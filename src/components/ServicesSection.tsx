@@ -2,6 +2,9 @@
 
 import { useState, useRef, useEffect } from 'react';
 import Image from 'next/image';
+import ScrollAnimationWrapper from './ScrollAnimationWrapper';
+import StickyScrollSection from './StickyScrollSection';
+import StaggeredGrid from './StaggeredGrid';
 
 const services = [
   {
@@ -68,7 +71,7 @@ const ServicesSection = () => {
   }, []);
 
   return (
-    <div id="services" className="py-24 bg-gray-800/50 relative">
+    <StickyScrollSection height="135vh" className="relative bg-gray-800/50">
       {/* Background decorative elements */}
       <div className="absolute inset-0 overflow-hidden">
         <div className="absolute -top-20 -left-20 w-64 h-64 bg-teal-500/5 rounded-full blur-3xl"></div>
@@ -83,8 +86,8 @@ const ServicesSection = () => {
         <div className="absolute bottom-[15%] left-[15%] w-6 h-6 bg-gradient-to-br from-purple-400/10 to-teal-400/10 rounded-full float-2 opacity-30"></div>
       </div>
 
-      <div className="container mx-auto px-4 md:px-6 relative z-10">
-        <div className="text-center mb-16">
+      <div className="container mx-auto px-4 md:px-6 relative z-10 pt-20">
+        <ScrollAnimationWrapper animationVariant="fadeUp" className="text-center mb-14">
           <div className="inline-block relative mb-3">
             {/* Reduced glow on the "Our Services" heading */}
             <div className="absolute -inset-1 bg-gradient-to-r from-teal-500/10 to-teal-300/10 rounded-lg blur-sm"></div>
@@ -95,9 +98,14 @@ const ServicesSection = () => {
           <p className="text-gray-400 max-w-3xl mx-auto">
             End-to-end AI consultancy to help you navigate the complex world of artificial intelligence and unlock its full potential.
           </p>
-        </div>
+        </ScrollAnimationWrapper>
 
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
+        <StaggeredGrid 
+          columns={{ sm: 1, md: 2, lg: 4 }}
+          gap="gap-8"
+          staggerDelay={0.1}
+          animationVariant="fadeUp"
+        >
           {services.map((service) => (
             <div 
               key={service.id}
@@ -163,18 +171,18 @@ const ServicesSection = () => {
               } after:content-[''] after:absolute after:inset-0 after:rounded-xl after:border after:border-teal-400/10 after:scale-[1.02] after:transition-all after:duration-300`}></div>
             </div>
           ))}
-        </div>
+        </StaggeredGrid>
         
-        <div className="mt-24 mb-12 text-center">
+        <ScrollAnimationWrapper animationVariant="fadeUp" delay={0.3} className="mt-24 mb-12 text-center">
           <div className="inline-block relative">
             <div className="absolute -inset-0.5 bg-gradient-to-r from-teal-500/30 to-teal-300/30 rounded-full blur-sm opacity-0 group-hover:opacity-100 transition-opacity duration-200"></div>
             <button className="relative px-8 py-3.5 rounded-full border-2 border-teal-400/30 text-white bg-gray-900 transition-all duration-200 hover:bg-teal-400/10 hover:border-teal-400/50 hover:scale-105 group">
               <span className="relative z-10 font-medium">Book a Consultation</span>
             </button>
           </div>
-        </div>
+        </ScrollAnimationWrapper>
       </div>
-    </div>
+    </StickyScrollSection>
   );
 };
 
