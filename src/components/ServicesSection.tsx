@@ -68,7 +68,7 @@ const ServicesSection = () => {
   }, []);
 
   return (
-    <div className="py-24 bg-gray-800/50 relative">
+    <div id="services" className="py-24 bg-gray-800/50 relative">
       {/* Background decorative elements */}
       <div className="absolute inset-0 overflow-hidden">
         <div className="absolute -top-20 -left-20 w-64 h-64 bg-teal-500/5 rounded-full blur-3xl"></div>

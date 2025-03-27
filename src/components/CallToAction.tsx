@@ -16,7 +16,7 @@ const CallToAction = () => {
   };
 
   return (
-    <div className="relative py-24 overflow-hidden">
+    <div id="contact" className="relative py-24 overflow-hidden">
       {/* Background elements */}
       <div className="absolute inset-0 bg-gray-900"></div>
       <div className="absolute inset-0 bg-gradient-to-br from-teal-500/10 to-purple-600/10"></div>

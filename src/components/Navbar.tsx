@@ -3,10 +3,13 @@
 import { useState, useEffect } from 'react';
 import Link from 'next/link';
 import Image from 'next/image';
+import { useRouter, usePathname } from 'next/navigation';
 
 const Navbar = () => {
   const [scrolled, setScrolled] = useState(false);
   const [productsOpen, setProductsOpen] = useState(false);
+  const router = useRouter();
+  const pathname = usePathname();
   
   useEffect(() => {
     const handleScroll = () => {
@@ -21,6 +24,19 @@ const Navbar = () => {
     return () => window.removeEventListener('scroll', handleScroll);
   }, []);
 
+  const scrollToSection = (sectionId: string) => {
+    // If we're on the homepage, scroll to the section
+    if (pathname === '/') {
+      const element = document.getElementById(sectionId);
+      if (element) {
+        element.scrollIntoView({ behavior: 'smooth' });
+      }
+    } else {
+      // Navigate to home page with hash
+      router.push(`/#${sectionId}`);
+    }
+  };
+
   const navItems = [
     { name: 'Home', path: '/' },
     { 
@@ -32,9 +48,13 @@ const Navbar = () => {
         { name: 'Skynet Agents', path: '/skynet-agents' }
       ]
     },
-    { name: 'Services', path: '/services' },
-    { name: 'About', path: '/about' },
-    { name: 'Contact', path: '/contact' }
+    { name: 'Services', path: '#', onClick: () => scrollToSection('services') },
+    { 
+      name: 'Blogs', 
+      path: '/blogs'
+    },
+    { name: 'Contact', path: '#', onClick: () => scrollToSection('contact') },
+    { name: 'About', path: '/about' }
   ];
 
   return (
@@ -129,13 +149,23 @@ const Navbar = () => {
                   </div>
                 </>
               ) : (
-                <Link 
-                  href={item.path}
-                  className="relative text-gray-300 hover:text-white transition-colors duration-200 group"
-                >
-                  {item.name}
-                  <span className="absolute -bottom-1 left-0 w-0 h-0.5 bg-teal-400 transition-all duration-300 group-hover:w-full"></span>
-                </Link>
+                item.onClick ? (
+                  <button 
+                    onClick={item.onClick}
+                    className="relative text-gray-300 hover:text-white transition-colors duration-200 group"
+                  >
+                    {item.name}
+                    <span className="absolute -bottom-1 left-0 w-0 h-0.5 bg-teal-400 transition-all duration-300 group-hover:w-full"></span>
+                  </button>
+                ) : (
+                  <Link 
+                    href={item.path}
+                    className="relative text-gray-300 hover:text-white transition-colors duration-200 group"
+                  >
+                    {item.name}
+                    <span className="absolute -bottom-1 left-0 w-0 h-0.5 bg-teal-400 transition-all duration-300 group-hover:w-full"></span>
+                  </Link>
+                )
               )}
             </div>
           ))}
