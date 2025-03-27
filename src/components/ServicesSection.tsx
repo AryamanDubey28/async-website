@@ -3,6 +3,7 @@
 import { useState, useRef, useEffect } from 'react';
 import Image from 'next/image';
 import ScrollAnimationWrapper from './ScrollAnimationWrapper';
+import ScrollRevealContainer from './ScrollRevealContainer';
 import StickyScrollSection from './StickyScrollSection';
 import StaggeredGrid from './StaggeredGrid';
 
@@ -87,7 +88,7 @@ const ServicesSection = () => {
       </div>
 
       <div className="container mx-auto px-4 md:px-6 relative z-10 pt-20">
-        <ScrollAnimationWrapper animationVariant="fadeUp" className="text-center mb-14">
+        <ScrollRevealContainer direction="fromTop" className="text-center mb-14" duration={0.7}>
           <div className="inline-block relative mb-3">
             {/* Reduced glow on the "Our Services" heading */}
             <div className="absolute -inset-1 bg-gradient-to-r from-teal-500/10 to-teal-300/10 rounded-lg blur-sm"></div>
@@ -98,89 +99,96 @@ const ServicesSection = () => {
           <p className="text-gray-400 max-w-3xl mx-auto">
             End-to-end AI consultancy to help you navigate the complex world of artificial intelligence and unlock its full potential.
           </p>
-        </ScrollAnimationWrapper>
+        </ScrollRevealContainer>
 
-        <StaggeredGrid 
-          columns={{ sm: 1, md: 2, lg: 4 }}
-          gap="gap-8"
-          staggerDelay={0.1}
-          animationVariant="fadeUp"
-        >
-          {services.map((service) => (
-            <div 
-              key={service.id}
-              className="relative bg-gray-900 rounded-xl p-6 overflow-hidden group hover-scale backdrop-blur-sm"
-              onMouseEnter={() => setActiveService(service.id)}
-              onMouseLeave={() => setActiveService(null)}
-            >
-              {/* Animated background gradient */}
-              <div className={`absolute inset-0 bg-gradient-to-br from-teal-500/10 via-teal-400/5 to-transparent transition-opacity duration-500 ${
-                activeService === service.id ? 'opacity-100' : 'opacity-0'
-              }`}></div>
-              
-              {/* Enhanced animated dots background with dynamic floating effects */}
-              <div className="absolute inset-0 opacity-5">
-                <div className="absolute top-10 left-10 w-1.5 h-1.5 rounded-full bg-teal-300 float-1"></div>
-                <div className="absolute top-20 right-10 w-1 h-1 rounded-full bg-teal-300 float-3"></div>
-                <div className="absolute bottom-10 left-20 w-1 h-1 rounded-full bg-teal-300 float-2"></div>
-                <div className="absolute bottom-20 right-20 w-1.5 h-1.5 rounded-full bg-teal-300 float-4"></div>
-                
-                {/* Adding more animated elements with dynamic movements */}
-                <div className="absolute top-1/2 left-1/4 w-2 h-2 rounded-full bg-teal-400/70 float-3"></div>
-                <div className="absolute bottom-1/3 right-1/4 w-1 h-1 rounded-full bg-teal-400/70 float-2"></div>
-                <div className="absolute top-1/3 right-1/3 w-1.5 h-1.5 rounded-full bg-teal-400/70 float-1"></div>
-                <div className="absolute bottom-1/4 left-1/3 w-1 h-1 rounded-full bg-teal-400/70 float-4"></div>
-              </div>
-              
-              {/* Content */}
-              <div className="relative z-10">
-                <div className="w-12 h-12 rounded-lg bg-gray-800 flex items-center justify-center mb-6 text-teal-400 group-hover:bg-teal-400/10 transition-all duration-300 transform group-hover:scale-110">
-                  {service.icon}
-                </div>
-                
-                <h3 className="text-xl font-bold mb-3 text-white transition-all duration-300 group-hover:text-gradient">{service.title}</h3>
-                <p className="text-gray-400 transition-all duration-300 group-hover:text-gray-300">{service.description}</p>
-                
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
+          {services.map((service, index) => {
+            // Alternate between left and right reveal directions for a more dynamic effect
+            const direction = index % 2 === 0 ? "fromLeft" : "fromRight";
+            
+            return (
+              <ScrollRevealContainer 
+                key={service.id} 
+                direction={direction}
+                duration={0.6} 
+                offset={['0 0.9', '0.3 0.9']}
+                className="h-full"
+              >
                 <div 
-                  ref={(el) => {
-                    expandRefs.current[service.id] = el;
-                  }}
-                  style={{
-                    height: activeService === service.id ? `${expandHeights[service.id] || 0}px` : '0px',
-                    opacity: activeService === service.id ? 1 : 0,
-                    visibility: activeService === service.id ? 'visible' : 'hidden',
-                    transition: 'height 250ms ease-out, opacity 200ms ease, visibility 0ms linear ' + 
-                      (activeService === service.id ? '0ms' : '200ms')
-                  }}
-                  className="overflow-hidden mt-4"
+                  className="relative bg-gray-900 rounded-xl p-6 overflow-hidden group hover-scale backdrop-blur-sm h-full"
+                  onMouseEnter={() => setActiveService(service.id)}
+                  onMouseLeave={() => setActiveService(null)}
                 >
-                  <button className="text-teal-400 flex items-center mt-2 group px-3 py-2 rounded-lg hover:bg-teal-400/5 transition-all duration-200">
-                    <span>Learn more</span>
-                    <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5 ml-1 transition-transform duration-200 group-hover:translate-x-1.5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M14 5l7 7m0 0l-7 7m7-7H3" />
-                    </svg>
-                  </button>
+                  {/* Animated background gradient */}
+                  <div className={`absolute inset-0 bg-gradient-to-br from-teal-500/10 via-teal-400/5 to-transparent transition-opacity duration-500 ${
+                    activeService === service.id ? 'opacity-100' : 'opacity-0'
+                  }`}></div>
+                  
+                  {/* Enhanced animated dots background with dynamic floating effects */}
+                  <div className="absolute inset-0 opacity-5">
+                    <div className="absolute top-10 left-10 w-1.5 h-1.5 rounded-full bg-teal-300 float-1"></div>
+                    <div className="absolute top-20 right-10 w-1 h-1 rounded-full bg-teal-300 float-3"></div>
+                    <div className="absolute bottom-10 left-20 w-1 h-1 rounded-full bg-teal-300 float-2"></div>
+                    <div className="absolute bottom-20 right-20 w-1.5 h-1.5 rounded-full bg-teal-300 float-4"></div>
+                    
+                    {/* Adding more animated elements with dynamic movements */}
+                    <div className="absolute top-1/2 left-1/4 w-2 h-2 rounded-full bg-teal-400/70 float-3"></div>
+                    <div className="absolute bottom-1/3 right-1/4 w-1 h-1 rounded-full bg-teal-400/70 float-2"></div>
+                    <div className="absolute top-1/3 right-1/3 w-1.5 h-1.5 rounded-full bg-teal-400/70 float-1"></div>
+                    <div className="absolute bottom-1/4 left-1/3 w-1 h-1 rounded-full bg-teal-400/70 float-4"></div>
+                  </div>
+                  
+                  {/* Content */}
+                  <div className="relative z-10">
+                    <div className="w-12 h-12 rounded-lg bg-gray-800 flex items-center justify-center mb-6 text-teal-400 group-hover:bg-teal-400/10 transition-all duration-300 transform group-hover:scale-110">
+                      {service.icon}
+                    </div>
+                    
+                    <h3 className="text-xl font-bold mb-3 text-white transition-all duration-300 group-hover:text-gradient">{service.title}</h3>
+                    <p className="text-gray-400 transition-all duration-300 group-hover:text-gray-300">{service.description}</p>
+                    
+                    <div 
+                      ref={(el) => {
+                        expandRefs.current[service.id] = el;
+                      }}
+                      style={{
+                        height: activeService === service.id ? `${expandHeights[service.id] || 0}px` : '0px',
+                        opacity: activeService === service.id ? 1 : 0,
+                        visibility: activeService === service.id ? 'visible' : 'hidden',
+                        transition: 'height 250ms ease-out, opacity 200ms ease, visibility 0ms linear ' + 
+                          (activeService === service.id ? '0ms' : '200ms')
+                      }}
+                      className="overflow-hidden mt-4"
+                    >
+                      <button className="text-teal-400 flex items-center mt-2 group px-3 py-2 rounded-lg hover:bg-teal-400/5 transition-all duration-200">
+                        <span>Learn more</span>
+                        <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5 ml-1 transition-transform duration-200 group-hover:translate-x-1.5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M14 5l7 7m0 0l-7 7m7-7H3" />
+                        </svg>
+                      </button>
+                    </div>
+                  </div>
+                  
+                  {/* Animated border */}
+                  <div className={`absolute inset-0 rounded-xl transition-all duration-300 ${
+                    activeService === service.id 
+                      ? 'border border-teal-400/30 shadow-[0_0_15px_rgba(56,178,172,0.1)] after:opacity-100' 
+                      : 'border border-transparent after:opacity-0'
+                  } after:content-[''] after:absolute after:inset-0 after:rounded-xl after:border after:border-teal-400/10 after:scale-[1.02] after:transition-all after:duration-300`}></div>
                 </div>
-              </div>
-              
-              {/* Animated border */}
-              <div className={`absolute inset-0 rounded-xl transition-all duration-300 ${
-                activeService === service.id 
-                  ? 'border border-teal-400/30 shadow-[0_0_15px_rgba(56,178,172,0.1)] after:opacity-100' 
-                  : 'border border-transparent after:opacity-0'
-              } after:content-[''] after:absolute after:inset-0 after:rounded-xl after:border after:border-teal-400/10 after:scale-[1.02] after:transition-all after:duration-300`}></div>
-            </div>
-          ))}
-        </StaggeredGrid>
+              </ScrollRevealContainer>
+            );
+          })}
+        </div>
         
-        <ScrollAnimationWrapper animationVariant="fadeUp" delay={0.3} className="mt-24 mb-12 text-center">
+        <ScrollRevealContainer direction="fromTop" duration={0.6} className="mt-24 mb-12 text-center">
           <div className="inline-block relative">
             <div className="absolute -inset-0.5 bg-gradient-to-r from-teal-500/30 to-teal-300/30 rounded-full blur-sm opacity-0 group-hover:opacity-100 transition-opacity duration-200"></div>
             <button className="relative px-8 py-3.5 rounded-full border-2 border-teal-400/30 text-white bg-gray-900 transition-all duration-200 hover:bg-teal-400/10 hover:border-teal-400/50 hover:scale-105 group">
               <span className="relative z-10 font-medium">Book a Consultation</span>
             </button>
           </div>
-        </ScrollAnimationWrapper>
+        </ScrollRevealContainer>
       </div>
     </StickyScrollSection>
   );

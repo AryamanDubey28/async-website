@@ -1,6 +1,8 @@
 'use client';
 
 const Footer = () => {
+  const currentYear = new Date().getFullYear();
+  
   return (
     <footer className="bg-gray-900 border-t border-gray-800">
       <div className="container mx-auto px-4 md:px-6 py-12">
@@ -79,7 +81,7 @@ const Footer = () => {
         
         <div className="border-t border-gray-800 mt-12 pt-8 flex flex-col sm:flex-row justify-between items-center">
           <p className="text-gray-500 text-sm">
-            © {new Date().getFullYear()} Async Studios. All rights reserved.
+            © {currentYear} Async Studios. All rights reserved.
           </p>
           
           <div className="mt-4 sm:mt-0">
