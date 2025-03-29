@@ -16,6 +16,11 @@ export const metadata: Metadata = {
   title: "Async Studios | AI Agents. Private. Built for you",
   description: "AI Consultancy helping businesses integrate AI. We build custom AI applications and provide expert consultancy services.",
   keywords: ["AI", "Artificial Intelligence", "AI Agents", "AI Consultancy", "AI Development", "Skynet Chat", "Skynet Agents"],
+  icons: {
+    icon: [
+      { url: './favicon.ico?v=' + Date.now() }
+    ]
+  }
 };
 
 export default function RootLayout({

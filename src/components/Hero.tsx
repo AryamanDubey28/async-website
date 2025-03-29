@@ -105,9 +105,9 @@ const Hero = () => {
           </div>
           
           <h1 className="text-4xl md:text-5xl lg:text-6xl font-bold leading-tight">
-            <span className="block">Revolutionize your business</span>
+            <span className="block">AI Agents. Private. </span>
             <span className="bg-clip-text text-transparent bg-gradient-to-r from-teal-400 to-teal-200">
-              with Intelligent AI Solutions
+            Built for you
             </span>
           </h1>
           
