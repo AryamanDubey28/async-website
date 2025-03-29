@@ -13,8 +13,13 @@ const Hero = () => {
     const ctx = canvas.getContext('2d');
     if (!ctx) return;
 
-    canvas.width = window.innerWidth;
-    canvas.height = window.innerHeight;
+    // Set canvas dimensions to match window
+    const setCanvasDimensions = () => {
+      canvas.width = window.innerWidth;
+      canvas.height = window.innerHeight;
+    };
+    
+    setCanvasDimensions();
 
     const particles: {
       x: number;
@@ -23,19 +28,23 @@ const Hero = () => {
       speedX: number;
       speedY: number;
       color: string;
+      opacity: number;
     }[] = [];
 
-    const colors = ['#4fd1c5', '#38b2ac', '#319795', '#2c7a7b'];
+    // Enhanced color palette
+    const colors = ['#4fd1c5', '#38b2ac', '#319795', '#2c7a7b', '#805AD5'];
 
     const createParticles = () => {
-      for (let i = 0; i < 50; i++) {
+      // Increased number of particles for a richer effect
+      for (let i = 0; i < 70; i++) {
         particles.push({
           x: Math.random() * canvas.width,
           y: Math.random() * canvas.height,
-          size: Math.random() * 5 + 1,
-          speedX: (Math.random() - 0.5) * 0.5,
-          speedY: (Math.random() - 0.5) * 0.5,
-          color: colors[Math.floor(Math.random() * colors.length)]
+          size: Math.random() * 4 + 1,
+          speedX: (Math.random() - 0.5) * 0.3, // Slowed down for more elegant movement
+          speedY: (Math.random() - 0.5) * 0.3,
+          color: colors[Math.floor(Math.random() * colors.length)],
+          opacity: Math.random() * 0.5 + 0.2 // Variable opacity
         });
       }
     };
@@ -48,27 +57,30 @@ const Hero = () => {
         particle.x += particle.speedX;
         particle.y += particle.speedY;
 
+        // Wrap particles around screen edges
         if (particle.x > canvas.width) particle.x = 0;
         if (particle.x < 0) particle.x = canvas.width;
         if (particle.y > canvas.height) particle.y = 0;
         if (particle.y < 0) particle.y = canvas.height;
 
-        // Draw particle
+        // Draw particle with variable opacity
         ctx.beginPath();
         ctx.arc(particle.x, particle.y, particle.size, 0, Math.PI * 2);
-        ctx.fillStyle = particle.color + '40'; // Add transparency
+        ctx.fillStyle = particle.color + Math.floor(particle.opacity * 255).toString(16).padStart(2, '0');
         ctx.fill();
 
-        // Connect particles
+        // Connect particles with dynamic connection distance based on screen size
+        const connectionDistance = Math.min(canvas.width, canvas.height) * 0.1;
         for (let j = index + 1; j < particles.length; j++) {
           const dx = particles[j].x - particle.x;
           const dy = particles[j].y - particle.y;
           const distance = Math.sqrt(dx * dx + dy * dy);
 
-          if (distance < 100) {
+          if (distance < connectionDistance) {
             ctx.beginPath();
-            ctx.strokeStyle = particle.color + Math.floor((1 - distance / 100) * 20).toString(16);
-            ctx.lineWidth = 0.5;
+            const opacity = Math.floor((1 - distance / connectionDistance) * 40).toString(16).padStart(2, '0');
+            ctx.strokeStyle = particle.color + opacity;
+            ctx.lineWidth = 0.4;
             ctx.moveTo(particle.x, particle.y);
             ctx.lineTo(particles[j].x, particles[j].y);
             ctx.stroke();
@@ -80,87 +92,107 @@ const Hero = () => {
     createParticles();
     animate();
 
-    const handleResize = () => {
-      canvas.width = window.innerWidth;
-      canvas.height = window.innerHeight;
-    };
-
-    window.addEventListener('resize', handleResize);
+    // Responsive canvas
+    window.addEventListener('resize', () => {
+      setCanvasDimensions();
+      particles.length = 0; // Clear particles
+      createParticles(); // Recreate particles for new dimensions
+    });
 
     return () => {
-      window.removeEventListener('resize', handleResize);
+      window.removeEventListener('resize', setCanvasDimensions);
     };
   }, []);
 
   return (
-    <div className="relative min-h-screen overflow-hidden">
+    <div className="relative h-screen w-full overflow-hidden">
       <canvas ref={canvasRef} className="absolute inset-0 z-0" />
       
-      <div className="relative z-10 pt-32 pb-20 container mx-auto px-4 md:px-6 flex flex-col md:flex-row items-center">
-        <div className="md:w-1/2 space-y-6 md:pr-12 mb-12 md:mb-0">
-          <div className="inline-block px-4 py-1 rounded-full bg-gray-800 border border-gray-700 mb-4">
-            <p className="text-sm font-medium bg-clip-text text-transparent bg-gradient-to-r from-teal-400 to-teal-200">
-              AI Agents. Private. Built for you
-            </p>
-          </div>
-          
-          <h1 className="text-4xl md:text-5xl lg:text-6xl font-bold leading-tight">
-            <span className="block">AI Agents. Private. </span>
-            <span className="bg-clip-text text-transparent bg-gradient-to-r from-teal-400 to-teal-200">
-            Built for you
-            </span>
-          </h1>
-          
-          <p className="text-xl text-gray-300">
-            We help businesses harness the power of AI with custom solutions that drive growth, efficiency, and innovation.
-          </p>
-          
-          <div className="flex flex-col sm:flex-row gap-4">
-            <button className="px-8 py-3 rounded-full bg-gradient-to-r from-teal-500 to-teal-400 text-gray-900 font-medium transition-all duration-300 hover:shadow-lg hover:shadow-teal-500/20 hover:scale-105">
-              Get Started
-            </button>
-            <button className="px-8 py-3 rounded-full border border-gray-700 text-white transition-all duration-300 hover:bg-gray-800 hover:border-teal-400">
-              Learn More
-            </button>
-          </div>
-          
-          <div className="flex items-center mt-8">
-            <div className="flex -space-x-2">
-              {[1, 2, 3, 4].map((i) => (
-                <div key={i} className="w-10 h-10 rounded-full bg-gray-700 border-2 border-gray-900 flex items-center justify-center">
-                  <span className="text-xs font-medium">{i}</span>
+      {/* Dark overlay for better text contrast */}
+      <div className="absolute inset-0 bg-black/30 z-0"></div>
+      
+      <div className="relative z-10 h-full flex items-center justify-center">
+        <div className="container mx-auto px-4 lg:px-8 pt-16 pb-16">
+          <div className="flex flex-col lg:flex-row items-center justify-between gap-12">
+            {/* Left content column */}
+            <div className="lg:w-1/2 space-y-8">
+              <div className="inline-block px-4 py-1.5 rounded-full bg-gray-800/80 backdrop-blur-sm border border-gray-700 mb-2">
+                <p className="text-sm font-medium text-teal-300">
+                  Welcome to Async Studios
+                </p>
+              </div>
+              
+              <h1 className="text-5xl sm:text-6xl lg:text-7xl font-bold leading-none tracking-tight">
+                <span className="block mb-3">AI Agents.</span>
+                <span className="block mb-3">Private.</span>
+                <span className="bg-clip-text text-transparent bg-gradient-to-r from-teal-400 via-teal-300 to-purple-400">
+                  Built for you
+                </span>
+              </h1>
+              
+              <p className="text-xl text-gray-300 max-w-xl leading-relaxed">
+                We help businesses harness the power of AI with custom solutions that drive growth, efficiency, and innovation.
+              </p>
+              
+              <div className="flex flex-col sm:flex-row gap-5 pt-2">
+                <button className="px-8 py-4 rounded-full bg-gradient-to-r from-teal-500 to-teal-400 text-gray-900 font-semibold transition-all duration-300 hover:shadow-lg hover:shadow-teal-500/30 hover:scale-105 focus:outline-none focus:ring-2 focus:ring-teal-400/50">
+                  Get Started
+                </button>
+                <button className="px-8 py-4 rounded-full border border-gray-600 backdrop-blur-sm text-white transition-all duration-300 hover:bg-white/10 hover:border-teal-400 focus:outline-none focus:ring-2 focus:ring-teal-400/30">
+                  Learn More
+                </button>
+              </div>
+              
+              {/* Social proof */}
+              <div className="flex items-center pt-4">
+                <div className="flex -space-x-3">
+                  {[1, 2, 3, 4].map((i) => (
+                    <div 
+                      key={i} 
+                      className="w-12 h-12 rounded-full border-2 border-gray-800 bg-gradient-to-br from-gray-700 to-gray-800 flex items-center justify-center shadow-lg"
+                    >
+                      <span className="text-xs font-medium text-teal-300">{i}</span>
+                    </div>
+                  ))}
                 </div>
-              ))}
-            </div>
-            <p className="ml-4 text-gray-400">Trusted by innovative companies</p>
-          </div>
-        </div>
-        
-        <div className="md:w-1/2 relative">
-          <div className="relative w-full aspect-square max-w-lg mx-auto">
-            <div className="absolute inset-0 bg-gradient-to-br from-teal-500/20 to-purple-600/20 rounded-full blur-3xl"></div>
-            <div className="absolute inset-8 bg-gray-900 rounded-full"></div>
-            <div className="absolute inset-0 flex items-center justify-center">
-              <div className="w-3/4 h-3/4 relative">
-                <div className="absolute inset-0 flex items-center justify-center z-10">
-                  <div className="text-center">
-                    <div className="text-5xl font-bold mb-2 bg-clip-text text-transparent bg-gradient-to-r from-teal-400 to-teal-200">AI</div>
-                    <div className="text-gray-400 text-sm">Powered by Async</div>
-                  </div>
-                </div>
-                <div className="absolute w-full h-full animate-spin-slow">
-                  <div className="absolute top-0 left-1/2 -translate-x-1/2 w-4 h-4 rounded-full bg-teal-400"></div>
-                  <div className="absolute bottom-0 left-1/2 -translate-x-1/2 w-4 h-4 rounded-full bg-teal-400"></div>
-                  <div className="absolute left-0 top-1/2 -translate-y-1/2 w-4 h-4 rounded-full bg-teal-400"></div>
-                  <div className="absolute right-0 top-1/2 -translate-y-1/2 w-4 h-4 rounded-full bg-teal-400"></div>
-                </div>
+                <p className="ml-5 text-gray-300">Trusted by innovative companies</p>
               </div>
             </div>
             
-            {/* Floating Elements */}
-            <div className="absolute -top-8 -right-8 w-24 h-24 bg-gradient-to-br from-teal-400 to-teal-500 rounded-xl floating opacity-80"></div>
-            <div className="absolute bottom-4 -left-12 w-16 h-16 bg-gradient-to-br from-purple-500 to-teal-400 rounded-lg floating delay-500 opacity-60"></div>
-            <div className="absolute top-1/2 -right-16 w-12 h-12 bg-teal-500 rounded-full floating delay-1000 opacity-40"></div>
+            {/* Right content column - visual element */}
+            <div className="lg:w-1/2 relative">
+              <div className="relative w-full max-w-xl mx-auto">
+                {/* Background glow */}
+                <div className="absolute inset-0 bg-gradient-to-br from-teal-500/20 via-purple-500/20 to-blue-600/20 rounded-full blur-3xl"></div>
+                
+                {/* Main circle */}
+                <div className="relative aspect-square">
+                  <div className="absolute inset-8 bg-gray-900/80 backdrop-blur-sm rounded-full border border-teal-500/20"></div>
+                  
+                  {/* Center content */}
+                  <div className="absolute inset-0 flex items-center justify-center z-10">
+                    <div className="text-center">
+                      <div className="text-6xl font-bold mb-2 bg-clip-text text-transparent bg-gradient-to-r from-teal-400 via-teal-300 to-purple-400">AI</div>
+                      <div className="text-gray-300 text-sm font-medium">Powered by Async</div>
+                    </div>
+                  </div>
+                  
+                  {/* Orbital ring */}
+                  <div className="absolute w-full h-full animate-spin-slow">
+                    <div className="absolute top-0 left-1/2 -translate-x-1/2 w-5 h-5 rounded-full bg-teal-400 shadow-lg shadow-teal-400/50"></div>
+                    <div className="absolute bottom-0 left-1/2 -translate-x-1/2 w-5 h-5 rounded-full bg-purple-400 shadow-lg shadow-purple-400/50"></div>
+                    <div className="absolute left-0 top-1/2 -translate-y-1/2 w-5 h-5 rounded-full bg-teal-400 shadow-lg shadow-teal-400/50"></div>
+                    <div className="absolute right-0 top-1/2 -translate-y-1/2 w-5 h-5 rounded-full bg-purple-400 shadow-lg shadow-purple-400/50"></div>
+                  </div>
+                </div>
+                
+                {/* Floating Elements with improved animations */}
+                <div className="absolute -top-8 -right-8 w-28 h-28 bg-gradient-to-br from-teal-400 to-teal-500 rounded-xl float-1 opacity-80 shadow-lg shadow-teal-500/30"></div>
+                <div className="absolute bottom-4 -left-12 w-20 h-20 bg-gradient-to-br from-purple-500 to-teal-400 rounded-lg float-2 opacity-70 shadow-lg shadow-purple-500/20"></div>
+                <div className="absolute top-1/3 -right-16 w-16 h-16 bg-gradient-to-r from-teal-500 to-blue-500 rounded-full float-3 opacity-60 shadow-lg shadow-blue-500/20"></div>
+                <div className="absolute -bottom-10 right-20 w-14 h-14 bg-gradient-to-r from-purple-500 to-pink-500 rounded-md float-4 opacity-50 shadow-lg shadow-purple-500/20"></div>
+              </div>
+            </div>
           </div>
         </div>
       </div>
