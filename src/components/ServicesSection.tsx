@@ -4,7 +4,6 @@ import { useState, useRef, useEffect } from 'react';
 import Image from 'next/image';
 import ScrollAnimationWrapper from './ScrollAnimationWrapper';
 import ScrollRevealContainer from './ScrollRevealContainer';
-import StickyScrollSection from './StickyScrollSection';
 import StaggeredGrid from './StaggeredGrid';
 
 const services = [
@@ -72,34 +71,34 @@ const ServicesSection = () => {
   }, []);
 
   return (
-    <StickyScrollSection height="135vh" className="relative bg-gray-800/50">
+    <div className="relative bg-gray-900 py-24">
       {/* Background decorative elements */}
       <div className="absolute inset-0 overflow-hidden">
-        <div className="absolute -top-20 -left-20 w-64 h-64 bg-teal-500/5 rounded-full blur-3xl"></div>
-        <div className="absolute top-1/3 -right-20 w-80 h-80 bg-teal-500/5 rounded-full blur-3xl"></div>
-        <div className="absolute bottom-0 left-1/3 w-72 h-72 bg-teal-400/5 rounded-full blur-3xl"></div>
+        <div className="absolute -top-20 -left-20 w-64 h-64 bg-gradient-to-br from-teal-500/20 via-purple-500/15 to-blue-600/20 rounded-full blur-3xl animate-pulse-slow"></div>
+        <div className="absolute top-1/3 -right-20 w-80 h-80 bg-gradient-to-tr from-purple-600/20 via-blue-500/15 to-teal-500/20 rounded-full blur-3xl animate-pulse-slower"></div>
+        <div className="absolute bottom-0 left-1/3 w-72 h-72 bg-gradient-to-br from-teal-400/20 via-purple-400/15 to-blue-500/20 rounded-full blur-3xl"></div>
         
         {/* Adding dynamic floating elements with varied animations */}
-        <div className="absolute top-1/4 left-20 w-12 h-12 bg-gradient-to-br from-teal-400/15 to-teal-500/15 rounded-xl float-1 opacity-50"></div>
-        <div className="absolute bottom-1/4 right-20 w-10 h-10 bg-gradient-to-br from-purple-500/15 to-teal-400/15 rounded-lg float-2 opacity-40"></div>
-        <div className="absolute top-1/2 left-1/2 w-8 h-8 bg-teal-500/15 rounded-full float-3 opacity-30"></div>
-        <div className="absolute top-[35%] right-[30%] w-14 h-14 bg-gradient-to-br from-teal-500/10 to-purple-400/10 rounded-lg float-4 opacity-25"></div>
-        <div className="absolute bottom-[15%] left-[15%] w-6 h-6 bg-gradient-to-br from-purple-400/10 to-teal-400/10 rounded-full float-2 opacity-30"></div>
+        <div className="absolute top-1/4 left-20 w-12 h-12 bg-gradient-to-br from-teal-400/30 to-blue-500/30 rounded-xl float-1 opacity-70 shadow-lg shadow-teal-500/20 backdrop-blur-sm border border-teal-400/30"></div>
+        <div className="absolute bottom-1/4 right-20 w-10 h-10 bg-gradient-to-br from-purple-500/30 to-teal-400/30 rounded-lg float-2 opacity-70 shadow-lg shadow-purple-500/20 backdrop-blur-sm border border-purple-400/30"></div>
+        <div className="absolute top-1/2 left-1/2 w-8 h-8 bg-gradient-to-r from-teal-500/30 to-blue-500/30 rounded-full float-3 opacity-70 shadow-lg shadow-blue-500/20 backdrop-blur-sm border border-blue-400/30"></div>
+        <div className="absolute top-[35%] right-[30%] w-14 h-14 bg-gradient-to-br from-teal-500/30 to-purple-400/30 rounded-lg float-4 opacity-70 shadow-lg shadow-purple-500/20 backdrop-blur-sm border border-purple-400/30"></div>
+        <div className="absolute bottom-[15%] left-[15%] w-6 h-6 bg-gradient-to-br from-purple-400/30 to-teal-400/30 rounded-full float-2 opacity-70 shadow-lg shadow-teal-500/20 backdrop-blur-sm border border-teal-400/30"></div>
       </div>
 
-      <div className="container mx-auto px-4 md:px-6 relative z-10 pt-20">
-        <ScrollRevealContainer direction="fromTop" className="text-center mb-14" duration={0.7}>
+      <div className="container mx-auto px-4 md:px-6 relative z-10">
+        <div className="text-center mb-14">
           <div className="inline-block relative mb-3">
-            {/* Reduced glow on the "Our Services" heading */}
-            <div className="absolute -inset-1 bg-gradient-to-r from-teal-500/10 to-teal-300/10 rounded-lg blur-sm"></div>
+            {/* Even more reduced glow on the "Our Services" heading */}
+            <div className="absolute -inset-1 bg-gradient-to-r from-teal-500/10 to-purple-400/10 rounded-lg blur-sm"></div>
             <h2 className="relative text-3xl md:text-4xl font-bold">
-              Our <span className="bg-clip-text text-transparent bg-gradient-to-r from-teal-400 to-teal-200">Services</span>
+              Our <span className="bg-clip-text text-transparent bg-gradient-to-r from-teal-400 via-purple-400 to-blue-500">Services</span>
             </h2>
           </div>
-          <p className="text-gray-400 max-w-3xl mx-auto">
+          <p className="text-gray-300 max-w-3xl mx-auto">
             End-to-end AI consultancy to help you navigate the complex world of artificial intelligence and unlock its full potential.
           </p>
-        </ScrollRevealContainer>
+        </div>
 
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
           {services.map((service, index) => {
@@ -115,37 +114,29 @@ const ServicesSection = () => {
                 className="h-full"
               >
                 <div 
-                  className="relative bg-gray-900 rounded-xl p-6 overflow-hidden group hover-scale backdrop-blur-sm h-full"
+                  className="relative bg-gray-900/60 backdrop-blur-xl rounded-xl p-6 overflow-hidden group hover-scale border border-teal-500/20 shadow-xl shadow-teal-500/5 h-full"
                   onMouseEnter={() => setActiveService(service.id)}
                   onMouseLeave={() => setActiveService(null)}
                 >
-                  {/* Animated background gradient */}
-                  <div className={`absolute inset-0 bg-gradient-to-br from-teal-500/10 via-teal-400/5 to-transparent transition-opacity duration-500 ${
+                  {/* Animated background gradient - lighter */}
+                  <div className={`absolute inset-0 bg-gradient-to-br from-teal-500/15 via-purple-500/10 to-blue-600/15 transition-opacity duration-500 ${
                     activeService === service.id ? 'opacity-100' : 'opacity-0'
                   }`}></div>
                   
-                  {/* Enhanced animated dots background with dynamic floating effects */}
-                  <div className="absolute inset-0 opacity-5">
-                    <div className="absolute top-10 left-10 w-1.5 h-1.5 rounded-full bg-teal-300 float-1"></div>
-                    <div className="absolute top-20 right-10 w-1 h-1 rounded-full bg-teal-300 float-3"></div>
-                    <div className="absolute bottom-10 left-20 w-1 h-1 rounded-full bg-teal-300 float-2"></div>
-                    <div className="absolute bottom-20 right-20 w-1.5 h-1.5 rounded-full bg-teal-300 float-4"></div>
-                    
-                    {/* Adding more animated elements with dynamic movements */}
-                    <div className="absolute top-1/2 left-1/4 w-2 h-2 rounded-full bg-teal-400/70 float-3"></div>
-                    <div className="absolute bottom-1/3 right-1/4 w-1 h-1 rounded-full bg-teal-400/70 float-2"></div>
-                    <div className="absolute top-1/3 right-1/3 w-1.5 h-1.5 rounded-full bg-teal-400/70 float-1"></div>
-                    <div className="absolute bottom-1/4 left-1/3 w-1 h-1 rounded-full bg-teal-400/70 float-4"></div>
+                  {/* Tech grid lines for tech effect - lighter */}
+                  <div className="absolute inset-0 rounded-xl overflow-hidden opacity-20">
+                    <div className="absolute inset-0 bg-[radial-gradient(#4fd1c515_1px,transparent_1px)] [background-size:8px_8px] opacity-70"></div>
+                    <div className="absolute inset-0 bg-[linear-gradient(to_right,transparent_0%,#4fd1c508_50%,transparent_100%)] animate-scanner"></div>
                   </div>
                   
                   {/* Content */}
                   <div className="relative z-10">
-                    <div className="w-12 h-12 rounded-lg bg-gray-800 flex items-center justify-center mb-6 text-teal-400 group-hover:bg-teal-400/10 transition-all duration-300 transform group-hover:scale-110">
+                    <div className="w-12 h-12 rounded-lg bg-gray-800/60 backdrop-blur-sm flex items-center justify-center mb-6 text-teal-400 group-hover:bg-teal-400/15 transition-all duration-300 transform group-hover:scale-110 border border-teal-400/20">
                       {service.icon}
                     </div>
                     
-                    <h3 className="text-xl font-bold mb-3 text-white transition-all duration-300 group-hover:text-gradient">{service.title}</h3>
-                    <p className="text-gray-400 transition-all duration-300 group-hover:text-gray-300">{service.description}</p>
+                    <h3 className="text-xl font-bold mb-3 text-white transition-all duration-300 group-hover:bg-clip-text group-hover:text-transparent group-hover:bg-gradient-to-r group-hover:from-teal-400 group-hover:via-purple-400 group-hover:to-blue-500">{service.title}</h3>
+                    <p className="text-gray-300 transition-all duration-300 group-hover:text-gray-200">{service.description}</p>
                     
                     <div 
                       ref={(el) => {
@@ -169,7 +160,7 @@ const ServicesSection = () => {
                     </div>
                   </div>
                   
-                  {/* Animated border */}
+                  {/* Animated border - lighter */}
                   <div className={`absolute inset-0 rounded-xl transition-all duration-300 ${
                     activeService === service.id 
                       ? 'border border-teal-400/30 shadow-[0_0_15px_rgba(56,178,172,0.1)] after:opacity-100' 
@@ -181,16 +172,17 @@ const ServicesSection = () => {
           })}
         </div>
         
-        <ScrollRevealContainer direction="fromTop" duration={0.6} className="mt-24 mb-12 text-center">
+        <div className="mt-24 mb-12 text-center">
           <div className="inline-block relative">
-            <div className="absolute -inset-0.5 bg-gradient-to-r from-teal-500/30 to-teal-300/30 rounded-full blur-sm opacity-0 group-hover:opacity-100 transition-opacity duration-200"></div>
-            <button className="relative px-8 py-3.5 rounded-full border-2 border-teal-400/30 text-white bg-gray-900 transition-all duration-200 hover:bg-teal-400/10 hover:border-teal-400/50 hover:scale-105 group">
-              <span className="relative z-10 font-medium">Book a Consultation</span>
+            <div className="absolute -inset-1 bg-gradient-to-r from-teal-500/10 to-purple-400/10 rounded-full blur-sm opacity-30 group-hover:opacity-100 transition-opacity duration-200"></div>
+            <button className="group relative px-8 py-4 rounded-full bg-gradient-to-r from-teal-500 to-purple-500 text-white font-semibold transition-all duration-300 hover:shadow-lg hover:shadow-teal-500/20 hover:scale-105 focus:outline-none focus:ring-2 focus:ring-teal-400/50 overflow-hidden">
+              <span className="relative z-10">Book a Consultation</span>
+              <span className="absolute inset-0 bg-gradient-to-r from-teal-400 to-purple-400 opacity-0 group-hover:opacity-100 transition-opacity duration-300 blur-xl"></span>
             </button>
           </div>
-        </ScrollRevealContainer>
+        </div>
       </div>
-    </StickyScrollSection>
+    </div>
   );
 };
 
