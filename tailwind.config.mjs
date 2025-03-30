@@ -38,7 +38,7 @@ export default {
         'pulse-slow': 'pulse 4s cubic-bezier(0.4, 0, 0.6, 1) infinite',
         'pulse-slower': 'pulse 6s cubic-bezier(0.4, 0, 0.6, 1) infinite',
         'pulse-fast': 'pulse 2s cubic-bezier(0.4, 0, 0.6, 1) infinite',
-        'ping-slow': 'ping 3s cubic-bezier(0, 0, 0.2, 1) infinite',
+        'ping-slow': 'ping 7s cubic-bezier(0, 0, 0.2, 1) infinite',
         'scanner': 'scanner 3s ease-in-out infinite',
         'scanner-vertical': 'scanner-vertical 4s ease-in-out infinite',
         'data-stream': 'data-stream 8s ease-in-out infinite',
