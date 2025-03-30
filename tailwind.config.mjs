@@ -43,6 +43,9 @@ export default {
         'scanner-vertical': 'scanner-vertical 4s ease-in-out infinite',
         'data-stream': 'data-stream 8s ease-in-out infinite',
         'data-stream-alt': 'data-stream 10s ease-in-out infinite',
+        'ticker': 'ticker 30s linear infinite',
+        'dash-slow': 'dash 15s linear infinite',
+        'dash-slow-reverse': 'dash-reverse 15s linear infinite',
       },
       keyframes: {
         floating1: {
@@ -89,6 +92,18 @@ export default {
           '20%': { opacity: 0.8 },
           '80%': { opacity: 0.8 },
           '100%': { transform: 'translateY(100%)', opacity: 0 },
+        },
+        'ticker': {
+          '0%': { transform: 'translateX(0)' },
+          '100%': { transform: 'translateX(-100%)' },
+        },
+        'dash': {
+          '0%': { strokeDashoffset: 0 },
+          '100%': { strokeDashoffset: 100 },
+        },
+        'dash-reverse': {
+          '0%': { strokeDashoffset: 0 },
+          '100%': { strokeDashoffset: -100 },
         },
       },
       backgroundImage: {
