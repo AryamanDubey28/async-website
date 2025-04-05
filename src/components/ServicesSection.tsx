@@ -114,14 +114,14 @@ const ServicesSection = () => {
                 className="h-full"
               >
                 <div 
-                  className="relative bg-gray-900/60 backdrop-blur-xl rounded-xl p-6 overflow-hidden group hover-scale border border-teal-500/20 shadow-xl shadow-teal-500/5 h-full"
+                  className="relative bg-gray-900/60 backdrop-blur-xl rounded-xl p-6 overflow-visible group hover-scale border border-teal-500/20 shadow-xl shadow-teal-500/5 h-full transition-all duration-300 hover:z-20"
                   onMouseEnter={() => setActiveService(service.id)}
                   onMouseLeave={() => setActiveService(null)}
                 >
                   {/* Animated background gradient - lighter */}
-                  <div className={`absolute inset-0 bg-gradient-to-br from-teal-500/15 via-purple-500/10 to-blue-600/15 transition-opacity duration-500 ${
-                    activeService === service.id ? 'opacity-100' : 'opacity-0'
-                  }`}></div>
+                  <div className={`absolute inset-0 bg-gradient-to-br from-teal-500/15 via-purple-500/10 to-blue-600/15 transition-all duration-500 ${
+                    activeService === service.id ? 'opacity-100 scale-[1.03]' : 'opacity-0 scale-100'
+                  } rounded-xl`}></div>
                   
                   {/* Tech grid lines for tech effect - lighter */}
                   <div className="absolute inset-0 rounded-xl overflow-hidden opacity-20">
@@ -129,42 +129,48 @@ const ServicesSection = () => {
                     <div className="absolute inset-0 bg-[linear-gradient(to_right,transparent_0%,#4fd1c508_50%,transparent_100%)] animate-scanner"></div>
                   </div>
                   
-                  {/* Content */}
-                  <div className="relative z-10">
+                  {/* Card Wrapper with transform effect */}
+                  <div className={`relative z-10 transition-all duration-300 ${
+                    activeService === service.id ? 'transform scale-[1.03]' : ''
+                  }`}>
                     <div className="w-12 h-12 rounded-lg bg-gray-800/60 backdrop-blur-sm flex items-center justify-center mb-6 text-teal-400 group-hover:bg-teal-400/15 transition-all duration-300 transform group-hover:scale-110 border border-teal-400/20">
                       {service.icon}
                     </div>
                     
                     <h3 className="text-xl font-bold mb-3 text-white transition-all duration-300 group-hover:bg-clip-text group-hover:text-transparent group-hover:bg-gradient-to-r group-hover:from-teal-400 group-hover:via-purple-400 group-hover:to-blue-500">{service.title}</h3>
                     <p className="text-gray-300 transition-all duration-300 group-hover:text-gray-200">{service.description}</p>
-                    
-                    <div 
-                      ref={(el) => {
-                        expandRefs.current[service.id] = el;
-                      }}
-                      style={{
-                        height: activeService === service.id ? `${expandHeights[service.id] || 0}px` : '0px',
-                        opacity: activeService === service.id ? 1 : 0,
-                        visibility: activeService === service.id ? 'visible' : 'hidden',
-                        transition: 'height 250ms ease-out, opacity 200ms ease, visibility 0ms linear ' + 
-                          (activeService === service.id ? '0ms' : '200ms')
-                      }}
-                      className="overflow-hidden mt-4"
-                    >
-                      <button className="text-teal-400 flex items-center mt-2 group px-3 py-2 rounded-lg hover:bg-teal-400/5 transition-all duration-200">
-                        <span>Learn more</span>
-                        <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5 ml-1 transition-transform duration-200 group-hover:translate-x-1.5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M14 5l7 7m0 0l-7 7m7-7H3" />
-                        </svg>
-                      </button>
-                    </div>
+                  </div>
+                  
+                  {/* Expandable content */}
+                  <div 
+                    ref={(el) => {
+                      expandRefs.current[service.id] = el;
+                    }}
+                    className="absolute left-0 right-0 mt-2 overflow-hidden bg-gray-900/90 backdrop-blur-xl rounded-b-xl border border-teal-400/20 shadow-lg shadow-teal-500/10 px-6 py-4 z-30 transform transition-all duration-300"
+                    style={{
+                      top: '100%',
+                      opacity: activeService === service.id ? 1 : 0,
+                      visibility: activeService === service.id ? 'visible' : 'hidden',
+                      transform: activeService === service.id ? 'translateY(0) scale(1.03)' : 'translateY(-10px) scale(0.98)',
+                      transformOrigin: 'top center',
+                      pointerEvents: activeService === service.id ? 'auto' : 'none',
+                      transition: 'opacity 200ms ease, visibility 0ms linear ' + 
+                        (activeService === service.id ? '0ms' : '200ms') + ', transform 300ms ease'
+                    }}
+                  >
+                    <button className="text-teal-400 flex items-center group px-3 py-2 rounded-lg hover:bg-teal-400/5 transition-all duration-200 w-full">
+                      <span>Learn more</span>
+                      <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5 ml-1 transition-transform duration-200 group-hover:translate-x-1.5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M14 5l7 7m0 0l-7 7m7-7H3" />
+                      </svg>
+                    </button>
                   </div>
                   
                   {/* Animated border - lighter */}
                   <div className={`absolute inset-0 rounded-xl transition-all duration-300 ${
                     activeService === service.id 
-                      ? 'border border-teal-400/30 shadow-[0_0_15px_rgba(56,178,172,0.1)] after:opacity-100' 
-                      : 'border border-transparent after:opacity-0'
+                      ? 'border border-teal-400/30 shadow-[0_0_20px_rgba(56,178,172,0.15)] after:opacity-100 scale-[1.03]' 
+                      : 'border border-transparent after:opacity-0 scale-100'
                   } after:content-[''] after:absolute after:inset-0 after:rounded-xl after:border after:border-teal-400/10 after:scale-[1.02] after:transition-all after:duration-300`}></div>
                 </div>
               </ScrollRevealContainer>
