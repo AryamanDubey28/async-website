@@ -204,7 +204,7 @@ const Hero = () => {
               </h1>
               
               <p className="text-xl text-gray-300 max-w-xl leading-relaxed">
-                We help businesses harness the power of AI with custom solutions that drive growth, efficiency, and innovation.
+              Ditch generic AI. Get private, custom agents built for your challenges, delivering results that actually matter.
               </p>
               
               <div className="flex flex-col sm:flex-row gap-5 pt-4">
