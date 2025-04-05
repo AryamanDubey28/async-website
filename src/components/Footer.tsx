@@ -1,4 +1,5 @@
 'use client';
+import Link from 'next/link';
 
 const Footer = () => {
   const currentYear = new Date().getFullYear();
@@ -64,15 +65,30 @@ const Footer = () => {
           {[
             {
               title: "Solutions",
-              links: ['Skynet Chat', 'Skynet Agents', 'Custom Development', 'Enterprise AI']
+              links: [
+                { name: 'Skynet Chat', href: '/skynet-chat' },
+                { name: 'Skynet Agents', href: '/skynet-agents' },
+                { name: 'Custom Development', href: '#' },
+                { name: 'Enterprise AI', href: '#' }
+              ]
             },
             {
               title: "Company",
-              links: ['About', 'Careers', 'Blog', 'Contact']
+              links: [
+                { name: 'About', href: '#' },
+                { name: 'Careers', href: '#' },
+                { name: 'Blog', href: '#' },
+                { name: 'Contact', href: '#' }
+              ]
             },
             {
               title: "Resources",
-              links: ['Documentation', 'API Reference', 'Privacy Policy', 'Terms of Service']
+              links: [
+                { name: 'Documentation', href: '#' },
+                { name: 'API Reference', href: '#' },
+                { name: 'Privacy Policy', href: '#' },
+                { name: 'Terms of Service', href: '#' }
+              ]
             }
           ].map((section, idx) => (
             <div key={idx}>
@@ -83,14 +99,24 @@ const Footer = () => {
               </h3>
               <ul className="space-y-3">
                 {section.links.map((item) => (
-                  <li key={item}>
-                    <a href="#" className="text-gray-300 hover:text-teal-400 transition-colors duration-200 group flex items-center">
-                      <span className="inline-block mr-2 text-teal-500 opacity-0 transform -translate-x-2 group-hover:opacity-100 group-hover:translate-x-0 transition-all duration-300">›</span>
-                      <span className="relative">
-                        {item}
-                        <span className="absolute -bottom-1 left-0 w-0 h-px bg-teal-400 transition-all duration-300 group-hover:w-full"></span>
-                      </span>
-                    </a>
+                  <li key={item.name}>
+                    {item.href === '#' ? (
+                      <a href="#" className="text-gray-300 hover:text-teal-400 transition-colors duration-200 group flex items-center">
+                        <span className="inline-block mr-2 text-teal-500 opacity-0 transform -translate-x-2 group-hover:opacity-100 group-hover:translate-x-0 transition-all duration-300">›</span>
+                        <span className="relative">
+                          {item.name}
+                          <span className="absolute -bottom-1 left-0 w-0 h-px bg-teal-400 transition-all duration-300 group-hover:w-full"></span>
+                        </span>
+                      </a>
+                    ) : (
+                      <Link href={item.href} className="text-gray-300 hover:text-teal-400 transition-colors duration-200 group flex items-center">
+                        <span className="inline-block mr-2 text-teal-500 opacity-0 transform -translate-x-2 group-hover:opacity-100 group-hover:translate-x-0 transition-all duration-300">›</span>
+                        <span className="relative">
+                          {item.name}
+                          <span className="absolute -bottom-1 left-0 w-0 h-px bg-teal-400 transition-all duration-300 group-hover:w-full"></span>
+                        </span>
+                      </Link>
+                    )}
                   </li>
                 ))}
               </ul>
