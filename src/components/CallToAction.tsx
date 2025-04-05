@@ -6,14 +6,49 @@ import ScrollRevealContainer from './ScrollRevealContainer';
 
 const CallToAction = () => {
   const [email, setEmail] = useState('');
+  const [name, setName] = useState('');
+  const [message, setMessage] = useState('');
   const [submitted, setSubmitted] = useState(false);
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState('');
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    if (email) {
+    
+    if (!email) return;
+    
+    setLoading(true);
+    setError('');
+    
+    try {
+      // Replace this URL with your Google Apps Script web app URL once deployed
+      const GOOGLE_SHEET_WEBHOOK_URL = 'https://script.google.com/macros/s/AKfycbyfYKlfUNKgFgJ6_vvP01Pp9mKtOhh_39YY2zDA0s4h89Sc7SToyGQboa27RZSZzSw1Yw/exec';
+      
+      const formData = {
+        email,
+        name,
+        message,
+        timestamp: new Date().toISOString(),
+      };
+      
+      const response = await fetch(GOOGLE_SHEET_WEBHOOK_URL, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(formData),
+        mode: 'no-cors', // Required for Google Apps Script
+      });
+      
       setSubmitted(true);
       setEmail('');
-      // In a real application, you would send this to your backend
+      setName('');
+      setMessage('');
+    } catch (err) {
+      console.error('Error submitting form:', err);
+      setError('Failed to submit. Please try again later.');
+    } finally {
+      setLoading(false);
     }
   };
 
@@ -61,7 +96,7 @@ const CallToAction = () => {
               </div>
               
               {!submitted ? (
-                <form onSubmit={handleSubmit} className="relative z-10 flex flex-col md:flex-row gap-4">
+                <form onSubmit={handleSubmit} className="relative z-10 flex flex-col gap-4">
                   <input
                     type="email"
                     value={email}
@@ -70,11 +105,31 @@ const CallToAction = () => {
                     className="flex-grow px-4 py-3 rounded-lg bg-gray-800/60 backdrop-blur-sm border border-gray-700 text-white focus:border-teal-400 focus:outline-none focus:ring-2 focus:ring-teal-400/15 transition-all duration-300"
                     required
                   />
+                  <input
+                    type="text"
+                    value={name}
+                    onChange={(e) => setName(e.target.value)}
+                    placeholder="Your name (optional)"
+                    className="flex-grow px-4 py-3 rounded-lg bg-gray-800/60 backdrop-blur-sm border border-gray-700 text-white focus:border-teal-400 focus:outline-none focus:ring-2 focus:ring-teal-400/15 transition-all duration-300"
+                  />
+                  <textarea
+                    value={message}
+                    onChange={(e) => setMessage(e.target.value)}
+                    placeholder="Your message (optional)"
+                    rows={3}
+                    className="flex-grow px-4 py-3 rounded-lg bg-gray-800/60 backdrop-blur-sm border border-gray-700 text-white focus:border-teal-400 focus:outline-none focus:ring-2 focus:ring-teal-400/15 transition-all duration-300"
+                  />
+                  
+                  {error && <p className="text-red-400 text-sm">{error}</p>}
+                  
                   <button
                     type="submit"
-                    className="group relative px-6 py-3 rounded-lg bg-gradient-to-r from-teal-500 to-purple-500 text-white font-medium transition-all duration-300 hover:shadow-lg hover:shadow-teal-500/20 hover:scale-105 focus:outline-none focus:ring-2 focus:ring-teal-400/30 overflow-hidden"
+                    disabled={loading}
+                    className="group relative px-6 py-3 rounded-lg bg-gradient-to-r from-teal-500 to-purple-500 text-white font-medium transition-all duration-300 hover:shadow-lg hover:shadow-teal-500/20 hover:scale-105 focus:outline-none focus:ring-2 focus:ring-teal-400/30 overflow-hidden disabled:opacity-70 disabled:hover:scale-100"
                   >
-                    <span className="relative z-10">Request a Demo</span>
+                    <span className="relative z-10">
+                      {loading ? 'Sending...' : 'Request a Demo'}
+                    </span>
                     <span className="absolute inset-0 bg-gradient-to-r from-teal-400 to-purple-400 opacity-0 group-hover:opacity-100 transition-opacity duration-300 blur-xl"></span>
                   </button>
                 </form>

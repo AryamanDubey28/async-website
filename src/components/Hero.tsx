@@ -204,7 +204,7 @@ const Hero = () => {
               </h1>
               
               <p className="text-xl text-gray-300 max-w-xl leading-relaxed">
-                We help businesses harness the power of AI with custom solutions that drive growth, efficiency, and innovation.
+              Ditch generic AI. Get private, custom agents built for your challenges, delivering results that actually matter.
               </p>
               
               <div className="flex flex-col sm:flex-row gap-5 pt-4">
@@ -219,27 +219,33 @@ const Hero = () => {
                 </button>
               </div>
               
-              {/* Social proof with better visual treatment */}
-              <div className="flex flex-col sm:flex-row items-center gap-4 pt-6">
-                <div className="flex -space-x-3">
-                  {[1, 2, 3, 4].map((i) => (
-                    <div 
-                      key={i} 
-                      className="w-12 h-12 rounded-full border-2 border-gray-800 bg-gradient-to-br from-gray-800 to-gray-900 flex items-center justify-center shadow-lg transform hover:scale-110 transition-transform duration-300 hover:border-teal-500/30"
-                    >
-                      <span className="text-xs font-medium text-teal-300">{i}</span>
-                    </div>
-                  ))}
-                </div>
-                <div className="flex items-center gap-1.5">
-                  <div className="text-gray-300">Trusted by innovative companies</div>
-                  <div className="flex">
-                    {[1, 2, 3, 4, 5].map((star) => (
-                      <svg key={star} className="w-4 h-4 text-yellow-400" fill="currentColor" viewBox="0 0 20 20">
-                        <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z" />
-                      </svg>
-                    ))}
+              {/* Feature highlights with teal outlined icons */}
+              <div className="flex flex-wrap items-center gap-6 pt-8">
+                <div className="flex items-center gap-2">
+                  <div className="w-10 h-10 rounded-full border-2 border-teal-400/70 flex items-center justify-center transition-transform duration-300 hover:scale-110 group">
+                    <svg className="w-5 h-5 text-teal-400" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2" />
+                    </svg>
                   </div>
+                  <span className="text-sm font-medium text-gray-300">Functional</span>
+                </div>
+                
+                <div className="flex items-center gap-2">
+                  <div className="w-10 h-10 rounded-full border-2 border-teal-400/70 flex items-center justify-center transition-transform duration-300 hover:scale-110 group">
+                    <svg className="w-5 h-5 text-teal-400" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M13 10V3L4 14h7v7l9-11h-7z" />
+                    </svg>
+                  </div>
+                  <span className="text-sm font-medium text-gray-300">High-Performance</span>
+                </div>
+                
+                <div className="flex items-center gap-2">
+                  <div className="w-10 h-10 rounded-full border-2 border-teal-400/70 flex items-center justify-center transition-transform duration-300 hover:scale-110 group">
+                    <svg className="w-5 h-5 text-teal-400" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z" />
+                    </svg>
+                  </div>
+                  <span className="text-sm font-medium text-gray-300">Enterprise Security</span>
                 </div>
               </div>
             </div>

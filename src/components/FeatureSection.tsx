@@ -9,33 +9,33 @@ const features = [
   {
     id: 'skynet-chat',
     title: 'Skynet Chat',
-    description: 'Advanced AI-powered chat platform that provides secure, private conversations with state-of-the-art language models.',
+    description: 'Your Data. Your AI. Your Control. Deploy the powerful, insightful Skynet Chat directly on your cloud. Answer complex questions, automate support, and handle sensitive data with confidence.',
     icon: (
       <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
         <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8 10h.01M12 10h.01M16 10h.01M9 16H5a2 2 0 01-2-2V6a2 2 0 012-2h14a2 2 0 012 2v8a2 2 0 01-2 2h-5l-5 5v-5z" />
       </svg>
     ),
     benefits: [
-      'End-to-end encryption',
-      'Custom knowledge integration',
-      'Enterprise-ready deployment',
-      'Seamless API integrations',
+      'Secure private cloud deployment',
+      'Confidential data handling',
+      'Powerful AI Q&A capabilities',
+      'Automated support workflows',
     ],
   },
   {
     id: 'skynet-agents',
     title: 'Skynet Agents',
-    description: 'Autonomous AI agents customized for your specific business workflows, boosting productivity and eliminating repetitive tasks.',
+    description: 'Agent Power. Custom Built. Problems Solved. Leverage our adaptable Skynet Agents, refinable for your specific operational needs. Automate specialist workflows and enhance core processes.',
     icon: (
       <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
         <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9.75 17L9 20l-1 1h8l-1-1-.75-3M3 13h18M5 17h14a2 2 0 002-2V5a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" />
       </svg>
     ),
     benefits: [
-      'Task automation',
-      'Natural language interfaces',
-      'Custom workflow design',
-      'Secure data handling',
+      'Autonomous Task Execution',
+      'Custom-Engineered Logic',
+      'Seamless Workflow Integration',
+      'Adaptive Performance Tuning',
     ],
   },
 ];
@@ -63,7 +63,7 @@ const FeatureSection = () => {
             </h2>
           </div>
           <p className="text-gray-300 max-w-3xl mx-auto">
-            Cutting-edge AI applications designed to transform your business with powerful, private, and customizable solutions.
+          Beyond standard AI: Powerful, private solutions engineered for your specific business needs.
           </p>
         </ScrollAnimationWrapper>
 
@@ -77,43 +77,43 @@ const FeatureSection = () => {
               <div 
                 className={`relative group overflow-hidden rounded-2xl transition-all duration-500 hover-scale backdrop-blur-xl ${
                   activeFeature === feature.id 
-                    ? 'border-2 border-teal-400/30 bg-gray-800/50 shadow-xl shadow-teal-500/10' 
-                    : 'border border-teal-500/20 bg-gray-900/60 shadow-lg shadow-teal-500/5'
+                    ? 'border-2 border-teal-400/30 bg-gray-800/80 shadow-xl shadow-teal-500/10' 
+                    : 'border border-teal-500/20 bg-gray-900/80 shadow-lg shadow-teal-500/5'
                 }`}
                 onMouseEnter={() => setActiveFeature(feature.id)}
               >
-                <div className="absolute inset-0 bg-gradient-to-br from-teal-500/15 via-purple-500/10 to-blue-600/15 opacity-0 group-hover:opacity-100 transition-opacity duration-500"></div>
+                {/* Soft gradient background */}
+                <div className="absolute inset-0 bg-gradient-to-br from-teal-500/10 via-purple-500/5 to-blue-600/10 opacity-30 group-hover:opacity-70 transition-opacity duration-500"></div>
                 
-                {/* Tech grid lines for tech effect - lighter */}
-                <div className="absolute inset-0 rounded-xl overflow-hidden opacity-20">
-                  <div className="absolute inset-0 bg-[radial-gradient(#4fd1c515_1px,transparent_1px)] [background-size:8px_8px] opacity-70"></div>
-                  <div className="absolute inset-0 bg-[linear-gradient(to_right,transparent_0%,#4fd1c508_50%,transparent_100%)] animate-scanner"></div>
-                </div>
+                {/* Glass-like overlay for better readability */}
+                <div className="absolute inset-0 backdrop-blur-sm bg-gray-900/40"></div>
                 
                 <div className="relative z-10 p-8">
-                  <div className="w-12 h-12 rounded-xl bg-gray-800/60 backdrop-blur-sm flex items-center justify-center mb-6 text-teal-400 group-hover:bg-teal-400/15 transition-colors duration-300 border border-teal-400/20 group-hover:scale-110 transform transition-transform duration-300">
+                  <div className="w-12 h-12 rounded-xl bg-gradient-to-br from-teal-500/20 to-purple-500/20 flex items-center justify-center mb-6 text-teal-400 group-hover:from-teal-500/30 group-hover:to-purple-500/30 transition-colors duration-300 border border-teal-400/20 group-hover:scale-110 transform transition-transform duration-300 shadow-md shadow-teal-500/10">
                     {feature.icon}
                   </div>
                   
                   <h3 className="text-2xl font-bold mb-3 text-white group-hover:bg-clip-text group-hover:text-transparent group-hover:bg-gradient-to-r group-hover:from-teal-400 group-hover:via-purple-400 group-hover:to-blue-500">{feature.title}</h3>
-                  <p className="text-gray-300 mb-6">{feature.description}</p>
+                  <p className="text-gray-300 mb-6 leading-relaxed">{feature.description}</p>
                   
                   <ul className="space-y-3">
                     {feature.benefits.map((benefit, index) => (
                       <li key={index} className="flex items-start">
-                        <svg 
-                          className="h-6 w-6 mr-2 text-teal-400" 
-                          fill="none" 
-                          viewBox="0 0 24 24" 
-                          stroke="currentColor"
-                        >
-                          <path 
-                            strokeLinecap="round" 
-                            strokeLinejoin="round" 
-                            strokeWidth={2} 
-                            d="M5 13l4 4L19 7" 
-                          />
-                        </svg>
+                        <span className="flex-shrink-0 w-6 h-6 rounded-full bg-gradient-to-r from-teal-500/30 to-purple-500/30 flex items-center justify-center mr-3 shadow-sm shadow-teal-500/10">
+                          <svg 
+                            className="h-4 w-4 text-teal-400" 
+                            fill="none" 
+                            viewBox="0 0 24 24" 
+                            stroke="currentColor"
+                          >
+                            <path 
+                              strokeLinecap="round" 
+                              strokeLinejoin="round" 
+                              strokeWidth={2} 
+                              d="M5 13l4 4L19 7" 
+                            />
+                          </svg>
+                        </span>
                         <span className="text-gray-200">{benefit}</span>
                       </li>
                     ))}
@@ -127,14 +127,8 @@ const FeatureSection = () => {
                   </div>
                 </div>
                 
-                {/* Corner gradient decoration - lighter */}
-                <div className="absolute bottom-0 right-0 w-24 h-24 bg-gradient-to-tl from-teal-400/20 via-purple-400/15 to-transparent rounded-tl-3xl"></div>
-                
-                {/* Data stream effect - lighter */}
-                <div className="absolute inset-0 overflow-hidden rounded-2xl">
-                  <div className="absolute left-1/4 top-0 h-full w-1 bg-gradient-to-b from-transparent via-teal-400/20 to-transparent animate-data-stream"></div>
-                  <div className="absolute right-1/3 top-0 h-full w-[2px] bg-gradient-to-b from-transparent via-purple-400/20 to-transparent animate-data-stream-alt"></div>
-                </div>
+                {/* Subtle corner gradient decoration */}
+                <div className="absolute bottom-0 right-0 w-32 h-32 bg-gradient-to-tl from-teal-400/10 via-purple-400/5 to-transparent rounded-tl-3xl"></div>
               </div>
             </ScrollAnimationWrapper>
           ))}
