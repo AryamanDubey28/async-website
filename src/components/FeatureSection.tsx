@@ -4,6 +4,7 @@ import { useState } from 'react';
 import Image from 'next/image';
 import ScrollAnimationWrapper from './ScrollAnimationWrapper';
 import ParallaxSection from './ParallaxSection';
+import Link from 'next/link';
 
 const features = [
   {
@@ -120,10 +121,12 @@ const FeatureSection = () => {
                   </ul>
                   
                   <div className="mt-8">
-                    <button className="group relative px-6 py-2 rounded-full bg-gradient-to-r from-teal-500 to-purple-500 text-white font-medium transition-all duration-300 hover:shadow-lg hover:shadow-teal-500/20 hover:scale-105 focus:outline-none focus:ring-2 focus:ring-teal-400/50 overflow-hidden">
+                    <Link
+                      href={`/${feature.id}`}
+                      className="group relative px-6 py-2 rounded-full bg-gradient-to-r from-teal-500 to-purple-500 text-white font-medium transition-all duration-300 hover:shadow-lg hover:shadow-teal-500/20 hover:scale-105 focus:outline-none focus:ring-2 focus:ring-teal-400/50 overflow-hidden">
                       <span className="relative z-10">Learn more</span>
                       <span className="absolute inset-0 bg-gradient-to-r from-teal-400 to-purple-400 opacity-0 group-hover:opacity-100 transition-opacity duration-300 blur-xl"></span>
-                    </button>
+                    </Link>
                   </div>
                 </div>
                 

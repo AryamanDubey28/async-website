@@ -71,7 +71,7 @@ const ServicesSection = () => {
   }, []);
 
   return (
-    <div className="relative bg-gray-900 py-24">
+    <div id="services" className="relative bg-gray-900 py-24">
       {/* Background decorative elements */}
       <div className="absolute inset-0 overflow-hidden">
         <div className="absolute -top-20 -left-20 w-64 h-64 bg-gradient-to-br from-teal-500/20 via-purple-500/15 to-blue-600/20 rounded-full blur-3xl animate-pulse-slow"></div>
@@ -181,7 +181,9 @@ const ServicesSection = () => {
         <div className="mt-24 mb-12 text-center">
           <div className="inline-block relative">
             <div className="absolute -inset-1 bg-gradient-to-r from-teal-500/10 to-purple-400/10 rounded-full blur-sm opacity-30 group-hover:opacity-100 transition-opacity duration-200"></div>
-            <button className="group relative px-8 py-4 rounded-full bg-gradient-to-r from-teal-500 to-purple-500 text-white font-semibold transition-all duration-300 hover:shadow-lg hover:shadow-teal-500/20 hover:scale-105 focus:outline-none focus:ring-2 focus:ring-teal-400/50 overflow-hidden">
+            <button 
+              onClick={() => document.getElementById('contact')?.scrollIntoView({ behavior: 'smooth' })}
+              className="group relative px-8 py-4 rounded-full bg-gradient-to-r from-teal-500 to-purple-500 text-white font-semibold transition-all duration-300 hover:shadow-lg hover:shadow-teal-500/20 hover:scale-105 focus:outline-none focus:ring-2 focus:ring-teal-400/50 overflow-hidden">
               <span className="relative z-10">Book a Consultation</span>
               <span className="absolute inset-0 bg-gradient-to-r from-teal-400 to-purple-400 opacity-0 group-hover:opacity-100 transition-opacity duration-300 blur-xl"></span>
             </button>
