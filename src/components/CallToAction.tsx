@@ -22,7 +22,7 @@ const CallToAction = () => {
     
     try {
       // Replace this URL with your Google Apps Script web app URL once deployed
-      const GOOGLE_SHEET_WEBHOOK_URL = 'https://script.google.com/macros/s/AKfycbyfYKlfUNKgFgJ6_vvP01Pp9mKtOhh_39YY2zDA0s4h89Sc7SToyGQboa27RZSZzSw1Yw/exec';
+      const GOOGLE_SHEET_WEBHOOK_URL = 'https://script.google.com/macros/s/AKfycbw0jX72GcNKB23nTZAkBC6EzGfniQFOMmWvONXW707FbDAgrhITcBGQgbe9HsGCwHtvsA/exec';
       
       const formData = {
         email,

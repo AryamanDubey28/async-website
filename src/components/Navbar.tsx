@@ -172,7 +172,9 @@ const Navbar = () => {
         </div>
 
         <div className="flex items-center gap-4">
-          <button className="hidden md:block px-6 py-2 rounded-full bg-gradient-to-r from-teal-500 to-teal-400 text-gray-900 font-medium transition-all duration-300 hover:shadow-lg hover:shadow-teal-500/20 hover:scale-105">
+          <button 
+            onClick={() => scrollToSection('contact')}
+            className="hidden md:block px-6 py-2 rounded-full bg-gradient-to-r from-teal-500 to-teal-400 text-gray-900 font-medium transition-all duration-300 hover:shadow-lg hover:shadow-teal-500/20 hover:scale-105">
             Get Started
           </button>
           <button className="block md:hidden text-white">

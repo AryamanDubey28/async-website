@@ -68,24 +68,21 @@ const Footer = () => {
               links: [
                 { name: 'Skynet Chat', href: '/skynet-chat' },
                 { name: 'Skynet Agents', href: '/skynet-agents' },
-                { name: 'Custom Development', href: '#' },
-                { name: 'Enterprise AI', href: '#' }
+                { name: 'Custom Development', href: '/#services' },
+                { name: 'Enterprise AI', href: '/#services' }
               ]
             },
             {
               title: "Company",
               links: [
-                { name: 'About', href: '#' },
-                { name: 'Careers', href: '#' },
-                { name: 'Blog', href: '#' },
-                { name: 'Contact', href: '#' }
+                { name: 'About', href: '/about' },
+                { name: 'Blog', href: '/blogs' },
+                { name: 'Contact', href: '/#contact' }
               ]
             },
             {
-              title: "Resources",
+              title: "Legal",
               links: [
-                { name: 'Documentation', href: '#' },
-                { name: 'API Reference', href: '#' },
                 { name: 'Privacy Policy', href: '#' },
                 { name: 'Terms of Service', href: '#' }
               ]
