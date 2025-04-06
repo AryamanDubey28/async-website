@@ -129,7 +129,7 @@ export default function SkynetChat() {
 
         // Create more dynamic, high-tech looking connections
         const connectionDistance = Math.min(canvas.width, canvas.height) * 0.12;
-        for (let j = index + 1; j < particles.length; j++) {
+        for (let j = index + 1; j < Math.min(particles.length, index + 5); j++) {
           const dx = particles[j].x - particle.x;
           const dy = particles[j].y - particle.y;
           const distance = Math.sqrt(dx * dx + dy * dy);
