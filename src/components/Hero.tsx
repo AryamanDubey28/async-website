@@ -1,7 +1,71 @@
 'use client';
 
-import { useEffect, useRef, useState } from 'react';
+import { useEffect, useRef, useState, useMemo, useCallback } from 'react';
 import Image from 'next/image';
+import React from 'react';
+
+// Define prop types for FloatingElement
+interface FloatingElementProps {
+  position: string;
+  size: string;
+  gradient: string;
+  className: string;
+  children?: React.ReactNode;
+}
+
+// Memoized floating element component to reduce re-renders
+const FloatingElement = React.memo(({ position, size, gradient, className, children }: FloatingElementProps) => (
+  <div className={`absolute ${position} ${size} ${gradient} ${className}`}>
+    {children}
+  </div>
+));
+
+FloatingElement.displayName = 'FloatingElement';
+
+// Define prop types for BrainImage
+interface BrainImageProps {
+  hoverEffect: boolean;
+}
+
+// Memoized brain image component
+const BrainImage = React.memo(({ hoverEffect }: BrainImageProps) => (
+  <div className="relative w-72 h-72 overflow-hidden">
+    <Image
+      src="/brain.png"
+      alt="AI Brain"
+      width={320}
+      height={320}
+      className={`object-contain transition-all duration-700 ${hoverEffect ? 'scale-110' : 'scale-100'}`}
+      style={{ 
+        filter: 'drop-shadow(0 0 8px rgba(79, 209, 197, 0.5))',
+      }}
+      priority
+    />
+    
+    {/* Animated scan line overlay */}
+    <div className="absolute inset-0 bg-gradient-to-b from-transparent via-teal-400/10 to-transparent opacity-70 animate-scanner-vertical"></div>
+  </div>
+));
+
+BrainImage.displayName = 'BrainImage';
+
+// Define prop types for FeatureIcon
+interface FeatureIconProps {
+  icon: React.ReactNode;
+  label: string;
+}
+
+// Memoized feature icon component
+const FeatureIcon = React.memo(({ icon, label }: FeatureIconProps) => (
+  <div className="flex items-center gap-2">
+    <div className="w-10 h-10 rounded-full border-2 border-teal-400/70 flex items-center justify-center transition-transform duration-300 hover:scale-110 group">
+      {icon}
+    </div>
+    <span className="text-sm font-medium text-gray-300">{label}</span>
+  </div>
+));
+
+FeatureIcon.displayName = 'FeatureIcon';
 
 const Hero = () => {
   const canvasRef = useRef<HTMLCanvasElement>(null);
@@ -11,10 +75,10 @@ const Hero = () => {
   const [particlePositions, setParticlePositions] = useState<Array<{top: string, left: string, animClass: string}>>([]);
   // Client-side state for canvas particles
   const [isCanvasReady, setIsCanvasReady] = useState(false);
-
-  // Client-side effect to generate random particles
-  useEffect(() => {
-    // Initialize particle positions on client side only
+  const [deviceInfo, setDeviceInfo] = useState({ isMobile: false, isLowPower: false });
+  
+  // Memoize the particle generation to avoid recalculation on each render
+  const generateStaticParticles = useCallback(() => {
     const newParticles = [];
     for (let i = 0; i < 6; i++) {
       newParticles.push({
@@ -23,16 +87,41 @@ const Hero = () => {
         animClass: `float-${i % 3 + 1} ${3 + i * 0.5}s infinite ease-in-out`
       });
     }
-    setParticlePositions(newParticles);
+    return newParticles;
+  }, []);
+
+  // Client-side effect to generate random particles
+  useEffect(() => {
+    // Initialize particle positions on client side only
+    setParticlePositions(generateStaticParticles());
     
     // Set loaded state for animation timing - delay slightly
     const timer = setTimeout(() => {
       setIsLoaded(true);
     }, 300);
     
+    // Detect device capabilities
+    if (typeof window !== 'undefined') {
+      const isMobile = window.innerWidth < 768;
+      const isLowPower = navigator.hardwareConcurrency <= 4;
+      setDeviceInfo({ isMobile, isLowPower });
+    }
+    
     return () => clearTimeout(timer);
-  }, []);
+  }, [generateStaticParticles]);
 
+  // Memoize the colors array to prevent recreation on each render
+  const particleColors = useMemo(() => ['#4fd1c5', '#38b2ac', '#805AD5', '#6B46C1', '#00FFFF', '#2D3748'], []);
+  
+  // Memoize the number of particles based on device capabilities
+  const particleCount = useMemo(() => {
+    if (deviceInfo.isMobile || deviceInfo.isLowPower) {
+      return 40; // Fewer particles for mobile/low-power devices
+    }
+    return 90; // Full particles for powerful devices
+  }, [deviceInfo]);
+
+  // Optimize canvas setup and animation
   useEffect(() => {
     // Skip canvas setup during SSR
     if (typeof window === 'undefined') return;
@@ -64,15 +153,14 @@ const Hero = () => {
       pulseSpeed: number;
     }[] = [];
     let animationFrameId: number;
+    let isTabVisible = true;
 
-    // Enhanced color palette for a more futuristic tech look
-    const colors = ['#4fd1c5', '#38b2ac', '#805AD5', '#6B46C1', '#00FFFF', '#2D3748'];
-
-    // Cache for particle gradients
-    const particleGradientCache = new Map<number, CanvasGradient>();
+    // Cache for particle gradients - improved with color in cache key
+    const particleGradientCache = new Map<string, CanvasGradient>();
 
     const createParticleGradient = (size: number, color: string) => {
-      const cacheKey = size;
+      // Include color in the cache key for more precise caching
+      const cacheKey = `${size.toFixed(2)}_${color}`;
       if (particleGradientCache.has(cacheKey)) {
         return particleGradientCache.get(cacheKey)!;
       }
@@ -85,21 +173,28 @@ const Hero = () => {
     };
 
     const createParticles = () => {
-      // More particles with varied behavior for a richer tech effect
-      for (let i = 0; i < 90; i++) {
+      // Use the memoized particle count
+      for (let i = 0; i < particleCount; i++) {
         particles.push({
           x: Math.random() * canvas.width,
           y: Math.random() * canvas.height,
           size: Math.random() * 3.5 + 0.5, // More varied sizes
           speedX: (Math.random() - 0.5) * 0.4, 
           speedY: (Math.random() - 0.5) * 0.4,
-          color: colors[Math.floor(Math.random() * colors.length)],
+          color: particleColors[Math.floor(Math.random() * particleColors.length)],
           opacity: Math.random() * 0.6 + 0.2, // More varied opacity
           pulse: 0,
           pulseSpeed: Math.random() * 0.02 + 0.01 // For pulsing animation
         });
       }
     };
+
+    // Visibility API for throttling animations when tab is not visible
+    const handleVisibilityChange = () => {
+      isTabVisible = document.visibilityState === 'visible';
+    };
+    
+    document.addEventListener('visibilitychange', handleVisibilityChange);
 
     const animate = () => {
       ctx.clearRect(0, 0, canvas.width, canvas.height);
@@ -126,21 +221,34 @@ const Hero = () => {
         ctx.beginPath();
         ctx.arc(0, 0, currentSize, 0, Math.PI * 2);
         
-        // Use cached gradient
+        // Use cached gradient with improved key
         const gradient = createParticleGradient(currentSize, particle.color);
         ctx.fillStyle = gradient;
         ctx.fill();
         
         ctx.restore();
 
-        // Create more dynamic, high-tech looking connections
-        const connectionDistance = Math.min(canvas.width, canvas.height) * 0.12;
-        for (let j = index + 1; j < Math.min(particles.length, index + 5); j++) {
+        // Create connections - optimized for device capabilities
+        // Adjust connection distance for mobile/low-power
+        const baseConnectionDistance = Math.min(canvas.width, canvas.height) * 0.12;
+        const connectionDistance = deviceInfo.isMobile || deviceInfo.isLowPower 
+          ? baseConnectionDistance * 0.7 
+          : baseConnectionDistance;
+          
+        // Limit connections search - reduced number for better performance
+        const maxConnections = deviceInfo.isMobile || deviceInfo.isLowPower ? 3 : 5;
+        
+        for (let j = index + 1; j < Math.min(particles.length, index + maxConnections); j++) {
           const dx = particles[j].x - particle.x;
           const dy = particles[j].y - particle.y;
-          const distance = Math.sqrt(dx * dx + dy * dy);
-
-          if (distance < connectionDistance) {
+          // Use approximate distance for performance when possible
+          // Avoid square root for performance when checking against thresholds
+          const distSquared = dx * dx + dy * dy;
+          const connectionDistSquared = connectionDistance * connectionDistance;
+          
+          if (distSquared < connectionDistSquared) {
+            // Only calculate exact distance when needed
+            const distance = Math.sqrt(distSquared);
             // Dynamic line width based on distance
             const lineWidth = 0.5 * (1 - distance / connectionDistance);
             
@@ -157,25 +265,82 @@ const Hero = () => {
         }
       });
 
-      animationFrameId = requestAnimationFrame(animate);
+      // Throttle animation when tab not visible
+      if (isTabVisible) {
+        animationFrameId = requestAnimationFrame(animate);
+      } else {
+        // Throttle to ~10 FPS when tab not visible to save resources
+        setTimeout(() => {
+          animationFrameId = requestAnimationFrame(animate);
+        }, 100);
+      }
     };
 
     createParticles();
     animate();
 
-    // Responsive canvas
-    window.addEventListener('resize', () => {
-      setCanvasDimensions();
-      particles.length = 0; // Clear particles
-      createParticles(); // Recreate particles for new dimensions
-    });
+    // Responsive canvas - debounced resize handler
+    let resizeTimeout: ReturnType<typeof setTimeout>;
+    const handleResize = () => {
+      clearTimeout(resizeTimeout);
+      resizeTimeout = setTimeout(() => {
+        setCanvasDimensions();
+        particles.length = 0; // Clear particles
+        createParticles(); // Recreate particles for new dimensions
+        
+        // Update device info on resize
+        const isMobile = window.innerWidth < 768;
+        const isLowPower = navigator.hardwareConcurrency <= 4;
+        setDeviceInfo({ isMobile, isLowPower });
+      }, 200); // Debounce resize events
+    };
+    
+    window.addEventListener('resize', handleResize);
 
     return () => {
-      window.removeEventListener('resize', setCanvasDimensions);
+      document.removeEventListener('visibilitychange', handleVisibilityChange);
+      window.removeEventListener('resize', handleResize);
+      clearTimeout(resizeTimeout);
       cancelAnimationFrame(animationFrameId);
     };
-  }, [isCanvasReady]); // Only run once canvas is ready
+  }, [isCanvasReady, particleColors, particleCount, deviceInfo]); // Dependencies include memoized values
 
+  // Memoize handlers
+  const handleMouseEnter = useCallback(() => setHoverEffect(true), []);
+  const handleMouseLeave = useCallback(() => setHoverEffect(false), []);
+
+  // Memoize feature icons to prevent recreation on each render
+  const featureIcons = useMemo(() => [
+    {
+      icon: <svg className="w-5 h-5 text-teal-400" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2" />
+            </svg>,
+      label: "Functional"
+    },
+    {
+      icon: <svg className="w-5 h-5 text-teal-400" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M13 10V3L4 14h7v7l9-11h-7z" />
+            </svg>,
+      label: "High-Performance"
+    },
+    {
+      icon: <svg className="w-5 h-5 text-teal-400" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z" />
+            </svg>,
+      label: "Enterprise Security"
+    }
+  ], []);
+
+  // Memoize the get started and learn more handlers to prevent recreation on each render
+  const handleGetStarted = useCallback(() => {
+    document.getElementById('contact')?.scrollIntoView({ behavior: 'smooth' });
+  }, []);
+
+  const handleLearnMore = useCallback(() => {
+    document.getElementById('services')?.scrollIntoView({ behavior: 'smooth' });
+  }, []);
+
+  // Rest of your component remains the same
   return (
     <div className="relative h-screen w-full overflow-hidden bg-gray-900">
       <canvas ref={canvasRef} className="absolute inset-0 z-0" />
@@ -209,18 +374,18 @@ const Hero = () => {
               </h1>
               
               <p className="text-xl text-gray-300 max-w-xl leading-relaxed">
-              Ditch generic AI. Get private, custom agents built for your challenges, delivering results that actually matter.
+                Ditch generic AI. Get private, custom agents built for your challenges, delivering results that actually matter.
               </p>
               
               <div className="flex flex-col sm:flex-row gap-5 pt-4">
                 <button 
-                  onClick={() => document.getElementById('contact')?.scrollIntoView({ behavior: 'smooth' })}
+                  onClick={handleGetStarted}
                   className="group relative px-8 py-4 rounded-full bg-gradient-to-r from-teal-500 to-purple-500 text-white font-semibold transition-all duration-300 hover:shadow-lg hover:shadow-teal-500/30 hover:scale-105 focus:outline-none focus:ring-2 focus:ring-teal-400/50 overflow-hidden">
                   <span className="relative z-10">Get Started</span>
                   <span className="absolute inset-0 bg-gradient-to-r from-teal-400 to-purple-400 opacity-0 group-hover:opacity-100 transition-opacity duration-300 blur-xl"></span>
                 </button>
                 <button 
-                  onClick={() => document.getElementById('services')?.scrollIntoView({ behavior: 'smooth' })}
+                  onClick={handleLearnMore}
                   className="relative px-8 py-4 rounded-full border border-gray-700 backdrop-blur-lg text-white transition-all duration-300 hover:border-teal-400 focus:outline-none focus:ring-2 focus:ring-teal-400/30 overflow-hidden group">
                   <span className="relative z-10">Learn More</span>
                   <span className="absolute inset-0 bg-gradient-to-r from-gray-800 to-gray-900 opacity-80"></span>
@@ -228,34 +393,15 @@ const Hero = () => {
                 </button>
               </div>
               
-              {/* Feature highlights with teal outlined icons */}
+              {/* Feature highlights with teal outlined icons - using memoized components */}
               <div className="flex flex-wrap items-center gap-6 pt-8">
-                <div className="flex items-center gap-2">
-                  <div className="w-10 h-10 rounded-full border-2 border-teal-400/70 flex items-center justify-center transition-transform duration-300 hover:scale-110 group">
-                    <svg className="w-5 h-5 text-teal-400" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2" />
-                    </svg>
-                  </div>
-                  <span className="text-sm font-medium text-gray-300">Functional</span>
-                </div>
-                
-                <div className="flex items-center gap-2">
-                  <div className="w-10 h-10 rounded-full border-2 border-teal-400/70 flex items-center justify-center transition-transform duration-300 hover:scale-110 group">
-                    <svg className="w-5 h-5 text-teal-400" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M13 10V3L4 14h7v7l9-11h-7z" />
-                    </svg>
-                  </div>
-                  <span className="text-sm font-medium text-gray-300">High-Performance</span>
-                </div>
-                
-                <div className="flex items-center gap-2">
-                  <div className="w-10 h-10 rounded-full border-2 border-teal-400/70 flex items-center justify-center transition-transform duration-300 hover:scale-110 group">
-                    <svg className="w-5 h-5 text-teal-400" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z" />
-                    </svg>
-                  </div>
-                  <span className="text-sm font-medium text-gray-300">Enterprise Security</span>
-                </div>
+                {featureIcons.map((feature, index) => (
+                  <FeatureIcon 
+                    key={index}
+                    icon={feature.icon}
+                    label={feature.label}
+                  />
+                ))}
               </div>
             </div>
             
@@ -284,46 +430,31 @@ const Hero = () => {
                   <div className="absolute inset-0 flex items-center justify-center z-10">
                     <div 
                       className="text-center transform hover:scale-105 transition-transform duration-500"
-                      onMouseEnter={() => setHoverEffect(true)}
-                      onMouseLeave={() => setHoverEffect(false)}
+                      onMouseEnter={handleMouseEnter}
+                      onMouseLeave={handleMouseLeave}
                     >
                       {/* Brain image with animation and effects - EVEN LARGER SIZE */}
                       <div className="relative w-80 h-80 mx-auto">
                         {/* Glowing background for the brain */}
                         <div className={`absolute inset-0 bg-gradient-to-br from-teal-500/30 to-purple-500/30 rounded-full blur-md transition-opacity duration-500 ${hoverEffect ? 'opacity-100' : 'opacity-50'}`}></div>
                         
-                        {/* Brain image with mask and effects */}
+                        {/* Brain image with mask and effects - using memoized component */}
                         <div className="absolute inset-0 flex items-center justify-center">
-                          <div className="relative w-72 h-72 overflow-hidden">
-                            <Image
-                              src="/brain.png"
-                              alt="AI Brain"
-                              width={320}
-                              height={320}
-                              className={`object-contain transition-all duration-700 ${hoverEffect ? 'scale-110' : 'scale-100'}`}
-                              style={{ 
-                                filter: 'drop-shadow(0 0 8px rgba(79, 209, 197, 0.5))',
-                              }}
-                              priority
-                            />
-                            
-                            {/* Animated scan line overlay */}
-                            <div className="absolute inset-0 bg-gradient-to-b from-transparent via-teal-400/10 to-transparent opacity-70 animate-scanner-vertical"></div>
-                            
-                            {/* Animated particles around the brain - CLIENT-SIDE RENDERING */}
-                            <div className="absolute inset-0">
-                              {isLoaded && particlePositions.map((particle, i) => (
-                                <div 
-                                  key={i}
-                                  className="absolute w-1.5 h-1.5 rounded-full bg-teal-400/80"
-                                  style={{
-                                    top: particle.top,
-                                    left: particle.left,
-                                    animation: particle.animClass
-                                  }}
-                                ></div>
-                              ))}
-                            </div>
+                          <BrainImage hoverEffect={hoverEffect} />
+                          
+                          {/* Animated particles around the brain - CLIENT-SIDE RENDERING */}
+                          <div className="absolute inset-0">
+                            {isLoaded && particlePositions.map((particle, i) => (
+                              <div 
+                                key={i}
+                                className="absolute w-1.5 h-1.5 rounded-full bg-teal-400/80"
+                                style={{
+                                  top: particle.top,
+                                  left: particle.left,
+                                  animation: particle.animClass
+                                }}
+                              ></div>
+                            ))}
                           </div>
                         </div>
                         
@@ -394,9 +525,13 @@ const Hero = () => {
                   </div>
                 </div>
                 
-                {/* Floating Elements with improved animations and tech look */}
-                <div className="absolute -top-8 -right-8 w-28 h-28 bg-gradient-to-br from-teal-400/80 to-blue-500/80 rounded-xl float-1 opacity-70 shadow-lg shadow-teal-500/30 backdrop-blur-sm border border-teal-400/30 overflow-hidden">
-                  {/* Add workflow image inside */}
+                {/* Floating Elements with improved animations and tech look - using memoized FloatingElement component */}
+                <FloatingElement 
+                  position="-top-8 -right-8" 
+                  size="w-28 h-28" 
+                  gradient="bg-gradient-to-br from-teal-400/80 to-blue-500/80" 
+                  className="rounded-xl float-1 opacity-70 shadow-lg shadow-teal-500/30 backdrop-blur-sm border border-teal-400/30 overflow-hidden"
+                >
                   <div className="absolute inset-0 flex items-center justify-center">
                     <Image
                       src="/workflow.png"
@@ -406,21 +541,33 @@ const Hero = () => {
                       className="object-cover opacity-90"
                     />
                   </div>
-                  {/* Tech pattern overlay */}
                   <div className="absolute inset-0 bg-[linear-gradient(45deg,transparent_25%,rgba(68,68,68,0.2)_25%,rgba(68,68,68,0.2)_50%,transparent_50%,transparent_75%,rgba(68,68,68,0.2)_75%)] bg-[length:4px_4px] mix-blend-overlay"></div>
-                </div>
+                </FloatingElement>
                 
-                <div className="absolute bottom-4 -left-12 w-20 h-20 bg-gradient-to-br from-purple-500/80 to-teal-400/80 rounded-lg float-2 opacity-70 shadow-lg shadow-purple-500/20 backdrop-blur-sm border border-purple-400/30">
-                  {/* Binary pattern */}
+                <FloatingElement 
+                  position="bottom-4 -left-12" 
+                  size="w-20 h-20" 
+                  gradient="bg-gradient-to-br from-purple-500/80 to-teal-400/80" 
+                  className="rounded-lg float-2 opacity-70 shadow-lg shadow-purple-500/20 backdrop-blur-sm border border-purple-400/30"
+                >
                   <div className="absolute inset-0 text-[6px] text-white/20 overflow-hidden p-1 font-mono">10110101010101</div>
-                </div>
+                </FloatingElement>
                 
-                <div className="absolute top-1/3 -right-16 w-16 h-16 bg-gradient-to-r from-teal-500/70 to-blue-500/70 rounded-full float-3 opacity-70 shadow-lg shadow-blue-500/20 backdrop-blur-sm border border-blue-400/30">
-                  {/* Pulse ring */}
+                <FloatingElement 
+                  position="top-1/3 -right-16" 
+                  size="w-16 h-16" 
+                  gradient="bg-gradient-to-r from-teal-500/70 to-blue-500/70" 
+                  className="rounded-full float-3 opacity-70 shadow-lg shadow-blue-500/20 backdrop-blur-sm border border-blue-400/30"
+                >
                   <div className="absolute -inset-1 border border-blue-400/40 rounded-full animate-ping-slow"></div>
-                </div>
+                </FloatingElement>
                 
-                <div className="absolute -bottom-10 right-20 w-14 h-14 bg-gradient-to-r from-purple-500/70 to-pink-500/70 rounded-md float-4 opacity-70 shadow-lg shadow-purple-500/20 backdrop-blur-sm border border-purple-400/30"></div>
+                <FloatingElement 
+                  position="-bottom-10 right-20" 
+                  size="w-14 h-14" 
+                  gradient="bg-gradient-to-r from-purple-500/70 to-pink-500/70" 
+                  className="rounded-md float-4 opacity-70 shadow-lg shadow-purple-500/20 backdrop-blur-sm border border-purple-400/30"
+                />
                 
                 {/* Additional futuristic elements */}
                 <div className="absolute left-1/4 top-1/4 w-8 h-2 bg-teal-400/50 rounded-full shadow-lg shadow-teal-400/30 animate-pulse-fast"></div>
@@ -434,4 +581,4 @@ const Hero = () => {
   );
 };
 
-export default Hero; 
+export default React.memo(Hero); 
