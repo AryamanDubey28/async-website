@@ -52,7 +52,7 @@ const Hero = () => {
     setCanvasDimensions();
     setIsCanvasReady(true);
 
-    const particles: {
+    let particles: {
       x: number;
       y: number;
       size: number;
@@ -63,9 +63,26 @@ const Hero = () => {
       pulse: number;
       pulseSpeed: number;
     }[] = [];
+    let animationFrameId: number;
 
     // Enhanced color palette for a more futuristic tech look
     const colors = ['#4fd1c5', '#38b2ac', '#805AD5', '#6B46C1', '#00FFFF', '#2D3748'];
+
+    // Cache for particle gradients
+    const particleGradientCache = new Map<number, CanvasGradient>();
+
+    const createParticleGradient = (size: number, color: string) => {
+      const cacheKey = size;
+      if (particleGradientCache.has(cacheKey)) {
+        return particleGradientCache.get(cacheKey)!;
+      }
+
+      const gradient = ctx.createRadialGradient(0, 0, 0, 0, 0, size * 2);
+      gradient.addColorStop(0, color + 'ff');
+      gradient.addColorStop(1, color + '00');
+      particleGradientCache.set(cacheKey, gradient);
+      return gradient;
+    };
 
     const createParticles = () => {
       // More particles with varied behavior for a richer tech effect
@@ -85,18 +102,13 @@ const Hero = () => {
     };
 
     const animate = () => {
-      requestAnimationFrame(animate);
+      ctx.clearRect(0, 0, canvas.width, canvas.height);
       
-      // Semi-transparent clear for trail effect
-      ctx.fillStyle = 'rgba(10, 10, 20, 0.2)';
-      ctx.fillRect(0, 0, canvas.width, canvas.height);
-
       particles.forEach((particle, index) => {
-        // Update position with slight mouse influence
+        // Update particle position
         particle.x += particle.speedX;
         particle.y += particle.speedY;
-
-        // Pulsing size effect
+        
         particle.pulse += particle.pulseSpeed;
         const pulseFactor = Math.sin(particle.pulse) * 0.5 + 1;
         const currentSize = particle.size * pulseFactor;
@@ -107,21 +119,19 @@ const Hero = () => {
         if (particle.y > canvas.height) particle.y = 0;
         if (particle.y < 0) particle.y = canvas.height;
 
-        // Draw particle with glow effect
+        // Draw particle with cached gradient
+        ctx.save();
+        ctx.translate(particle.x, particle.y);
+        
         ctx.beginPath();
-        ctx.arc(particle.x, particle.y, currentSize, 0, Math.PI * 2);
+        ctx.arc(0, 0, currentSize, 0, Math.PI * 2);
         
-        // Create gradient for glow effect
-        const gradient = ctx.createRadialGradient(
-          particle.x, particle.y, 0,
-          particle.x, particle.y, currentSize * 2
-        );
-        
-        gradient.addColorStop(0, particle.color + Math.floor(particle.opacity * 255).toString(16).padStart(2, '0'));
-        gradient.addColorStop(1, particle.color + '00'); // Transparent at the edge
-        
+        // Use cached gradient
+        const gradient = createParticleGradient(currentSize, particle.color);
         ctx.fillStyle = gradient;
         ctx.fill();
+        
+        ctx.restore();
 
         // Create more dynamic, high-tech looking connections
         const connectionDistance = Math.min(canvas.width, canvas.height) * 0.12;
@@ -137,16 +147,8 @@ const Hero = () => {
             ctx.beginPath();
             const opacity = Math.floor((1 - distance / connectionDistance) * 60).toString(16).padStart(2, '0');
             
-            // Create a gradient for lines
-            const gradient = ctx.createLinearGradient(
-              particle.x, particle.y, 
-              particles[j].x, particles[j].y
-            );
-            
-            gradient.addColorStop(0, particle.color + opacity);
-            gradient.addColorStop(1, particles[j].color + opacity);
-            
-            ctx.strokeStyle = gradient;
+            // Use solid color instead of gradient for better performance
+            ctx.strokeStyle = particle.color + opacity;
             ctx.lineWidth = lineWidth;
             ctx.moveTo(particle.x, particle.y);
             ctx.lineTo(particles[j].x, particles[j].y);
@@ -154,6 +156,8 @@ const Hero = () => {
           }
         }
       });
+
+      animationFrameId = requestAnimationFrame(animate);
     };
 
     createParticles();
@@ -168,6 +172,7 @@ const Hero = () => {
 
     return () => {
       window.removeEventListener('resize', setCanvasDimensions);
+      cancelAnimationFrame(animationFrameId);
     };
   }, [isCanvasReady]); // Only run once canvas is ready
 

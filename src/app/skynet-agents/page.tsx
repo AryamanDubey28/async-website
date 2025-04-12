@@ -13,7 +13,7 @@ export default function SkynetAgents() {
   const [activeAgent, setActiveAgent] = useState(0);
   const [showTypingIndicator, setShowTypingIndicator] = useState(false);
   const canvasRef = useRef<HTMLCanvasElement>(null);
-  const [isCanvasReady, setIsCanvasReady] = useState(false);
+  const mainRef = useRef<HTMLElement>(null); // Add ref for the main element
   
   // Features list for the product
   const features = [
@@ -103,25 +103,29 @@ export default function SkynetAgents() {
 
   // Canvas particle effect
   useEffect(() => {
-    // Skip canvas setup during SSR
-    if (typeof window === 'undefined') return;
-    
-    const canvas = canvasRef.current;
-    if (!canvas) return;
+    // Removed isCanvasReady check, only check for canvasRef
+    if (!canvasRef.current) return;
 
-    const ctx = canvas.getContext('2d', { alpha: true });
+    const canvas = canvasRef.current;
+    const ctx = canvas.getContext('2d');
     if (!ctx) return;
 
-    // Set canvas dimensions to match window
+    // Set canvas dimensions based on the main container
     const setCanvasDimensions = () => {
-      canvas.width = window.innerWidth;
-      canvas.height = window.innerHeight;
+      if (mainRef.current && canvas) {
+        canvas.width = mainRef.current.clientWidth;
+        canvas.height = mainRef.current.scrollHeight; // Use scrollHeight for full content height
+      } else if (canvas) {
+        // Fallback if mainRef isn't available yet
+        canvas.width = window.innerWidth;
+        canvas.height = window.innerHeight;
+      }
     };
-    
-    setCanvasDimensions();
-    setIsCanvasReady(true);
 
-    const particles: {
+    setCanvasDimensions();
+    // Removed setIsCanvasReady call
+
+    type Particle = {
       x: number;
       y: number;
       size: number;
@@ -131,10 +135,29 @@ export default function SkynetAgents() {
       opacity: number;
       pulse: number;
       pulseSpeed: number;
-    }[] = [];
+    };
 
-    // Enhanced color palette with deeper purples for a more advanced tech look
-    const colors = ['#4fd1c5', '#38b2ac', '#805AD5', '#6B46C1', '#9F7AEA', '#2D3748'];
+    let particles: Particle[] = [];
+    let animationFrameId: number;
+
+    // Enhanced color palette for a more futuristic tech look
+    const colors = ['#4fd1c5', '#38b2ac', '#805AD5', '#6B46C1', '#00FFFF', '#2D3748'];
+
+    // Cache for particle gradients
+    const particleGradientCache = new Map<number, CanvasGradient>();
+
+    const createParticleGradient = (size: number, color: string) => {
+      const cacheKey = size;
+      if (particleGradientCache.has(cacheKey)) {
+        return particleGradientCache.get(cacheKey)!;
+      }
+
+      const gradient = ctx.createRadialGradient(0, 0, 0, 0, 0, size * 2);
+      gradient.addColorStop(0, color + 'ff');
+      gradient.addColorStop(1, color + '00');
+      particleGradientCache.set(cacheKey, gradient);
+      return gradient;
+    };
 
     const createParticles = () => {
       // More particles with varied behavior for a richer tech effect
@@ -154,18 +177,12 @@ export default function SkynetAgents() {
     };
 
     const animate = () => {
-      requestAnimationFrame(animate);
+      ctx.clearRect(0, 0, canvas.width, canvas.height);
       
-      // Semi-transparent clear for trail effect
-      ctx.fillStyle = 'rgba(10, 10, 20, 0.2)';
-      ctx.fillRect(0, 0, canvas.width, canvas.height);
-
       particles.forEach((particle, index) => {
-        // Update position with slight mouse influence
         particle.x += particle.speedX;
         particle.y += particle.speedY;
 
-        // Pulsing size effect
         particle.pulse += particle.pulseSpeed;
         const pulseFactor = Math.sin(particle.pulse) * 0.5 + 1;
         const currentSize = particle.size * pulseFactor;
@@ -176,21 +193,19 @@ export default function SkynetAgents() {
         if (particle.y > canvas.height) particle.y = 0;
         if (particle.y < 0) particle.y = canvas.height;
 
-        // Draw particle with glow effect
+        // Draw particle with cached gradient
+        ctx.save();
+        ctx.translate(particle.x, particle.y);
+        
         ctx.beginPath();
-        ctx.arc(particle.x, particle.y, currentSize, 0, Math.PI * 2);
+        ctx.arc(0, 0, currentSize, 0, Math.PI * 2);
         
-        // Create gradient for glow effect
-        const gradient = ctx.createRadialGradient(
-          particle.x, particle.y, 0,
-          particle.x, particle.y, currentSize * 2
-        );
-        
-        gradient.addColorStop(0, particle.color + Math.floor(particle.opacity * 255).toString(16).padStart(2, '0'));
-        gradient.addColorStop(1, particle.color + '00'); // Transparent at the edge
-        
+        // Use cached gradient
+        const gradient = createParticleGradient(currentSize, particle.color);
         ctx.fillStyle = gradient;
         ctx.fill();
+        
+        ctx.restore();
 
         // Create more dynamic, high-tech looking connections
         const connectionDistance = Math.min(canvas.width, canvas.height) * 0.12;
@@ -206,16 +221,8 @@ export default function SkynetAgents() {
             ctx.beginPath();
             const opacity = Math.floor((1 - distance / connectionDistance) * 60).toString(16).padStart(2, '0');
             
-            // Create a gradient for lines
-            const gradient = ctx.createLinearGradient(
-              particle.x, particle.y, 
-              particles[j].x, particles[j].y
-            );
-            
-            gradient.addColorStop(0, particle.color + opacity);
-            gradient.addColorStop(1, particles[j].color + opacity);
-            
-            ctx.strokeStyle = gradient;
+            // Use solid color instead of gradient for better performance
+            ctx.strokeStyle = particle.color + opacity;
             ctx.lineWidth = lineWidth;
             ctx.moveTo(particle.x, particle.y);
             ctx.lineTo(particles[j].x, particles[j].y);
@@ -223,6 +230,8 @@ export default function SkynetAgents() {
           }
         }
       });
+
+      animationFrameId = requestAnimationFrame(animate);
     };
 
     createParticles();
@@ -237,15 +246,19 @@ export default function SkynetAgents() {
 
     return () => {
       window.removeEventListener('resize', setCanvasDimensions);
+      cancelAnimationFrame(animationFrameId);
     };
-  }, [isCanvasReady]);
+  }, []); // Changed dependency to empty array []
 
   return (
-    <main className="min-h-screen bg-gray-900 text-white overflow-hidden flex flex-col">
+    <main ref={mainRef} className="relative min-h-screen bg-gray-900 text-white overflow-hidden flex flex-col">
       <Navbar />
       
       {/* Canvas background */}
-      <canvas ref={canvasRef} className="fixed inset-0 z-0 opacity-90" />
+      <canvas ref={canvasRef} className="absolute inset-0 z-0" />
+      
+      {/* Subtle radial gradient overlay for depth */}
+      <div className="absolute inset-0 bg-gradient-radial from-transparent to-gray-900/80 z-0"></div>
       
       {/* Content wrapper */}
       <div className="flex-grow">
