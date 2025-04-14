@@ -1,7 +1,40 @@
 'use client';
 
-import { useState } from 'react';
-import { motion, AnimatePresence } from 'framer-motion';
+import { useState, useRef, useEffect } from 'react';
+import { motion, AnimatePresence, useAnimationControls } from 'framer-motion';
+
+// Add global styles at the top of the file
+const globalStyles = `
+  .hide-scrollbar::-webkit-scrollbar {
+    display: none;
+  }
+  .hide-scrollbar {
+    -ms-overflow-style: none;
+    scrollbar-width: none;
+  }
+  @keyframes bounce-x {
+    0%, 100% {
+      transform: translateX(0);
+    }
+    50% {
+      transform: translateX(5px);
+    }
+  }
+  .animate-bounce-x {
+    animation: bounce-x 1.5s infinite;
+  }
+  @keyframes scanner {
+    0% {
+      transform: translateX(-100%);
+    }
+    100% {
+      transform: translateX(100%);
+    }
+  }
+  .animate-scanner {
+    animation: scanner 8s linear infinite;
+  }
+`;
 
 const services = [
   {
@@ -78,28 +111,51 @@ const services = [
 const ServicesSection = () => {
   const [activeService, setActiveService] = useState<string | null>(null);
   const [hoveredService, setHoveredService] = useState<string | null>(null);
+  const carouselRef = useRef<HTMLDivElement>(null);
+  const controls = useAnimationControls();
+
+  // Add effect to inject global styles once on mount
+  useEffect(() => {
+    // Check if the style element already exists
+    const id = 'services-section-styles';
+    if (!document.getElementById(id)) {
+      const styleElement = document.createElement('style');
+      styleElement.id = id;
+      styleElement.innerHTML = globalStyles;
+      document.head.appendChild(styleElement);
+    }
+    
+    // Clean up on unmount
+    return () => {
+      const styleElement = document.getElementById(id);
+      if (styleElement) {
+        document.head.removeChild(styleElement);
+      }
+    };
+  }, []);
 
   const toggleService = (id: string) => {
-    setActiveService(activeService === id ? null : id);
-  };
-  
-  // Updated animation variants for modal-style expansion
-  const expandVariants = {
-    collapsed: { 
-      opacity: 0,
-      scale: 0.8,
-      transition: { 
-        duration: 0.2, 
-        ease: "easeOut" 
-      }
-    },
-    expanded: { 
-      opacity: 1,
-      scale: 1,
-      transition: { 
-        duration: 0.3, 
-        ease: "easeOut" 
-      }
+    if (activeService === id) {
+      setActiveService(null);
+    } else {
+      setActiveService(id);
+      
+      // Scroll the active card into view if needed
+      setTimeout(() => {
+        const activeElement = document.getElementById(`service-card-${id}`);
+        if (activeElement && carouselRef.current) {
+          const containerRect = carouselRef.current.getBoundingClientRect();
+          const activeRect = activeElement.getBoundingClientRect();
+          
+          // Calculate if we need to scroll
+          if (activeRect.left < containerRect.left || activeRect.right > containerRect.right) {
+            carouselRef.current.scrollTo({
+              left: activeElement.offsetLeft - 32,
+              behavior: 'smooth'
+            });
+          }
+        }
+      }, 100);
     }
   };
   
@@ -120,7 +176,7 @@ const ServicesSection = () => {
       
       <div className="container mx-auto px-4 max-w-6xl relative z-10">
         {/* Section header */}
-        <div className="text-center mb-16">
+        <div className="text-center mb-12">
           <div className="inline-block relative">
             <div className="absolute -inset-1 bg-gradient-to-r from-teal-500/10 to-purple-400/10 rounded-lg blur-sm"></div>
             <h2 className="relative text-3xl md:text-4xl font-bold mb-4">
@@ -132,183 +188,208 @@ const ServicesSection = () => {
           </p>
         </div>
         
-        {/* Services grid */}
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+        {/* Carousel navigation indicators */}
+        <div className="flex justify-center mb-8 gap-2 md:hidden">
           {services.map((service) => (
-            <div key={service.id} className="h-full">
-              <div 
-                className={`
-                  h-full group relative rounded-2xl
-                  bg-gray-900/60 backdrop-blur-sm 
-                  border transition-all duration-300
-                  hover:shadow-lg hover:shadow-teal-500/10
-                  ${activeService === service.id 
-                    ? 'border-teal-500/40 shadow-lg shadow-teal-500/10' 
-                    : 'border-gray-700/50'}
-                `}
-                onMouseEnter={() => setHoveredService(service.id)}
-                onMouseLeave={() => setHoveredService(null)}
-              >
-                {/* Tech grid lines inside cards */}
-                <div className="absolute inset-0 rounded-xl overflow-hidden opacity-15">
-                  <div className="absolute inset-0 bg-[radial-gradient(#4fd1c515_1px,transparent_1px)] [background-size:8px_8px] opacity-70"></div>
-                </div>
-                
-                {/* Card header - always visible */}
-                <div 
-                  className="p-6 flex flex-col h-full cursor-pointer relative z-10"
-                  onClick={() => toggleService(service.id)}
-                >
-                  {/* Service icon */}
-                  <div className={`
-                    w-12 h-12 rounded-lg flex items-center justify-center mb-5
-                    transition-all duration-300
-                    ${activeService === service.id 
-                      ? 'bg-gradient-to-br from-teal-500/15 to-purple-500/15 text-teal-400'
-                      : hoveredService === service.id
-                        ? 'bg-teal-500/10 text-teal-400'
-                        : 'bg-gray-800/70 text-gray-400'}
-                  `}>
-                    {service.icon}
-                  </div>
-                  
-                  {/* Service title */}
-                  <h3 className={`
-                    text-xl font-bold mb-3 transition-all duration-300
-                    ${activeService === service.id 
-                      ? 'bg-clip-text text-transparent bg-gradient-to-r from-teal-400 to-purple-400' 
-                      : 'text-white'}
-                  `}>
-                    {service.title}
-                  </h3>
-                  
-                  {/* Service description */}
-                  <p className="text-gray-300 mb-5">
-                    {service.description}
-                  </p>
-                  
-                  {/* Expand/collapse indicator */}
-                  <div className="mt-auto flex items-center">
-                    <div className={`
-                      h-px w-6 mr-3 transition-all duration-300
-                      ${activeService === service.id || hoveredService === service.id
-                        ? 'bg-teal-400'
-                        : 'bg-gray-700'}
-                    `}></div>
-                    <span className={`
-                      text-sm font-medium flex items-center gap-1.5
-                      transition-all duration-300
-                      ${activeService === service.id 
-                        ? 'text-teal-400' 
-                        : 'text-gray-500'}
-                    `}>
-                      {activeService === service.id ? 'View less' : 'View more'}
-                      <svg 
-                        xmlns="http://www.w3.org/2000/svg" 
-                        className={`h-3.5 w-3.5 transition-transform duration-300 ${
-                          activeService === service.id ? 'rotate-180' : ''
-                        }`}
-                        fill="none" 
-                        viewBox="0 0 24 24" 
-                        stroke="currentColor"
-                      >
-                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
-                      </svg>
-                    </span>
-                  </div>
-                </div>
-                
-                {/* Subtle hover effect */}
-                <div className="absolute inset-0 bg-gradient-to-br from-teal-500/0 via-purple-500/0 to-blue-600/0 opacity-0 group-hover:opacity-10 transition-opacity duration-300"></div>
-              </div>
-            </div>
+            <button
+              key={`nav-${service.id}`}
+              className={`w-2.5 h-2.5 rounded-full transition-all duration-300 ${
+                activeService === service.id || hoveredService === service.id
+                  ? 'bg-teal-400' 
+                  : 'bg-gray-700'
+              }`}
+              onClick={() => {
+                const element = document.getElementById(`service-card-${service.id}`);
+                if (element && carouselRef.current) {
+                  carouselRef.current.scrollTo({
+                    left: element.offsetLeft - 32,
+                    behavior: 'smooth'
+                  });
+                }
+              }}
+            />
           ))}
         </div>
         
-        {/* Modal-style expandable content */}
-        <AnimatePresence>
-          {activeService && (
-            <>
-              {/* Overlay */}
-              <motion.div 
-                initial={{ opacity: 0 }}
-                animate={{ opacity: 1 }}
-                exit={{ opacity: 0 }}
-                onClick={() => setActiveService(null)}
-                className="fixed inset-0 bg-gray-900/80 backdrop-blur-sm z-50"
-              />
-              
-              {/* Modal content */}
+        {/* Carousel scroll hint */}
+        <div className="hidden md:flex items-center justify-center mb-8 text-gray-400">
+          <div className="w-6 h-6 animate-bounce-x mr-2">
+            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 19l-7-7 7-7" />
+            </svg>
+          </div>
+          <span className="text-sm">Scroll or swipe to explore</span>
+          <div className="w-6 h-6 animate-bounce-x ml-2">
+            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
+            </svg>
+          </div>
+        </div>
+        
+        {/* Horizontal scrollable carousel */}
+        <div 
+          ref={carouselRef}
+          className="flex overflow-x-auto pb-8 -mx-4 px-4 snap-x snap-mandatory hide-scrollbar"
+          style={{ scrollbarWidth: 'none' }}
+        >
+          <div className="flex gap-6">
+            {services.map((service) => (
               <motion.div
-                initial="collapsed"
-                animate="expanded"
-                exit="collapsed"
-                variants={expandVariants}
-                className="fixed top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-full max-w-2xl max-h-[90vh] overflow-y-auto z-50 p-6 rounded-2xl bg-gray-900/95 backdrop-blur-md border border-teal-500/30 shadow-2xl shadow-teal-500/20"
+                id={`service-card-${service.id}`}
+                key={service.id}
+                layout
+                transition={{ 
+                  layout: { duration: 0.4, ease: "easeOut" },
+                  height: { duration: 0.4, ease: "easeOut" }
+                }}
+                className={`
+                  snap-center flex-shrink-0 
+                  ${activeService === service.id ? 'w-[calc(100vw-4rem)] max-w-4xl' : 'w-80'}
+                  h-fit
+                  transition-all duration-400
+                `}
               >
-                {/* Modal header */}
-                <div className="flex items-start justify-between mb-4">
-                  <div className="flex items-center">
-                    <div className="w-12 h-12 rounded-lg flex items-center justify-center mr-4 bg-gradient-to-br from-teal-500/20 to-purple-500/20 text-teal-400">
-                      {services.find(s => s.id === activeService)?.icon}
-                    </div>
-                    <h3 className="text-2xl font-bold bg-clip-text text-transparent bg-gradient-to-r from-teal-400 to-purple-400">
-                      {services.find(s => s.id === activeService)?.title}
-                    </h3>
+                <div 
+                  className={`
+                    relative rounded-2xl h-full
+                    bg-gray-900/60 backdrop-blur-sm overflow-hidden
+                    border transition-all duration-300
+                    hover:shadow-lg hover:shadow-teal-500/10
+                    ${activeService === service.id 
+                      ? 'border-teal-500/40 shadow-lg shadow-teal-500/10' 
+                      : 'border-gray-700/50'}
+                  `}
+                  onMouseEnter={() => setHoveredService(service.id)}
+                  onMouseLeave={() => setHoveredService(null)}
+                >
+                  {/* Tech grid background */}
+                  <div className="absolute inset-0 rounded-xl overflow-hidden opacity-15">
+                    <div className="absolute inset-0 bg-[radial-gradient(#4fd1c515_1px,transparent_1px)] [background-size:8px_8px] opacity-70"></div>
+                    {activeService === service.id && (
+                      <div className="absolute inset-0 bg-[linear-gradient(to_right,transparent_0%,#4fd1c508_50%,transparent_100%)] animate-scanner"></div>
+                    )}
                   </div>
                   
-                  <button 
-                    onClick={() => setActiveService(null)}
-                    className="text-gray-400 hover:text-white transition-colors"
-                  >
-                    <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
-                    </svg>
-                  </button>
+                  <div className="flex flex-col md:flex-row h-full">
+                    {/* Card content - always visible */}
+                    <div 
+                      className={`
+                        p-6 flex flex-col h-full cursor-pointer relative z-10
+                        ${activeService === service.id ? 'md:w-80 border-b md:border-b-0 md:border-r border-gray-700/50' : 'w-full'}
+                      `}
+                      onClick={() => toggleService(service.id)}
+                    >
+                      {/* Service icon */}
+                      <div className={`
+                        w-12 h-12 rounded-lg flex items-center justify-center mb-5
+                        transition-all duration-300
+                        ${activeService === service.id || hoveredService === service.id
+                          ? 'bg-gradient-to-br from-teal-500/15 to-purple-500/15 text-teal-400'
+                          : 'bg-gray-800/70 text-gray-400'}
+                      `}>
+                        {service.icon}
+                      </div>
+                      
+                      {/* Service title */}
+                      <h3 className={`
+                        text-xl font-bold mb-3 transition-all duration-300
+                        ${activeService === service.id 
+                          ? 'bg-clip-text text-transparent bg-gradient-to-r from-teal-400 to-purple-400' 
+                          : 'text-white'}
+                      `}>
+                        {service.title}
+                      </h3>
+                      
+                      {/* Service description */}
+                      <p className="text-gray-300 mb-5">
+                        {service.description}
+                      </p>
+                      
+                      {/* Expand/collapse indicator */}
+                      <div className="mt-auto flex items-center">
+                        <div className={`
+                          h-px w-6 mr-3 transition-all duration-300
+                          ${activeService === service.id || hoveredService === service.id
+                            ? 'bg-teal-400'
+                            : 'bg-gray-700'}
+                        `}></div>
+                        <span className={`
+                          text-sm font-medium flex items-center gap-1.5
+                          transition-all duration-300
+                          ${activeService === service.id 
+                            ? 'text-teal-400' 
+                            : 'text-gray-500'}
+                        `}>
+                          {activeService === service.id ? 'View less' : 'View more'}
+                          <svg 
+                            xmlns="http://www.w3.org/2000/svg" 
+                            className={`h-3.5 w-3.5 transition-transform duration-300 ${
+                              activeService === service.id ? 'rotate-180' : ''
+                            }`}
+                            fill="none" 
+                            viewBox="0 0 24 24" 
+                            stroke="currentColor"
+                          >
+                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
+                          </svg>
+                        </span>
+                      </div>
+                    </div>
+                    
+                    {/* Expanded content */}
+                    {activeService === service.id && (
+                      <motion.div 
+                        initial={{ opacity: 0, x: 20 }}
+                        animate={{ opacity: 1, x: 0 }}
+                        exit={{ opacity: 0, x: 20 }}
+                        transition={{ duration: 0.3, delay: 0.1 }}
+                        className="p-6 md:flex-1 overflow-y-auto max-h-[600px]"
+                      >
+                        <h4 className="text-teal-400 text-lg font-medium mb-6">Services include:</h4>
+                        <ul className="space-y-4 mb-6">
+                          {service.expandedContent.map((item, i) => (
+                            <motion.li 
+                              key={i} 
+                              initial={{ opacity: 0, y: 10 }}
+                              animate={{ opacity: 1, y: 0 }}
+                              transition={{ duration: 0.3, delay: 0.1 + (i * 0.05) }}
+                              className="flex items-start gap-3"
+                            >
+                              <span className="flex-shrink-0 w-2 h-2 rounded-full bg-gradient-to-r from-teal-400 to-purple-400 mt-2"></span>
+                              <span className="text-gray-300">{item}</span>
+                            </motion.li>
+                          ))}
+                        </ul>
+                        
+                        {/* Action button */}
+                        <motion.button 
+                          initial={{ opacity: 0, y: 10 }}
+                          animate={{ opacity: 1, y: 0 }}
+                          transition={{ duration: 0.3, delay: 0.3 }}
+                          className="w-full py-3 rounded-lg
+                            bg-gradient-to-r from-teal-500 to-purple-500
+                            hover:shadow-lg hover:shadow-teal-500/20 
+                            transition-all duration-300 text-white font-medium"
+                          onClick={(e) => {
+                            e.stopPropagation();
+                            document.getElementById('contact')?.scrollIntoView({ behavior: 'smooth' });
+                          }}
+                        >
+                          Discuss Your Project
+                        </motion.button>
+                      </motion.div>
+                    )}
+                  </div>
+                  
+                  {/* Subtle hover effect */}
+                  {!activeService && (
+                    <div className="absolute inset-0 bg-gradient-to-br from-teal-500/0 via-purple-500/0 to-blue-600/0 opacity-0 hover:opacity-10 transition-opacity duration-300 rounded-2xl"></div>
+                  )}
                 </div>
-                
-                {/* Modal description */}
-                <p className="text-gray-300 mb-6 text-lg">
-                  {services.find(s => s.id === activeService)?.description}
-                </p>
-                
-                {/* Modal content details */}
-                <div className="mb-6">
-                  <h4 className="text-white text-lg font-medium mb-4">Services include:</h4>
-                  <ul className="space-y-4">
-                    {services.find(s => s.id === activeService)?.expandedContent.map((item, i) => (
-                      <li key={i} className="flex items-start gap-3">
-                        <span className="flex-shrink-0 w-2 h-2 rounded-full bg-gradient-to-r from-teal-400 to-purple-400 mt-2"></span>
-                        <span className="text-gray-300">{item}</span>
-                      </li>
-                    ))}
-                  </ul>
-                </div>
-                
-                {/* Tech grid background */}
-                <div className="absolute inset-0 -z-10 rounded-2xl overflow-hidden opacity-10">
-                  <div className="absolute inset-0 bg-[radial-gradient(#4fd1c515_1px,transparent_1px)] [background-size:8px_8px]"></div>
-                  <div className="absolute inset-0 bg-[linear-gradient(to_right,transparent_0%,#4fd1c508_50%,transparent_100%)] animate-scanner"></div>
-                </div>
-                
-                {/* Action button */}
-                <button 
-                  className="w-full py-3 rounded-lg
-                    bg-gradient-to-r from-teal-500 to-purple-500
-                    hover:shadow-lg hover:shadow-teal-500/20 
-                    transition-all duration-300 text-white font-medium"
-                  onClick={(e) => {
-                    e.stopPropagation();
-                    setActiveService(null);
-                    document.getElementById('contact')?.scrollIntoView({ behavior: 'smooth' });
-                  }}
-                >
-                  Discuss Your Project
-                </button>
               </motion.div>
-            </>
-          )}
-        </AnimatePresence>
+            ))}
+          </div>
+        </div>
         
         {/* Call to action button */}
         <div className="mt-16 text-center">
