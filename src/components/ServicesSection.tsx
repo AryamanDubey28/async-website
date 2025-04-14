@@ -1,40 +1,39 @@
 'use client';
 
-import { useState, useRef, useEffect } from 'react';
-import { motion, AnimatePresence, useAnimationControls } from 'framer-motion';
+import { useEffect } from 'react';
+import { motion } from 'framer-motion';
+import ServiceCard from './ServiceCard';
 
 // Add global styles at the top of the file
 const globalStyles = `
-  .hide-scrollbar::-webkit-scrollbar {
-    display: none;
-  }
-  .hide-scrollbar {
-    -ms-overflow-style: none;
-    scrollbar-width: none;
-  }
-  @keyframes bounce-x {
+  @keyframes pulse-glow {
     0%, 100% {
-      transform: translateX(0);
+      opacity: 0.8;
     }
     50% {
-      transform: translateX(5px);
+      opacity: 1;
     }
   }
-  .animate-bounce-x {
-    animation: bounce-x 1.5s infinite;
+  .pulse-glow {
+    animation: pulse-glow 3s ease-in-out infinite;
   }
-  @keyframes scanner {
-    0% {
-      transform: translateX(-100%);
-    }
-    100% {
-      transform: translateX(100%);
-    }
+  
+  .service-card-wrapper {
+    transition: transform 0.3s ease;
   }
-  .animate-scanner {
-    animation: scanner 8s linear infinite;
+  
+  .service-card-wrapper:hover {
+    transform: rotate(0deg) scale(1.03) !important;
   }
 `;
+
+// Define random offsets for each service card - using numbers instead of strings
+const randomOffsets = [
+  { rotate: -1, translateY: 0, scale: 1.02 },
+  { rotate: 1.5, translateY: 25, scale: 0.98 },
+  { rotate: -0.7, translateY: 45, scale: 1 },
+  { rotate: 0.9, translateY: 10, scale: 1.01 }
+];
 
 const services = [
   {
@@ -101,7 +100,7 @@ const services = [
     icon: (
       <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
         <path d="M12 14l9-5-9-5-9 5 9 5z" />
-        <path d="M12 14l6.16-3.422a12.083 12.083 0 01.665 6.479A11.952 11.952 0 0012 20.055a11.952 11.952 0 00-6.824-2.998 12.078 12.078 0 01.665-6.479L12 14z" />
+        <path d="M12 14l6.16-3.422a12.083 12.083 0 01.665 6.479A11.952 11.952 0 0012 20.055a11.952 11.952 0 00-6.824-2.998a12.078 12.078 0 01.665-6.479L12 14z" />
         <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 14l9-5-9-5-9 5 9 5zm0 0l6.16-3.422a12.083 12.083 0 01.665 6.479A11.952 11.952 0 0012 20.055a11.952 11.952 0 00-6.824-2.998a12.078 12.078 0 01.665-6.479L12 14zm-4 6v-7.5l4-2.222" />
       </svg>
     ),
@@ -109,11 +108,6 @@ const services = [
 ];
 
 const ServicesSection = () => {
-  const [activeService, setActiveService] = useState<string | null>(null);
-  const [hoveredService, setHoveredService] = useState<string | null>(null);
-  const carouselRef = useRef<HTMLDivElement>(null);
-  const controls = useAnimationControls();
-
   // Add effect to inject global styles once on mount
   useEffect(() => {
     // Check if the style element already exists
@@ -133,31 +127,6 @@ const ServicesSection = () => {
       }
     };
   }, []);
-
-  const toggleService = (id: string) => {
-    if (activeService === id) {
-      setActiveService(null);
-    } else {
-      setActiveService(id);
-      
-      // Scroll the active card into view if needed
-      setTimeout(() => {
-        const activeElement = document.getElementById(`service-card-${id}`);
-        if (activeElement && carouselRef.current) {
-          const containerRect = carouselRef.current.getBoundingClientRect();
-          const activeRect = activeElement.getBoundingClientRect();
-          
-          // Calculate if we need to scroll
-          if (activeRect.left < containerRect.left || activeRect.right > containerRect.right) {
-            carouselRef.current.scrollTo({
-              left: activeElement.offsetLeft - 32,
-              behavior: 'smooth'
-            });
-          }
-        }
-      }, 100);
-    }
-  };
   
   return (
     <section id="services" className="relative py-24 overflow-hidden">
@@ -176,7 +145,7 @@ const ServicesSection = () => {
       
       <div className="container mx-auto px-4 max-w-6xl relative z-10">
         {/* Section header */}
-        <div className="text-center mb-12">
+        <div className="text-center mb-16">
           <div className="inline-block relative">
             <div className="absolute -inset-1 bg-gradient-to-r from-teal-500/10 to-purple-400/10 rounded-lg blur-sm"></div>
             <h2 className="relative text-3xl md:text-4xl font-bold mb-4">
@@ -188,226 +157,54 @@ const ServicesSection = () => {
           </p>
         </div>
         
-        {/* Carousel navigation indicators */}
-        <div className="flex justify-center mb-8 gap-2 md:hidden">
-          {services.map((service) => (
-            <button
-              key={`nav-${service.id}`}
-              className={`w-2.5 h-2.5 rounded-full transition-all duration-300 ${
-                activeService === service.id || hoveredService === service.id
-                  ? 'bg-teal-400' 
-                  : 'bg-gray-700'
-              }`}
-              onClick={() => {
-                const element = document.getElementById(`service-card-${service.id}`);
-                if (element && carouselRef.current) {
-                  carouselRef.current.scrollTo({
-                    left: element.offsetLeft - 32,
-                    behavior: 'smooth'
-                  });
-                }
+        {/* Randomized Grid Layout for Services using CSS transforms and transitions */}
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-8 lg:gap-12 mt-12">
+          {services.map((service, index) => (
+            <div 
+              key={service.id}
+              className="relative service-card-wrapper"
+              style={{
+                transform: `rotate(${randomOffsets[index].rotate}deg) translateY(${randomOffsets[index].translateY}px) scale(${randomOffsets[index].scale})`,
+                transformOrigin: index % 2 === 0 ? 'right center' : 'left center'
               }}
-            />
+            >
+              <ServiceCard
+                id={service.id}
+                title={service.title}
+                description={service.description}
+                expandedContent={service.expandedContent}
+                icon={service.icon}
+              />
+              
+              {/* Random decorative element */}
+              {index % 2 === 0 && (
+                <div className="absolute -top-5 -right-5 w-12 h-12 md:w-16 md:h-16 bg-gradient-to-br from-teal-500/5 to-purple-500/5 rounded-xl rotate-12 backdrop-blur-sm border border-teal-500/10"></div>
+              )}
+              {index % 2 === 1 && (
+                <div className="absolute -bottom-3 -left-3 w-8 h-8 bg-gradient-to-br from-purple-500/5 to-blue-500/5 rounded-md -rotate-6 backdrop-blur-sm border border-purple-500/10"></div>
+              )}
+            </div>
           ))}
         </div>
         
-        {/* Carousel scroll hint */}
-        <div className="hidden md:flex items-center justify-center mb-8 text-gray-400">
-          <div className="w-6 h-6 animate-bounce-x mr-2">
-            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 19l-7-7 7-7" />
-            </svg>
-          </div>
-          <span className="text-sm">Scroll or swipe to explore</span>
-          <div className="w-6 h-6 animate-bounce-x ml-2">
-            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
-            </svg>
-          </div>
-        </div>
-        
-        {/* Horizontal scrollable carousel */}
-        <div 
-          ref={carouselRef}
-          className="flex overflow-x-auto pb-8 -mx-4 px-4 snap-x snap-mandatory hide-scrollbar"
-          style={{ scrollbarWidth: 'none' }}
-        >
-          <div className="flex gap-6">
-            {services.map((service) => (
-              <motion.div
-                id={`service-card-${service.id}`}
-                key={service.id}
-                layout
-                transition={{ 
-                  layout: { duration: 0.4, ease: "easeOut" },
-                  height: { duration: 0.4, ease: "easeOut" }
-                }}
-                className={`
-                  snap-center flex-shrink-0 
-                  ${activeService === service.id ? 'w-[calc(100vw-4rem)] max-w-4xl' : 'w-80'}
-                  h-fit
-                  transition-all duration-400
-                `}
-              >
-                <div 
-                  className={`
-                    relative rounded-2xl h-full
-                    bg-gray-900/60 backdrop-blur-sm overflow-hidden
-                    border transition-all duration-300
-                    hover:shadow-lg hover:shadow-teal-500/10
-                    ${activeService === service.id 
-                      ? 'border-teal-500/40 shadow-lg shadow-teal-500/10' 
-                      : 'border-gray-700/50'}
-                  `}
-                  onMouseEnter={() => setHoveredService(service.id)}
-                  onMouseLeave={() => setHoveredService(null)}
-                >
-                  {/* Tech grid background */}
-                  <div className="absolute inset-0 rounded-xl overflow-hidden opacity-15">
-                    <div className="absolute inset-0 bg-[radial-gradient(#4fd1c515_1px,transparent_1px)] [background-size:8px_8px] opacity-70"></div>
-                    {activeService === service.id && (
-                      <div className="absolute inset-0 bg-[linear-gradient(to_right,transparent_0%,#4fd1c508_50%,transparent_100%)] animate-scanner"></div>
-                    )}
-                  </div>
-                  
-                  <div className="flex flex-col md:flex-row h-full">
-                    {/* Card content - always visible */}
-                    <div 
-                      className={`
-                        p-6 flex flex-col h-full cursor-pointer relative z-10
-                        ${activeService === service.id ? 'md:w-80 border-b md:border-b-0 md:border-r border-gray-700/50' : 'w-full'}
-                      `}
-                      onClick={() => toggleService(service.id)}
-                    >
-                      {/* Service icon */}
-                      <div className={`
-                        w-12 h-12 rounded-lg flex items-center justify-center mb-5
-                        transition-all duration-300
-                        ${activeService === service.id || hoveredService === service.id
-                          ? 'bg-gradient-to-br from-teal-500/15 to-purple-500/15 text-teal-400'
-                          : 'bg-gray-800/70 text-gray-400'}
-                      `}>
-                        {service.icon}
-                      </div>
-                      
-                      {/* Service title */}
-                      <h3 className={`
-                        text-xl font-bold mb-3 transition-all duration-300
-                        ${activeService === service.id 
-                          ? 'bg-clip-text text-transparent bg-gradient-to-r from-teal-400 to-purple-400' 
-                          : 'text-white'}
-                      `}>
-                        {service.title}
-                      </h3>
-                      
-                      {/* Service description */}
-                      <p className="text-gray-300 mb-5">
-                        {service.description}
-                      </p>
-                      
-                      {/* Expand/collapse indicator */}
-                      <div className="mt-auto flex items-center">
-                        <div className={`
-                          h-px w-6 mr-3 transition-all duration-300
-                          ${activeService === service.id || hoveredService === service.id
-                            ? 'bg-teal-400'
-                            : 'bg-gray-700'}
-                        `}></div>
-                        <span className={`
-                          text-sm font-medium flex items-center gap-1.5
-                          transition-all duration-300
-                          ${activeService === service.id 
-                            ? 'text-teal-400' 
-                            : 'text-gray-500'}
-                        `}>
-                          {activeService === service.id ? 'View less' : 'View more'}
-                          <svg 
-                            xmlns="http://www.w3.org/2000/svg" 
-                            className={`h-3.5 w-3.5 transition-transform duration-300 ${
-                              activeService === service.id ? 'rotate-180' : ''
-                            }`}
-                            fill="none" 
-                            viewBox="0 0 24 24" 
-                            stroke="currentColor"
-                          >
-                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
-                          </svg>
-                        </span>
-                      </div>
-                    </div>
-                    
-                    {/* Expanded content */}
-                    {activeService === service.id && (
-                      <motion.div 
-                        initial={{ opacity: 0, x: 20 }}
-                        animate={{ opacity: 1, x: 0 }}
-                        exit={{ opacity: 0, x: 20 }}
-                        transition={{ duration: 0.3, delay: 0.1 }}
-                        className="p-6 md:flex-1 overflow-y-auto max-h-[600px]"
-                      >
-                        <h4 className="text-teal-400 text-lg font-medium mb-6">Services include:</h4>
-                        <ul className="space-y-4 mb-6">
-                          {service.expandedContent.map((item, i) => (
-                            <motion.li 
-                              key={i} 
-                              initial={{ opacity: 0, y: 10 }}
-                              animate={{ opacity: 1, y: 0 }}
-                              transition={{ duration: 0.3, delay: 0.1 + (i * 0.05) }}
-                              className="flex items-start gap-3"
-                            >
-                              <span className="flex-shrink-0 w-2 h-2 rounded-full bg-gradient-to-r from-teal-400 to-purple-400 mt-2"></span>
-                              <span className="text-gray-300">{item}</span>
-                            </motion.li>
-                          ))}
-                        </ul>
-                        
-                        {/* Action button */}
-                        <motion.button 
-                          initial={{ opacity: 0, y: 10 }}
-                          animate={{ opacity: 1, y: 0 }}
-                          transition={{ duration: 0.3, delay: 0.3 }}
-                          className="w-full py-3 rounded-lg
-                            bg-gradient-to-r from-teal-500 to-purple-500
-                            hover:shadow-lg hover:shadow-teal-500/20 
-                            transition-all duration-300 text-white font-medium"
-                          onClick={(e) => {
-                            e.stopPropagation();
-                            document.getElementById('contact')?.scrollIntoView({ behavior: 'smooth' });
-                          }}
-                        >
-                          Discuss Your Project
-                        </motion.button>
-                      </motion.div>
-                    )}
-                  </div>
-                  
-                  {/* Subtle hover effect */}
-                  {!activeService && (
-                    <div className="absolute inset-0 bg-gradient-to-br from-teal-500/0 via-purple-500/0 to-blue-600/0 opacity-0 hover:opacity-10 transition-opacity duration-300 rounded-2xl"></div>
-                  )}
-                </div>
-              </motion.div>
-            ))}
-          </div>
-        </div>
-        
         {/* Call to action button */}
-        <div className="mt-16 text-center">
-          <button 
+        <div className="mt-20 text-center">
+          <motion.button 
+            whileHover={{ y: -4, boxShadow: "0 15px 30px -5px rgba(45, 212, 191, 0.3)" }}
+            transition={{ duration: 0.3 }}
             onClick={() => document.getElementById('contact')?.scrollIntoView({ behavior: 'smooth' })}
-            className="px-8 py-3 rounded-lg 
+            className="px-8 py-3.5 rounded-lg 
               group relative
               bg-gradient-to-r from-teal-500 to-purple-500 
               text-white font-medium 
-              transition-all duration-300 
-              hover:shadow-lg hover:shadow-teal-500/20 
-              hover:scale-105 
+              transition-all duration-500 
+              shadow-lg shadow-teal-500/20 
               focus:outline-none focus:ring-2 focus:ring-teal-400/50
               overflow-hidden"
           >
             <span className="relative z-10">Book a Consultation</span>
             <span className="absolute inset-0 bg-gradient-to-r from-teal-400 to-purple-400 opacity-0 group-hover:opacity-100 transition-opacity duration-300 blur-xl"></span>
-          </button>
+          </motion.button>
         </div>
       </div>
     </section>
