@@ -28,7 +28,7 @@ export default function About() {
             </span>
           </h1>
           <p className="text-gray-300 text-center max-w-3xl mx-auto mb-12 text-lg">
-            We build private, custom AI agents that solve real business challenges
+            Empowering businesses to harness the power of AI for transformative growth
           </p>
           <div className="flex justify-center mb-16">
             <div className="w-24 h-1 bg-gradient-to-r from-teal-500 to-purple-300 rounded-full"></div>
@@ -44,7 +44,7 @@ export default function About() {
                     Our Mission
                   </h2>
                   <p className="text-gray-300 mb-4 leading-relaxed">
-                    At Async Studios, our mission is to help businesses close the AI gap and seamlessly integrate artificial intelligence into their existing workflows. We believe that:
+                    At Async Studios, our mission is to help businesses incorporate powerful AI solutions that optimize performance and drive sustainable growth. Based in London but operating worldwide, we're dedicated to:
                   </p>
                   <ul className="space-y-4 text-gray-300">
                     <li className="flex items-start">
@@ -53,7 +53,7 @@ export default function About() {
                           <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
                         </svg>
                       </div>
-                      <span><span className="font-semibold text-teal-300">Every business can benefit from AI</span> — Regardless of your industry or current tech stack, we can create custom AI solutions that deliver real value</span>
+                      <span><span className="font-semibold text-teal-300">Educating businesses</span> — Demystifying AI technologies and showcasing their transformative potential for organizations of all sizes</span>
                     </li>
                     <li className="flex items-start">
                       <div className="flex-shrink-0 w-6 h-6 rounded-full bg-purple-400/20 flex items-center justify-center mr-3 mt-1">
@@ -61,7 +61,7 @@ export default function About() {
                           <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
                         </svg>
                       </div>
-                      <span><span className="font-semibold text-purple-300">Workflow integration is essential</span> — AI tools should enhance your existing processes, not force you to rebuild them from scratch</span>
+                      <span><span className="font-semibold text-purple-300">Optimizing performance</span> — Creating tailored AI solutions that seamlessly integrate with existing workflows to enhance efficiency and productivity</span>
                     </li>
                     <li className="flex items-start">
                       <div className="flex-shrink-0 w-6 h-6 rounded-full bg-blue-400/20 flex items-center justify-center mr-3 mt-1">
@@ -69,7 +69,7 @@ export default function About() {
                           <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
                         </svg>
                       </div>
-                      <span><span className="font-semibold text-blue-300">Privacy and security cannot be compromised</span> — Your sensitive data deserves protection at every stage of AI implementation</span>
+                      <span><span className="font-semibold text-blue-300">Driving innovation</span> — Leading the conversation about emerging AI technologies through industry talks, workshops, and collaborative partnerships</span>
                     </li>
                   </ul>
                 </div>
@@ -93,8 +93,40 @@ export default function About() {
             </div>
           </div>
 
+          {/* Global Impact Section */}
+          <div className="mb-24">
+            <h2 className="text-3xl font-bold text-center mb-12 bg-clip-text text-transparent bg-gradient-to-r from-teal-400 via-purple-400 to-blue-500">
+              Global Reach, Local Expertise
+            </h2>
+            <div className="relative overflow-hidden rounded-2xl border border-gray-800 bg-gray-900/80 backdrop-blur-sm shadow-xl p-8">
+              <div className="absolute inset-0 bg-gradient-to-br from-blue-500/10 via-transparent to-purple-500/10 rounded-2xl"></div>
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-12">
+                <div>
+                  <p className="text-gray-300 mb-6 leading-relaxed">
+                    Founded in London, Async Studios has quickly grown into a global AI consultancy with clients spanning multiple continents. Our team combines local market insights with cutting-edge technical expertise to deliver solutions that resonate with diverse business environments.
+                  </p>
+                  <p className="text-gray-300 leading-relaxed">
+                    We pride ourselves on being thought leaders in the AI space, regularly conducting workshops, speaking at conferences, and publishing insights on the latest developments in artificial intelligence. Our educational initiatives have helped countless organizations understand and implement AI strategies that drive measurable business results.
+                  </p>
+                </div>
+                <div className="relative h-64 md:h-auto rounded-xl overflow-hidden">
+                  <div className="absolute inset-0 bg-gradient-to-br from-teal-500/20 via-purple-500/20 to-blue-600/20 rounded-xl"></div>
+                  <div className="h-full flex items-center justify-center p-6">
+                    <Image
+                      src="/global-impact.png"
+                      alt="Global Impact"
+                      width={400}
+                      height={300}
+                      className="object-contain rounded-lg"
+                    />
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+
           {/* Values Section */}
-          <div className="text-center mb-20">
+          <div className="text-center mb-24">
             <h2 className="text-3xl font-bold mb-12 inline-block bg-clip-text text-transparent bg-gradient-to-r from-teal-400 via-purple-400 to-blue-500">
               Our Core Values
             </h2>
@@ -106,11 +138,11 @@ export default function About() {
                 <div className="relative">
                   <div className="w-14 h-14 rounded-full border-2 border-teal-400/70 flex items-center justify-center mx-auto mb-4 group-hover:scale-110 transition-transform duration-300">
                     <svg className="w-7 h-7 text-teal-400" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z" />
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M9.663 17h4.673M12 3v1m6.364 1.636l-.707.707M21 12h-1M4 12H3m3.343-5.657l-.707-.707m2.828 9.9a5 5 0 117.072 0l-.548.547A3.374 3.374 0 0014 18.469V19a2 2 0 11-4 0v-.531c0-.895-.356-1.754-.988-2.386l-.548-.547z" />
                     </svg>
                   </div>
-                  <h3 className="text-xl font-bold mb-3 text-white">Privacy First</h3>
-                  <p className="text-gray-400">We design our systems with privacy as a foundational principle, not an afterthought. Your data remains yours.</p>
+                  <h3 className="text-xl font-bold mb-3 text-white">Innovation Leadership</h3>
+                  <p className="text-gray-400">We continuously explore the cutting edge of AI to bring transformative solutions that keep our clients ahead of the competition.</p>
                 </div>
               </div>
               
@@ -120,11 +152,11 @@ export default function About() {
                 <div className="relative">
                   <div className="w-14 h-14 rounded-full border-2 border-purple-400/70 flex items-center justify-center mx-auto mb-4 group-hover:scale-110 transition-transform duration-300">
                     <svg className="w-7 h-7 text-purple-400" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M9 3v2m6-2v2M9 19v2m6-2v2M5 9H3m2 6H3m18-6h-2m2 6h-2M7 19h10a2 2 0 002-2V7a2 2 0 00-2-2H7a2 2 0 00-2 2v10a2 2 0 002 2zM9 9h6v6H9V9z" />
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M12 6V4m0 2a2 2 0 100 4m0-4a2 2 0 110 4m-6 8a2 2 0 100-4m0 4a2 2 0 110-4m0 4v2m0-6V4m6 6v10m6-2a2 2 0 100-4m0 4a2 2 0 110-4m0 4v2m0-6V4" />
                     </svg>
                   </div>
-                  <h3 className="text-xl font-bold mb-3 text-white">Continuous Innovation</h3>
-                  <p className="text-gray-400">We stay at the forefront of AI research, constantly refining our approach to deliver state-of-the-art solutions.</p>
+                  <h3 className="text-xl font-bold mb-3 text-white">Business Transformation</h3>
+                  <p className="text-gray-400">We focus on delivering measurable business impact, not just implementing technology for technology's sake.</p>
                 </div>
               </div>
               
@@ -137,17 +169,41 @@ export default function About() {
                       <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z" />
                     </svg>
                   </div>
-                  <h3 className="text-xl font-bold mb-3 text-white">Client Partnership</h3>
-                  <p className="text-gray-400">We don't just build and leave. We form lasting partnerships, ensuring our agents evolve with your business needs.</p>
+                  <h3 className="text-xl font-bold mb-3 text-white">Educational Empowerment</h3>
+                  <p className="text-gray-400">We believe in demystifying AI through education, enabling our clients to make informed decisions about their technological future.</p>
                 </div>
               </div>
             </div>
           </div>
 
-          {/* Team Section */}
-          <div className="mb-20">
+          {/* Thought Leadership Section */}
+          <div className="mb-24">
             <h2 className="text-3xl font-bold text-center mb-12 bg-clip-text text-transparent bg-gradient-to-r from-teal-400 via-purple-400 to-blue-500">
-              Our Team
+              Thought Leadership
+            </h2>
+            <div className="relative overflow-hidden rounded-2xl border border-gray-800 bg-gray-900/80 backdrop-blur-sm shadow-xl">
+              <div className="absolute inset-0 bg-gradient-to-tr from-purple-500/10 via-transparent to-teal-500/10 rounded-2xl"></div>
+              <div className="grid grid-cols-1 md:grid-cols-3 gap-6 p-8">
+                <div className="relative p-6 rounded-xl border border-gray-800 bg-gray-900/40 backdrop-blur-sm hover:border-teal-500/30 transition-colors duration-300">
+                  <h3 className="text-xl font-bold mb-3 text-white">Conference Speakers</h3>
+                  <p className="text-gray-400 mb-4">Our team regularly presents at leading technology conferences, sharing insights on practical AI implementation strategies.</p>
+                </div>
+                <div className="relative p-6 rounded-xl border border-gray-800 bg-gray-900/40 backdrop-blur-sm hover:border-purple-500/30 transition-colors duration-300">
+                  <h3 className="text-xl font-bold mb-3 text-white">AI Workshops</h3>
+                  <p className="text-gray-400 mb-4">We conduct hands-on workshops to help businesses understand and leverage the latest AI technologies for their specific needs.</p>
+                </div>
+                <div className="relative p-6 rounded-xl border border-gray-800 bg-gray-900/40 backdrop-blur-sm hover:border-blue-500/30 transition-colors duration-300">
+                  <h3 className="text-xl font-bold mb-3 text-white">Industry Publications</h3>
+                  <p className="text-gray-400 mb-4">Our research and case studies are regularly featured in leading industry publications, contributing to the broader AI discourse.</p>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          {/* Founders Section */}
+          <div className="mb-24">
+            <h2 className="text-3xl font-bold text-center mb-12 bg-clip-text text-transparent bg-gradient-to-r from-teal-400 via-purple-400 to-blue-500">
+              Our Founders
             </h2>
             
             <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
@@ -160,8 +216,8 @@ export default function About() {
                   <div className="absolute inset-0 bg-[linear-gradient(to_right,transparent_0%,#4fd1c510_50%,transparent_100%)] animate-scanner"></div>
                 </div>
                 <h3 className="text-xl font-bold mb-1">Aryaman Dubey</h3>
-                <p className="text-teal-400 mb-2">Founder & CEO</p>
-                <p className="text-gray-400 text-center max-w-xs">Expert in AI systems with a passion for bringing cutting-edge technology to businesses.</p>
+                <p className="text-teal-400 mb-2">Head of AI Strategy</p>
+                <p className="text-gray-400 text-center max-w-xs">Visionary leader guiding businesses through the complexities of AI adoption and implementation.</p>
               </div>
               
               <div className="flex flex-col items-center">
@@ -173,8 +229,8 @@ export default function About() {
                   <div className="absolute inset-0 bg-[linear-gradient(to_right,transparent_0%,#805ad510_50%,transparent_100%)] animate-scanner"></div>
                 </div>
                 <h3 className="text-xl font-bold mb-1">Zinedine Messaoudi</h3>
-                <p className="text-purple-400 mb-2">Chief Technology Officer</p>
-                <p className="text-gray-400 text-center max-w-xs">ML engineer specializing in enterprise AI integration and workflow optimization.</p>
+                <p className="text-purple-400 mb-2">Business Transformation Lead</p>
+                <p className="text-gray-400 text-center max-w-xs">Expert in leveraging AI technologies to drive organizational change and business growth.</p>
               </div>
               
               <div className="flex flex-col items-center">
@@ -186,8 +242,8 @@ export default function About() {
                   <div className="absolute inset-0 bg-[linear-gradient(to_right,transparent_0%,#4299e110_50%,transparent_100%)] animate-scanner"></div>
                 </div>
                 <h3 className="text-xl font-bold mb-1">Shaan Ganimusa</h3>
-                <p className="text-blue-400 mb-2">Head of Client Solutions</p>
-                <p className="text-gray-400 text-center max-w-xs">Transforms business requirements into effective AI implementations that drive results.</p>
+                <p className="text-blue-400 mb-2">Product Officer</p>
+                <p className="text-gray-400 text-center max-w-xs">Bridges the gap between business requirements and technical solutions to craft impactful AI products.</p>
               </div>
             </div>
           </div>
@@ -197,8 +253,8 @@ export default function About() {
             <div className="absolute inset-0 bg-gradient-to-r from-teal-500/10 via-purple-500/10 to-blue-500/10"></div>
             <div className="absolute inset-0 bg-[radial-gradient(#4fd1c520_1px,transparent_1px)] [background-size:8px_8px] opacity-70"></div>
             <div className="relative z-10 text-center">
-              <h2 className="text-2xl md:text-3xl font-bold mb-4">Ready to build your custom AI solution?</h2>
-              <p className="text-gray-300 mb-8 max-w-2xl mx-auto">Let's discuss how our AI agents can address your specific business challenges.</p>
+              <h2 className="text-2xl md:text-3xl font-bold mb-4">Ready to transform your business with AI?</h2>
+              <p className="text-gray-300 mb-8 max-w-2xl mx-auto">Let's discuss how our AI expertise can help optimize your operations and drive growth.</p>
               <a href="#contact" className="inline-block px-8 py-4 rounded-full bg-gradient-to-r from-teal-500 to-purple-500 text-white font-semibold transition-all duration-300 hover:shadow-lg hover:shadow-teal-500/30 hover:scale-105 focus:outline-none focus:ring-2 focus:ring-teal-400/50">
                 Get in Touch
               </a>
