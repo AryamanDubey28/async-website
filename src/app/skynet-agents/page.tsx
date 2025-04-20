@@ -274,7 +274,7 @@ export default function SkynetAgents() {
           <div className="container mx-auto px-4 relative z-10">
             <div className="flex flex-col lg:flex-row items-center justify-between gap-16">
               {/* Left content column */}
-              <div className="lg:w-1/2 space-y-8">
+              <div className="lg:w-2/5 space-y-8">
                 <div 
                   className="inline-block px-4 py-1.5 rounded-full bg-gray-800/70 backdrop-blur-lg border border-purple-500/30 mb-3 transform hover:scale-105 transition-all duration-300 shadow-lg shadow-purple-500/10"
                 >
@@ -329,8 +329,8 @@ export default function SkynetAgents() {
               </div>
               
               {/* Right content column - Interactive agents mockup */}
-              <div className="lg:w-1/2 relative">
-                <div className="relative max-w-xl mx-auto">
+              <div className="lg:w-3/5 relative">
+                <div className="relative max-w-2xl mx-auto">
                   {/* Main UI mockup */}
                   <div className="aspect-[16/10] relative rounded-xl overflow-hidden border border-purple-500/30 shadow-xl shadow-purple-500/10 backdrop-blur-sm bg-gray-900/80">
                     <div className="absolute inset-0 bg-gradient-to-br from-purple-500/10 via-teal-500/10 to-blue-600/10"></div>
@@ -838,28 +838,6 @@ export default function SkynetAgents() {
                   ))}
                 </div>
               </div>
-            </div>
-            
-            {/* Integration categories */}
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
-              {[
-                { title: "Productivity", desc: "Seamlessly integrate with Google Workspace, Microsoft 365, Notion, and more", icon: "📊" },
-                { title: "Communication", desc: "Connect with Slack, Teams, Discord, Email services, and SMS gateways", icon: "💬" },
-                { title: "Finance", desc: "Work with banking APIs, payment processors, accounting software", icon: "💰" },
-                { title: "E-Commerce", desc: "Integrate with Shopify, Amazon, eBay, and inventory systems", icon: "🛒" },
-                { title: "Marketing", desc: "Connect with CRMs, analytics tools, social media platforms", icon: "📱" },
-                { title: "Development", desc: "GitHub, Jira, GitLab, CI/CD platforms, and cloud services", icon: "⚙️" },
-                { title: "Data & Analytics", desc: "Tableau, Power BI, database systems, and ML platforms", icon: "📈" },
-                { title: "Custom Enterprise", desc: "Securely connect to your proprietary internal systems", icon: "🏢" }
-              ].map((category, idx) => (
-                <div key={idx} className="bg-gray-800/30 backdrop-blur-sm rounded-xl border border-gray-700 p-5 hover:border-purple-500/30 transition-colors duration-300 group">
-                  <div className="w-12 h-12 rounded-lg bg-purple-500/10 backdrop-blur-sm flex items-center justify-center mb-4 text-2xl group-hover:bg-purple-500/20 transition-all duration-300">
-                    {category.icon}
-                  </div>
-                  <h3 className="text-lg font-bold text-white mb-2">{category.title}</h3>
-                  <p className="text-gray-400 text-sm">{category.desc}</p>
-                </div>
-              ))}
             </div>
             
             {/* Custom integrations CTA */}

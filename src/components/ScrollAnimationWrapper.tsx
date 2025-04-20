@@ -1,19 +1,18 @@
 'use client';
 
 import { ReactNode, useEffect, useState } from 'react';
-import { motion, useAnimation, Variants } from 'framer-motion';
 import { useInView } from 'react-intersection-observer';
 
 interface ScrollAnimationWrapperProps {
   children: ReactNode;
   className?: string;
-  animationVariant?: 'fadeIn' | 'fadeUp' | 'fadeRight' | 'fadeLeft' | 'scale' | 'stagger';
+  animationVariant?: 'fadeIn' | 'fadeUp' | 'fadeRight' | 'fadeLeft' | 'scale';
   delay?: number;
   threshold?: number;
   triggerOnce?: boolean;
-  staggerChildren?: number;
-  staggerDelay?: number;
   viewportMargin?: string;
+  duration?: number;
+  easing?: string;
 }
 
 export const ScrollAnimationWrapper = ({
@@ -23,12 +22,11 @@ export const ScrollAnimationWrapper = ({
   delay = 0,
   threshold = 0.2,
   triggerOnce = true,
-  staggerChildren = 0.1,
-  staggerDelay = 0,
   viewportMargin = '-130px',
+  duration = 0.6,
+  easing = 'cubic-bezier(0.22, 1, 0.36, 1)',
 }: ScrollAnimationWrapperProps) => {
-  const controls = useAnimation();
-  const [ref, inView] = useInView({
+  const { ref, inView } = useInView({
     triggerOnce: triggerOnce,
     threshold: threshold,
     rootMargin: viewportMargin,
@@ -40,123 +38,39 @@ export const ScrollAnimationWrapper = ({
     setIsClient(true);
   }, []);
 
-  useEffect(() => {
-    if (inView) {
-      controls.start('visible');
-    } else if (!triggerOnce) {
-      controls.start('hidden');
-    }
-  }, [controls, inView, triggerOnce]);
-
-  // Animation variants definition
-  const fadeUp: Variants = {
-    hidden: { y: 30, opacity: 0 },
-    visible: {
-      y: 0, 
-      opacity: 1,
-      transition: { 
-        duration: 0.6, 
-        delay: delay,
-        ease: [0.22, 1, 0.36, 1]
-      }
-    }
-  };
-
-  const fadeIn: Variants = {
-    hidden: { opacity: 0 },
-    visible: {
-      opacity: 1,
-      transition: { 
-        duration: 0.6, 
-        delay: delay,
-        ease: [0.22, 1, 0.36, 1]
-      }
-    }
-  };
-
-  const fadeRight: Variants = {
-    hidden: { x: -50, opacity: 0 },
-    visible: {
-      x: 0, 
-      opacity: 1,
-      transition: { 
-        duration: 0.6, 
-        delay: delay,
-        ease: [0.22, 1, 0.36, 1]
-      }
-    }
-  };
-
-  const fadeLeft: Variants = {
-    hidden: { x: 50, opacity: 0 },
-    visible: {
-      x: 0, 
-      opacity: 1,
-      transition: { 
-        duration: 0.6, 
-        delay: delay,
-        ease: [0.22, 1, 0.36, 1]
-      }
-    }
-  };
-
-  const scale: Variants = {
-    hidden: { scale: 0.95, opacity: 0 },
-    visible: {
-      scale: 1, 
-      opacity: 1,
-      transition: { 
-        duration: 0.6, 
-        delay: delay,
-        ease: [0.22, 1, 0.36, 1]
-      }
-    }
-  };
-
-  const stagger: Variants = {
-    hidden: {},
-    visible: {
-      transition: { 
-        staggerChildren: staggerChildren,
-        delayChildren: staggerDelay + delay
-      }
-    }
-  };
-
-  const getVariant = (): Variants => {
+  const getAnimationClasses = () => {
     switch (animationVariant) {
       case 'fadeIn':
-        return fadeIn;
+        return 'animate-fade-in';
       case 'fadeUp':
-        return fadeUp;
+        return 'animate-fade-up';
       case 'fadeRight':
-        return fadeRight;
+        return 'animate-fade-right';
       case 'fadeLeft':
-        return fadeLeft;
+        return 'animate-fade-left';
       case 'scale':
-        return scale;
-      case 'stagger':
-        return stagger;
+        return 'animate-scale';
       default:
-        return fadeUp;
+        return 'animate-fade-up';
     }
   };
 
-  // Handle server-side rendering
   if (!isClient) {
     return <div className={className}>{children}</div>;
   }
 
   return (
-    <motion.div
+    <div
       ref={ref}
-      initial="hidden"
-      animate={controls}
-      variants={getVariant()}
-      className={className}
+      className={`${className} ${getAnimationClasses()} ${inView ? 'is-in-view' : ''}`}
+      style={{
+        transitionDelay: `${delay}s`,
+        transitionDuration: `${duration}s`,
+        transitionTimingFunction: easing,
+      }}
     >
       {children}
-    </motion.div>
+    </div>
   );
 };
 

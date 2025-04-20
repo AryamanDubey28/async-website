@@ -1,7 +1,6 @@
 'use client';
 
-import React, { useEffect } from 'react';
-import { motion } from 'framer-motion';
+import React from 'react';
 
 export interface ServiceCardProps {
   id: string;
@@ -9,6 +8,7 @@ export interface ServiceCardProps {
   description: string;
   expandedContent: string[];
   icon: React.ReactNode;
+  isActive: boolean;
 }
 
 const ServiceCard = ({
@@ -16,118 +16,39 @@ const ServiceCard = ({
   title,
   description,
   expandedContent,
-  icon
+  icon,
+  isActive
 }: ServiceCardProps) => {
-  // Add styles for transitions
-  useEffect(() => {
-    const styleId = `service-card-${id}-style`;
-    if (!document.getElementById(styleId)) {
-      const styleEl = document.createElement('style');
-      styleEl.id = styleId;
-      styleEl.innerHTML = `
-        .service-card {
-          transition: transform 0.3s cubic-bezier(0.34, 1.56, 0.64, 1), 
-                      box-shadow 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
-        }
-        
-        .expandable-content {
-          max-height: 0;
-          opacity: 0;
-          transform: translateY(-10px);
-          overflow: hidden;
-          transition: all 0.5s cubic-bezier(0.33, 1, 0.68, 1);
-          margin-top: 0;
-          will-change: opacity, transform;
-        }
-        
-        #service-card-${id}:hover .expandable-content {
-          max-height: 500px;
-          opacity: 1;
-          transform: translateY(0);
-          margin-top: 1rem;
-        }
-      `;
-      document.head.appendChild(styleEl);
-      
-      return () => {
-        const el = document.getElementById(styleId);
-        if (el) document.head.removeChild(el);
-      };
-    }
-  }, [id]);
-  
   return (
-    <motion.div
-      id={`service-card-${id}`}
-      className="w-full rounded-2xl overflow-hidden"
-      whileHover={{ 
-        y: -8,
-        transition: { 
-          duration: 0.3,
-          ease: [0.34, 1.56, 0.64, 1]
-        } 
-      }}
-    >
-      <div className="relative bg-gray-900/60 backdrop-blur-sm border border-gray-700/50 rounded-2xl h-full overflow-hidden group service-card">
-        {/* Simple hover background effect */}
-        <div className="absolute inset-0 bg-gradient-to-br from-teal-500/10 to-purple-500/10 rounded-2xl opacity-0 group-hover:opacity-100 transition-opacity duration-300 ease-in-out"></div>
-        
-        {/* Tech grid background */}
-        <div className="absolute inset-0 rounded-xl opacity-15">
-          <div className="absolute inset-0 bg-[radial-gradient(#4fd1c515_1px,transparent_1px)] [background-size:8px_8px] opacity-70"></div>
-        </div>
-        
-        <div className="p-7 relative z-10">
-          {/* Service icon */}
-          <div className="w-14 h-14 rounded-full flex items-center justify-center mb-6
-            bg-gradient-to-br from-teal-500/20 to-purple-500/20 text-teal-400 
-            shadow-lg shadow-teal-500/20 group-hover:scale-110"
-            style={{ transition: 'transform 0.3s cubic-bezier(0.34, 1.56, 0.64, 1)' }}
-          >
+    <div className={`carousel-card ${isActive ? 'active' : ''}`}>
+      <div className="carousel-card-content">
+        {/* Left side - Summary content */}
+        <div className={`card-summary ${isActive ? 'active-card-section' : ''}`}>
+          <div className={`service-icon mb-4 text-cyan-300 w-14 h-14 rounded-xl p-2.5 bg-cyan-500/15 backdrop-blur-md border ${isActive ? 'border-cyan-400/50' : 'border-cyan-500/30'} flex items-center justify-center`}>
             {icon}
           </div>
           
-          {/* Service title with glow on hover */}
-          <h3 className="text-xl font-bold mb-3 
-            bg-clip-text text-transparent bg-gradient-to-r from-teal-400 to-purple-400
-            group-hover:scale-[1.01]"
-            style={{ transition: 'transform 0.3s cubic-bezier(0.34, 1.56, 0.64, 1)' }}
-          >
-            {title}
-          </h3>
+          <h3 className="service-title text-2xl md:text-3xl font-bold mb-4 bg-gradient-to-r from-cyan-200 to-purple-300 text-transparent bg-clip-text tracking-tight leading-tight">{title}</h3>
           
-          {/* Service description */}
-          <p className="text-gray-300 mb-2">
-            {description}
-          </p>
-          
-          {/* Service details - Only shown on hover */}
-          <div className="expandable-content">
-            <h4 className="bg-clip-text text-transparent bg-gradient-to-r from-teal-400 to-purple-400 text-lg font-medium mb-4">
-              Services include:
-            </h4>
-            <ul className="space-y-4">
-              {expandedContent.map((item, i) => (
-                <li 
-                  key={i} 
-                  className="flex items-start gap-4"
-                >
-                  <span className="flex-shrink-0 w-1.5 h-1.5 rounded-full bg-gradient-to-r from-teal-400 to-purple-400 mt-2.5"></span>
-                  <span className="text-gray-300">{item}</span>
-                </li>
-              ))}
-            </ul>
-          </div>
+          <p className="service-description text-white leading-relaxed text-base md:text-lg font-light tracking-wide" style={{textShadow: '0 1px 1px rgba(0,0,0,0.3)'}}>{description}</p>
         </div>
         
-        {/* Border glow on hover using CSS instead of Framer Motion */}
-        <div 
-          className="absolute inset-0 rounded-2xl border-2 border-teal-400/0 group-hover:border-teal-400/50 group-hover:shadow-[0_0_20px_3px_rgba(45,212,191,0.3),inset_0_0_10px_2px_rgba(45,212,191,0.2)]"
-          style={{ transition: 'all 0.3s cubic-bezier(0.34, 1.56, 0.64, 1)' }}
-        ></div>
+        {/* Right side - Expanded content */}
+        <div className={`card-expanded ${isActive ? 'active-card-section' : ''}`}>
+          <h4 className="offerings-title text-xl font-semibold mb-4 text-white bg-gradient-to-r from-white to-gray-200 text-transparent bg-clip-text tracking-wide">Services include:</h4>
+          
+          <ul className="offerings-list space-y-3 text-base">
+            {expandedContent.map((item, i) => (
+              <li key={i} className="offering-item flex items-start group">
+                <span className="offering-bullet w-2 h-2 rounded-full bg-gradient-to-r from-cyan-300 to-purple-300 mt-2 mr-3 flex-shrink-0 group-hover:scale-125 transition-transform duration-300"></span>
+                <span className="offering-text text-white leading-relaxed font-light tracking-wide" style={{textShadow: '0 1px 1px rgba(0,0,0,0.2)'}}>{item}</span>
+              </li>
+            ))}
+          </ul>
+        </div>
       </div>
-    </motion.div>
+    </div>
   );
 };
 
-export default ServiceCard; 
+export default ServiceCard;
