@@ -1,9 +1,9 @@
 'use client';
 
 import { useEffect, useState } from 'react';
-import ServiceCard from './ServiceCard';
+import ServicesCarousel from './ServicesCarousel';
 
-// Add global styles at the top of the file
+// Keep the existing global styles but remove the noise overlay
 const globalStyles = `
   @keyframes pulse-glow {
     0%, 100% {
@@ -94,286 +94,25 @@ const globalStyles = `
   .rotate-slow {
     animation: rotate-slow 30s linear infinite;
   }
-  
-  /* New service card styles */
-  .service-card-container {
-    position: relative;
-    width: 100%;
-    height: 100%;
-  }
-  
-  .service-card {
-    background-color: rgba(17, 24, 39, 0.6);
-    backdrop-filter: blur(8px);
-    border: 1px solid rgba(75, 85, 99, 0.5);
-    border-radius: 1rem;
-    padding: 1.75rem;
-    height: 100%;
-    cursor: pointer;
-    transition: all 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
-    position: relative;
-    overflow: hidden;
-    display: flex;
-    flex-direction: column;
-  }
-  
-  .service-card:before {
-    content: '';
-    position: absolute;
-    inset: 0;
-    border-radius: 1rem;
-    padding: 2px;
-    background: linear-gradient(to right, rgba(45, 212, 191, 0), rgba(168, 85, 247, 0));
-    -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
-    -webkit-mask-composite: xor;
-    mask-composite: exclude;
-    transition: all 0.3s ease;
-    pointer-events: none;
-  }
-  
-  .service-card:hover:before {
-    background: linear-gradient(to right, rgba(45, 212, 191, 0.5), rgba(168, 85, 247, 0.5));
-  }
-  
-  .service-card:hover {
-    transform: translateY(-5px);
-    box-shadow: 0 8px 25px -5px rgba(45, 212, 191, 0.3);
-  }
-  
-  .service-card-front {
-    display: flex;
-    flex-direction: column;
-    height: 100%;
-    position: relative;
-    z-index: 1;
-  }
-  
-  .service-icon {
-    width: 3.5rem;
-    height: 3.5rem;
-    border-radius: 50%;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    margin-bottom: 1.5rem;
-    background: linear-gradient(135deg, rgba(45, 212, 191, 0.2), rgba(168, 85, 247, 0.2));
-    color: rgb(45, 212, 191);
-    transition: transform 0.3s ease;
-  }
-  
-  .service-card:hover .service-icon {
-    transform: scale(1.1);
-  }
-  
-  .service-title {
-    font-size: 1.25rem;
-    font-weight: 700;
-    margin-bottom: 0.75rem;
-    background: linear-gradient(to right, rgb(45, 212, 191), rgb(168, 85, 247));
-    -webkit-background-clip: text;
-    background-clip: text;
-    color: transparent;
-    transition: transform 0.3s ease;
-  }
-  
-  .service-description {
-    color: rgb(209, 213, 219);
-    margin-bottom: 1.5rem;
-    flex-grow: 1;
-  }
-  
-  .learn-more-btn {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    color: rgb(45, 212, 191);
-    font-size: 0.875rem;
-    font-weight: 500;
-    padding: 0.5rem 0;
-    transition: color 0.3s ease;
-    margin-top: auto;
-    border-radius: 0.375rem;
-    background: transparent;
-    border: none;
-    cursor: pointer;
-  }
-  
-  .learn-more-btn:hover {
-    color: rgb(168, 85, 247);
-  }
-  
-  /* Service detail modal */
-  .service-detail-modal {
-    position: fixed;
-    top: 0;
-    left: 0;
-    right: 0;
-    bottom: 0;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    z-index: 50;
-    padding: 1rem;
-  }
-  
-  .modal-backdrop {
-    position: fixed;
-    inset: 0;
-    background-color: rgba(0, 0, 0, 0.75);
-    backdrop-filter: blur(4px);
-    z-index: -1;
-    animation: fadeIn 0.2s ease-out;
-  }
-  
-  @keyframes fadeIn {
-    from { opacity: 0; }
-    to { opacity: 1; }
-  }
-  
-  @keyframes scaleIn {
-    from { 
-      opacity: 0;
-      transform: scale(0.9); 
-    }
-    to { 
-      opacity: 1;
-      transform: scale(1); 
-    }
-  }
-  
-  .service-detail-content {
-    background: linear-gradient(135deg, rgba(17, 24, 39, 0.95), rgba(31, 41, 55, 0.95));
-    backdrop-filter: blur(16px);
-    border: 1px solid rgba(75, 85, 99, 0.5);
-    border-radius: 1rem;
-    padding: 2rem;
-    max-width: 650px;
-    width: 90%;
-    max-height: 90vh;
-    overflow-y: auto;
-    position: relative;
-    box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5), 0 0 30px 5px rgba(45, 212, 191, 0.2);
-    animation: scaleIn 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
-  }
-  
-  .service-detail-content::-webkit-scrollbar {
-    width: 5px;
-  }
-  
-  .service-detail-content::-webkit-scrollbar-track {
-    background: rgba(75, 85, 99, 0.1);
-    border-radius: 10px;
-  }
-  
-  .service-detail-content::-webkit-scrollbar-thumb {
-    background: linear-gradient(to bottom, rgba(45, 212, 191, 0.5), rgba(168, 85, 247, 0.5));
-    border-radius: 10px;
-  }
-  
-  .service-detail-header {
-    display: flex;
-    align-items: flex-start;
-    gap: 1.5rem;
-    margin-bottom: 2rem;
-    padding-bottom: 1.5rem;
-    border-bottom: 1px solid rgba(75, 85, 99, 0.5);
-  }
-  
-  .service-icon-large {
-    width: 4rem;
-    height: 4rem;
-    border-radius: 50%;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    background: linear-gradient(135deg, rgba(45, 212, 191, 0.2), rgba(168, 85, 247, 0.2));
-    color: rgb(45, 212, 191);
-    flex-shrink: 0;
-  }
-  
-  .service-icon-large svg {
-    width: 2rem;
-    height: 2rem;
-  }
-  
-  .service-title-large {
-    font-size: 1.5rem;
-    font-weight: 700;
-    margin-bottom: 0.5rem;
-    background: linear-gradient(to right, rgb(45, 212, 191), rgb(168, 85, 247));
-    -webkit-background-clip: text;
-    background-clip: text;
-    color: transparent;
-  }
-  
-  .service-description-large {
-    color: rgb(209, 213, 219);
-  }
-  
-  .service-offerings {
-    padding-bottom: 1rem;
-  }
-  
-  .offerings-title {
-    font-size: 1.25rem;
-    font-weight: 600;
-    margin-bottom: 1.5rem;
-    background: linear-gradient(to right, rgb(45, 212, 191), rgb(168, 85, 247));
-    -webkit-background-clip: text;
-    background-clip: text;
-    color: transparent;
-  }
-  
-  .offerings-list {
-    display: grid;
-    gap: 1.25rem;
-  }
-  
-  .offering-item {
-    display: flex;
-    align-items: flex-start;
-    gap: 1rem;
-  }
-  
-  .offering-bullet {
-    width: 0.5rem;
-    height: 0.5rem;
-    border-radius: 50%;
-    background: linear-gradient(to right, rgb(45, 212, 191), rgb(168, 85, 247));
-    margin-top: 0.5rem;
-    flex-shrink: 0;
-  }
-  
-  .offering-text {
-    color: rgb(209, 213, 219);
-  }
-  
-  .close-modal-btn {
-    position: absolute;
-    top: 1rem;
-    right: 1rem;
-    width: 2.5rem;
-    height: 2.5rem;
-    border-radius: 50%;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    background: rgba(31, 41, 55, 0.7);
-    color: rgb(209, 213, 219);
-    border: none;
-    cursor: pointer;
-    transition: all 0.2s ease;
-  }
-  
-  .close-modal-btn:hover {
-    background: rgba(45, 212, 191, 0.2);
-    color: rgb(45, 212, 191);
-    transform: rotate(90deg);
-  }
 `;
 
-// Function to generate background particles - Refined for subtlety & visibility
-const generateBackgroundParticles = (count = 20) => {
+// Define the type for background particles
+type BackgroundParticle = {
+  id: number;
+  style: {
+    width: string;
+    height: string;
+    top: string;
+    left: string;
+    opacity: number;
+    animationDelay: string;
+    zIndex: number;
+  };
+  className: string;
+};
+
+// Function to generate background particles - same as before
+const generateBackgroundParticles = (count = 20): BackgroundParticle[] => {
   return Array(count).fill(0).map((_, i) => {
     const size = Math.floor(Math.random() * 18) + 6;
     const top = Math.floor(Math.random() * 100);
@@ -404,9 +143,9 @@ const generateBackgroundParticles = (count = 20) => {
     const shape = shapes[Math.floor(Math.random() * shapes.length)];
 
     const gradients = [
-      'from-teal-400/10 to-blue-500/10',
+      'from-cyan-400/10 to-blue-500/10',
       'from-purple-500/10 to-blue-400/10',
-      'from-teal-500/10 to-purple-400/10',
+      'from-cyan-500/10 to-purple-400/10',
       'from-sky-500/10 to-indigo-500/10',
     ];
     const gradientType = gradients[Math.floor(Math.random() * gradients.length)];
@@ -441,8 +180,8 @@ const services = [
       'Phased Implementation Roadmap: Create a clear, actionable plan for AI adoption.'
     ],
     icon: (
-      <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z" />
+      <svg xmlns="http://www.w3.org/2000/svg" className="h-8 w-8" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1.5}>
+        <path strokeLinecap="round" strokeLinejoin="round" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z" />
       </svg>
     ),
   },
@@ -457,9 +196,9 @@ const services = [
       'Infrastructure Optimisation: Tune and configure the target environment for stable, scalable AI performance under real-world load.'
     ],
     icon: (
-      <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z" />
-        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
+      <svg xmlns="http://www.w3.org/2000/svg" className="h-8 w-8" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1.5}>
+        <path strokeLinecap="round" strokeLinejoin="round" d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z" />
+        <path strokeLinecap="round" strokeLinejoin="round" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
       </svg>
     ),
   },
@@ -474,8 +213,8 @@ const services = [
       'Core Logic Build: Building the unique processing engine central to your specific AI solution.'
     ],
     icon: (
-      <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M10 20l4-16m4 4l4 4-4 4M6 16l-4-4 4-4" />
+      <svg xmlns="http://www.w3.org/2000/svg" className="h-8 w-8" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1.5}>
+        <path strokeLinecap="round" strokeLinejoin="round" d="M10 20l4-16m4 4l4 4-4 4M6 16l-4-4 4-4" />
       </svg>
     ),
   },
@@ -490,10 +229,10 @@ const services = [
       'Workflow Integration Skills: Equipping teams to spot opportunities and effectively integrate AI into daily tasks.'
     ],
     icon: (
-      <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+      <svg xmlns="http://www.w3.org/2000/svg" className="h-8 w-8" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1.5}>
         <path d="M12 14l9-5-9-5-9 5 9 5z" />
         <path d="M12 14l6.16-3.422a12.083 12.083 0 01.665 6.479A11.952 11.952 0 0012 20.055a11.952 11.952 0 00-6.824-2.998a12.078 12.078 0 01.665-6.479L12 14z" />
-        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 14l9-5-9-5-9 5 9 5zm0 0l6.16-3.422a12.083 12.083 0 01.665 6.479A11.952 11.952 0 0012 20.055a11.952 11.952 0 00-6.824-2.998a12.078 12.078 0 01.665-6.479L12 14zm-4 6v-7.5l4-2.222" />
+        <path strokeLinecap="round" strokeLinejoin="round" d="M12 14l9-5-9-5-9 5 9 5zm0 0l6.16-3.422a12.083 12.083 0 01.665 6.479A11.952 11.952 0 0012 20.055a11.952 11.952 0 00-6.824-2.998a12.078 12.078 0 01.665-6.479L12 14zm-4 6v-7.5l4-2.222" />
       </svg>
     ),
   },
@@ -501,7 +240,7 @@ const services = [
 
 const ServicesSection = () => {
   const [isClient, setIsClient] = useState(false);
-  const [backgroundParticles, setBackgroundParticles] = useState<Array<any>>([]);
+  const [backgroundParticles, setBackgroundParticles] = useState<BackgroundParticle[]>([]);
 
   useEffect(() => {
     setIsClient(true);
@@ -523,54 +262,43 @@ const ServicesSection = () => {
   return (
     <section 
       id="services" 
-      className="py-28 md:py-32 bg-gradient-to-b from-gray-900 via-gray-950 to-gray-900 relative overflow-hidden"
+      className="py-16 md:py-20 bg-gradient-to-b from-slate-900 via-slate-950 to-slate-900 relative overflow-hidden"
     >
       {isClient && backgroundParticles.map(particle => (
         <div key={particle.id} style={particle.style} className={particle.className}></div>
       ))}
       
-      <div className="absolute inset-0 bg-[radial-gradient(#38b2ac0d_1px,transparent_1px)] [background-size:24px_24px] opacity-15 pointer-events-none"></div>
+      <div className="absolute inset-0 bg-[radial-gradient(#38b2ac0d_1px,transparent_1px)] [background-size:24px_24px] opacity-20 pointer-events-none"></div>
       
       <div className="container mx-auto px-4 relative z-10">
-        <div className="text-center max-w-3xl mx-auto mb-20">
-          <h2 className="text-4xl md:text-5xl font-bold mb-5">
-            <span className="bg-clip-text text-transparent bg-gradient-to-r from-teal-400 via-purple-400 to-blue-500">
+        <div className="text-center max-w-3xl mx-auto mb-10">
+          <h2 className="text-4xl md:text-5xl font-bold mb-4 leading-tight">
+            <span className="bg-clip-text text-transparent bg-gradient-to-r from-cyan-400 via-purple-400 to-blue-500">
               Unlock AI Potential
             </span>
           </h2>
-          <p className="text-lg md:text-xl text-gray-300 mt-5">
+          <p className="text-lg text-gray-300/90 mt-3 font-light leading-relaxed max-w-2xl mx-auto">
             From strategy to implementation, we provide end-to-end AI services tailored to drive innovation and growth.
           </p>
         </div>
 
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 md:gap-8">
-          {services.map((service, index) => (
-            <ServiceCard
-              key={service.id}
-              id={service.id}
-              title={service.title}
-              description={service.description}
-              expandedContent={service.expandedContent}
-              icon={service.icon}
-            />
-          ))}
-        </div>
+        <ServicesCarousel services={services} />
 
-        <div className="mt-24 text-center"> 
+        <div className="mt-10 text-center"> 
           <button 
             onClick={() => document.getElementById('contact')?.scrollIntoView({ behavior: 'smooth' })}
-            className="px-8 py-3.5 rounded-lg 
+            className="px-8 py-4 rounded-lg 
               group relative
-              bg-gradient-to-r from-teal-500 to-purple-500 
+              bg-gradient-to-r from-cyan-500 to-purple-500 
               text-white font-medium 
-              shadow-lg shadow-teal-500/20 
-              focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-offset-gray-950 focus:ring-teal-400/50
+              shadow-lg shadow-cyan-500/20 
+              focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-offset-gray-950 focus:ring-cyan-400/50
               overflow-hidden
               transition-all duration-300 ease-in-out 
-              hover:-translate-y-1 hover:shadow-[0_15px_30px_-5px_rgba(45,212,191,0.3)] hover:bg-gradient-to-r hover:from-teal-400 hover:to-purple-400"
+              hover:-translate-y-1 hover:shadow-[0_15px_30px_-5px_rgba(45,212,191,0.3)] hover:bg-gradient-to-r hover:from-cyan-400 hover:to-purple-400"
           >
             <span className="relative z-10">Request a Consultation</span>
-            <span className="absolute inset-0 bg-gradient-to-r from-teal-400 to-purple-400 opacity-0 group-hover:opacity-30 transition-opacity duration-300 blur-lg"></span>
+            <span className="absolute inset-0 bg-gradient-to-r from-cyan-400 to-purple-400 opacity-0 group-hover:opacity-30 transition-opacity duration-300 blur-lg"></span>
           </button>
         </div>
       </div>
@@ -578,4 +306,4 @@ const ServicesSection = () => {
   );
 };
 
-export default ServicesSection; 
+export default ServicesSection;
