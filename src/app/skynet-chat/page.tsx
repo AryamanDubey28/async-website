@@ -7,10 +7,10 @@ import Footer from '@/components/Footer';
 
 export default function SkynetChat() {
   // Controls for the animated features and interactions
-  const [activeFeature, setActiveFeature] = useState(0);
+  // const [activeFeature, setActiveFeature] = useState(0); // REMOVED - Replaced with CSS hover
   const [isLoaded, setIsLoaded] = useState(false);
   const [activeChatMessage, setActiveChatMessage] = useState(0);
-  const [isEditorFocused, setIsEditorFocused] = useState(false);
+  // const [isEditorFocused, setIsEditorFocused] = useState(false); // REMOVED - Replaced with CSS focus-within
   const [showTypingIndicator, setShowTypingIndicator] = useState(false);
   const canvasRef = useRef<HTMLCanvasElement>(null);
   const mainRef = useRef<HTMLElement>(null); // Add ref for the main element
@@ -294,13 +294,14 @@ function processData(data) {
                 </div>
                 
                 <h1 className="text-5xl sm:text-6xl lg:text-7xl font-bold leading-none tracking-tight">
+                  {/* CSS Transition applied directly */}
                   <div className="overflow-hidden">
-                    <span className={`block mb-3 transform ${isLoaded ? 'translate-y-0' : 'translate-y-full'} transition-transform duration-700 delay-100 ease-out`}>
+                    <span className={`block mb-3 transform ${isLoaded ? 'translate-y-0' : 'translate-y-full'} transition-transform duration-700 delay-[100ms] ease-out`}>
                       Skynet Chat
                     </span>
                   </div>
                   <div className="overflow-hidden">
-                    <span className={`block bg-clip-text text-transparent bg-gradient-to-r from-teal-400 via-purple-400 to-blue-500 transform ${isLoaded ? 'translate-y-0' : 'translate-y-full'} transition-transform duration-700 delay-300 ease-out`}>
+                    <span className={`block bg-clip-text text-transparent bg-gradient-to-r from-teal-400 via-purple-400 to-blue-500 transform ${isLoaded ? 'translate-y-0' : 'translate-y-full'} transition-transform duration-700 delay-[300ms] ease-out`}>
                       Intelligent Collaboration
                     </span>
                   </div>
@@ -323,7 +324,8 @@ function processData(data) {
                 </div>
                 
                 {/* Social proof */}
-                <div className={`flex items-center gap-4 transition-all duration-1000 ${isLoaded ? 'opacity-100' : 'opacity-0'}`}>
+                {/* CSS Transition applied directly */}
+                <div className={`flex items-center gap-4 transition-opacity duration-1000 ${isLoaded ? 'opacity-100' : 'opacity-0'}`}>
                   <div className="flex -space-x-3">
                     {Array(4).fill(0).map((_, i) => (
                       <div key={i} className="w-10 h-10 rounded-full border-2 border-gray-800 bg-gradient-to-br from-gray-800 to-gray-900 flex items-center justify-center overflow-hidden">
@@ -422,14 +424,14 @@ function processData(data) {
                           <div className="flex-1 flex">
                             {/* Document editor */}
                             <div 
-                              className={`flex-1 p-3 text-xs font-mono text-gray-300 overflow-hidden ${isEditorFocused ? 'ring-1 ring-teal-500/30 ring-inset' : ''}`}
-                              onClick={() => setIsEditorFocused(true)}
-                              onMouseLeave={() => setIsEditorFocused(false)}
+                              tabIndex={0} // Make focusable
+                              className="flex-1 p-3 text-xs font-mono text-gray-300 overflow-hidden outline-none focus-within:ring-1 focus-within:ring-teal-500/30 focus-within:ring-inset" // Use focus-within for ring
                             >
                               <div className="mb-2 font-semibold text-teal-400"># Project Overview</div>
                               <div className="mb-2">The system integrates advanced AI capabilities with a secure, user-friendly interface to enable collaboration on documents and code.</div>
                               <div className="mb-2 font-semibold text-teal-400">## Key Features</div>
-                              <div className={`mb-2 ${isEditorFocused ? 'bg-teal-500/10 px-1' : ''}`}>- Real-time collaboration with AI assistance</div>
+                              {/* Use focus-within for highlight */}
+                              <div className="mb-2 focus-within:bg-teal-500/10 focus-within:px-1">- Real-time collaboration with AI assistance</div>
                               <div className="mb-2">- Secure, on-premise deployment options</div>
                               <div className="mb-2">- Customizable AI models to suit specific needs</div>
                               <div className="mb-2 font-semibold text-teal-400">## Technical Specifications</div>
@@ -456,11 +458,11 @@ function processData(data) {
                                       msg.role === 'user' 
                                         ? 'bg-teal-500/20 ml-auto text-white' 
                                         : 'bg-gray-800/60 text-gray-300'
-                                    } ${idx > activeChatMessage ? 'opacity-0' : 'opacity-100'} transition-opacity duration-300`}
+                                    } ${idx >= activeChatMessage ? 'opacity-0' : 'opacity-100'} transition-opacity duration-300`} // Keep JS logic, rely on CSS transition
                                   >
                                     {msg.content}
                                   </div>
-                                ))}
+                                ))} {/* NOTE: The sequential reveal still uses JS state `activeChatMessage`, but the fade uses CSS `transition-opacity` */}
                                 
                                 {/* Typing indicator */}
                                 {showTypingIndicator && (
@@ -470,9 +472,9 @@ function processData(data) {
                                     <div className="w-1.5 h-1.5 rounded-full bg-gray-500 animate-bounce [animation-delay:300ms]"></div>
                                   </div>
                                 )}
-                              </div>
+                              </div> {/* NOTE: Typing indicator uses JS state `showTypingIndicator` and CSS `animate-bounce` */}
                               
-                              {/* Chat input */}
+                              {/* Chat input - Triggers JS state update */}
                               <div className="p-3 border-t border-gray-800">
                                 <div className="relative">
                                   <input 
@@ -552,13 +554,12 @@ function processData(data) {
               {features.map((feature, index) => (
                 <div 
                   key={index}
-                  className="relative bg-gray-900/60 backdrop-blur-xl rounded-xl p-6 overflow-hidden group hover-scale border border-teal-500/20 shadow-xl shadow-teal-500/5 h-full transition-all duration-300 hover:border-teal-400/40 hover:shadow-teal-500/10"
-                  onMouseEnter={() => setActiveFeature(index)}
+                  // Replaced JS state hover with CSS group-hover
+                  className="relative bg-gray-900/60 backdrop-blur-xl rounded-xl p-6 overflow-hidden group hover:scale-105 border border-teal-500/20 shadow-xl shadow-teal-500/5 h-full transition-all duration-300 hover:border-teal-400/40 hover:shadow-teal-500/10 group-hover:border-teal-400/30 group-hover:shadow-[0_0_15px_rgba(56,178,172,0.1)]" 
+                  // onMouseEnter={() => setActiveFeature(index)}
                 >
-                  {/* Animated background gradient */}
-                  <div className={`absolute inset-0 bg-gradient-to-br from-teal-500/15 via-purple-500/10 to-blue-600/15 transition-opacity duration-500 ${
-                    activeFeature === index ? 'opacity-100' : 'opacity-0'
-                  }`}></div>
+                  {/* Animated background gradient on hover */}
+                  <div className="absolute inset-0 bg-gradient-to-br from-teal-500/15 via-purple-500/10 to-blue-600/15 opacity-0 group-hover:opacity-100 transition-opacity duration-500"></div>
                   
                   {/* Tech grid lines for tech effect */}
                   <div className="absolute inset-0 rounded-xl overflow-hidden opacity-20">
@@ -581,12 +582,8 @@ function processData(data) {
                     </p>
                   </div>
                   
-                  {/* Animated border */}
-                  <div className={`absolute inset-0 rounded-xl transition-all duration-300 ${
-                    activeFeature === index 
-                      ? 'border border-teal-400/30 shadow-[0_0_15px_rgba(56,178,172,0.1)] after:opacity-100' 
-                      : 'border border-transparent after:opacity-0'
-                  } after:content-[''] after:absolute after:inset-0 after:rounded-xl after:border after:border-teal-400/10 after:scale-[1.02] after:transition-all after:duration-300`}></div>
+                  {/* Animated border on hover */}
+                  <div className="absolute inset-0 rounded-xl transition-all duration-300 border border-transparent after:opacity-0 group-hover:after:opacity-100 after:content-[''] after:absolute after:inset-0 after:rounded-xl after:border after:border-teal-400/10 after:scale-[1.02] after:transition-all after:duration-300"></div>
                 </div>
               ))}
             </div>
