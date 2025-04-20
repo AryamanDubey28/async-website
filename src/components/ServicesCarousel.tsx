@@ -38,7 +38,7 @@ const carouselStyles = `
     flex-shrink: 0;
     padding: 1rem;
     transition: all 0.5s cubic-bezier(0.4, 0, 0.2, 1);
-    opacity: 0.25;
+    opacity: 0.35;
     transform: scale(0.92);
     filter: blur(1px);
   }
@@ -47,20 +47,22 @@ const carouselStyles = `
     opacity: 1;
     transform: scale(1);
     filter: blur(0);
+    z-index: 10;
+    position: relative;
   }
   
   .carousel-card-content {
     display: flex;
     flex-direction: column;
-    background-color: rgba(15, 23, 42, 0.7);
+    background-color: rgba(15, 23, 42, 0.65);
     backdrop-filter: blur(12px);
-    border: 1px solid rgba(59, 130, 246, 0.15);
+    border: 1px solid rgba(59, 130, 246, 0.2);
     border-radius: 1.5rem;
     overflow: hidden;
     height: 100%;
     box-shadow: 
       0 20px 40px rgba(0, 0, 0, 0.3),
-      0 0 80px rgba(45, 212, 191, 0.1) inset;
+      0 0 80px rgba(45, 212, 191, 0.15) inset;
     
     @media (min-width: 768px) {
       flex-direction: row;
@@ -73,7 +75,7 @@ const carouselStyles = `
     inset: 0;
     border-radius: 1.5rem;
     padding: 1.5px;
-    background: linear-gradient(to right, rgba(45, 212, 191, 0), rgba(168, 85, 247, 0));
+    background: linear-gradient(to right, rgba(45, 212, 191, 0.1), rgba(168, 85, 247, 0.1));
     -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
     -webkit-mask-composite: xor;
     mask-composite: exclude;
@@ -82,8 +84,28 @@ const carouselStyles = `
   }
   
   .carousel-card.active .carousel-card-content:before {
-    background: linear-gradient(60deg, rgba(45, 212, 191, 0.4), rgba(168, 85, 247, 0.4), rgba(59, 130, 246, 0.4));
-    box-shadow: 0 0 30px rgba(45, 212, 191, 0.2);
+    background: linear-gradient(60deg, rgba(45, 212, 191, 0.6), rgba(168, 85, 247, 0.6), rgba(59, 130, 246, 0.6));
+    box-shadow: 0 0 30px rgba(45, 212, 191, 0.3);
+  }
+
+  /* Pulsating glow effect for active card */
+  @keyframes pulse-glow {
+    0%, 100% {
+      box-shadow: 
+        0 0 20px rgba(45, 212, 191, 0.3),
+        0 0 50px rgba(45, 212, 191, 0.15),
+        0 0 80px rgba(45, 212, 191, 0.15) inset;
+    }
+    50% {
+      box-shadow: 
+        0 0 30px rgba(168, 85, 247, 0.4),
+        0 0 70px rgba(59, 130, 246, 0.25),
+        0 0 100px rgba(45, 212, 191, 0.2) inset;
+    }
+  }
+  
+  .carousel-card.active .carousel-card-content {
+    animation: pulse-glow 3s ease-in-out infinite;
   }
   
   /* Card sections */
@@ -91,21 +113,59 @@ const carouselStyles = `
     padding: 1.5rem;
     display: flex;
     flex-direction: column;
-    background-color: rgba(15, 23, 42, 0.4);
+    background-color: rgba(15, 23, 42, 0.35);
+    transition: background-color 0.5s ease;
     
     @media (min-width: 768px) {
       width: 40%;
-      border-right: 1px solid rgba(59, 130, 246, 0.15);
+      border-right: 1px solid rgba(59, 130, 246, 0.2);
     }
   }
   
   .card-expanded {
     padding: 1.5rem;
-    background-color: rgba(15, 23, 42, 0.2);
+    background-color: rgba(15, 23, 42, 0.15);
+    transition: background-color 0.5s ease;
     
     @media (min-width: 768px) {
       width: 60%;
     }
+  }
+  
+  /* Active card styling */
+  .active-card-section {
+    position: relative;
+  }
+  
+  .active-card-section::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: radial-gradient(
+      circle at center,
+      rgba(45, 212, 191, 0.08) 0%,
+      rgba(168, 85, 247, 0.08) 70%,
+      transparent 100%
+    );
+    pointer-events: none;
+    opacity: 0;
+    transition: opacity 0.5s ease;
+    z-index: 0;
+  }
+  
+  .carousel-card.active .active-card-section::before {
+    opacity: 1;
+  }
+  
+  .card-summary.active-card-section {
+    background-color: rgba(15, 23, 42, 0.45);
+  }
+  
+  .card-expanded.active-card-section {
+    background-color: rgba(15, 23, 42, 0.25);
   }
   
   /* Navigation controls */
@@ -124,24 +184,24 @@ const carouselStyles = `
     display: flex;
     align-items: center;
     justify-content: center;
-    background: rgba(15, 23, 42, 0.7);
+    background: rgba(15, 23, 42, 0.65);
     color: white;
-    border: 1px solid rgba(59, 130, 246, 0.15);
+    border: 1px solid rgba(59, 130, 246, 0.25);
     cursor: pointer;
     transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
     backdrop-filter: blur(8px);
   }
   
   .carousel-nav-button:hover {
-    background: linear-gradient(135deg, rgba(45, 212, 191, 0.9), rgba(168, 85, 247, 0.9));
+    background: linear-gradient(135deg, rgba(56, 224, 204, 0.9), rgba(185, 105, 254, 0.9));
     transform: translateY(-3px);
-    box-shadow: 0 10px 25px rgba(45, 212, 191, 0.3);
+    box-shadow: 0 10px 25px rgba(56, 224, 204, 0.4);
     border-color: transparent;
   }
   
   .carousel-nav-button:focus {
     outline: none;
-    box-shadow: 0 0 0 3px rgba(45, 212, 191, 0.4);
+    box-shadow: 0 0 0 3px rgba(56, 224, 204, 0.5);
   }
   
   .carousel-nav-button:disabled {
@@ -161,7 +221,7 @@ const carouselStyles = `
     width: 2rem;
     height: 0.25rem;
     border-radius: 0.125rem;
-    background-color: rgba(100, 116, 139, 0.3);
+    background-color: rgba(100, 116, 139, 0.4);
     cursor: pointer;
     transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
     overflow: hidden;
@@ -169,7 +229,7 @@ const carouselStyles = `
   }
   
   .carousel-indicator:hover {
-    background-color: rgba(100, 116, 139, 0.5);
+    background-color: rgba(100, 116, 139, 0.6);
   }
   
   .carousel-indicator.active {
@@ -184,7 +244,7 @@ const carouselStyles = `
     left: 0;
     right: 0;
     bottom: 0;
-    background: linear-gradient(90deg, rgb(45, 212, 191), rgb(168, 85, 247), rgb(59, 130, 246));
+    background: linear-gradient(90deg, rgb(56, 224, 204), rgb(185, 105, 254), rgb(75, 141, 250));
     background-size: 200% 100%;
     animation: shimmer 2s infinite linear;
   }
@@ -199,7 +259,7 @@ const ServicesCarousel = ({ services }: ServicesCarouselProps) => {
   const [activeIndex, setActiveIndex] = useState(0);
   const [isAutoPlaying, setIsAutoPlaying] = useState(true);
   const autoPlayInterval = useRef<NodeJS.Timeout | null>(null);
-  const autoPlayDuration = 5000; // 5 seconds per slide
+  const autoPlayDuration = 7000; // 7 seconds per slide
   const trackRef = useRef<HTMLDivElement>(null);
 
   // Calculate the correct transform for the track
