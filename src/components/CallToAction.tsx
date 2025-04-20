@@ -1,8 +1,6 @@
 'use client';
 
-import { useState } from 'react';
-import ScrollAnimationWrapper from './ScrollAnimationWrapper';
-import ScrollRevealContainer from './ScrollRevealContainer';
+import { useState, useEffect, useRef } from 'react';
 
 const CallToAction = () => {
   const [email, setEmail] = useState('');
@@ -11,6 +9,35 @@ const CallToAction = () => {
   const [submitted, setSubmitted] = useState(false);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState('');
+  const [visible, setVisible] = useState(false);
+  const sectionRef = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    // Set up Intersection Observer to detect when section is scrolled into view
+    const observer = new IntersectionObserver(
+      (entries) => {
+        const [entry] = entries;
+        // Only trigger animation when element comes into view
+        if (entry.isIntersecting) {
+          setVisible(true);
+          // Once triggered, we can disconnect the observer
+          observer.disconnect();
+        }
+      },
+      // Options: trigger when at least 20% of the element is visible
+      { threshold: 0.2 }
+    );
+
+    // Start observing the section
+    if (sectionRef.current) {
+      observer.observe(sectionRef.current);
+    }
+
+    return () => {
+      // Clean up the observer when component unmounts
+      observer.disconnect();
+    };
+  }, []);
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -53,7 +80,7 @@ const CallToAction = () => {
   };
 
   return (
-    <div id="contact" className="relative py-24 overflow-hidden">
+    <div id="contact" className="relative py-24 overflow-hidden" ref={sectionRef}>
       {/* Background elements - lighter */}
       <div className="absolute inset-0 bg-gray-900"></div>
       <div className="absolute inset-0 bg-gradient-to-br from-teal-500/15 via-purple-500/10 to-blue-600/15"></div>
@@ -67,34 +94,20 @@ const CallToAction = () => {
       
       {/* Content */}
       <div className="relative z-10 container mx-auto px-4 md:px-6 text-center">
-        <div className="max-w-3xl mx-auto">
-          <ScrollAnimationWrapper animationVariant="fadeUp" delay={0.1}>
-            <div className="inline-block relative mb-4">
-              {/* Even more reduced glow on the heading */}
-              <div className="absolute -inset-1 bg-gradient-to-r from-teal-500/10 to-purple-400/10 rounded-lg blur-sm"></div>
-              <h2 className="relative text-3xl md:text-4xl font-bold mb-6">
-                Ready to transform your business with{' '}
-                <span className="bg-clip-text text-transparent bg-gradient-to-r from-teal-400 via-purple-400 to-blue-500">
-                  intelligent AI?
-                </span>
-              </h2>
-            </div>
-          </ScrollAnimationWrapper>
+        <div className={`max-w-3xl mx-auto transition-all duration-700 ease-out ${visible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-8'}`}>
+          <h2 className={`text-3xl md:text-4xl font-bold mb-6 transition-all duration-700 delay-100 ease-out ${visible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-8'}`}>
+            Ready to transform your business with{' '}
+            <span className="bg-clip-text text-transparent bg-gradient-to-r from-teal-400 via-purple-400 to-blue-500">
+              intelligent AI?
+            </span>
+          </h2>
           
-          <ScrollAnimationWrapper animationVariant="fadeUp" delay={0.2}>
-            <p className="text-gray-300 text-lg mb-8">
-              Get in touch with our team of AI experts to discuss how we can help your business leverage the power of artificial intelligence.
-            </p>
-          </ScrollAnimationWrapper>
+          <p className={`text-gray-300 text-lg mb-8 transition-all duration-700 delay-200 ease-out ${visible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-8'}`}>
+            Get in touch with our team of AI experts to discuss how we can help your business leverage the power of artificial intelligence.
+          </p>
           
-          <ScrollRevealContainer direction="fromBottom" className="mb-8">
-            <div className="bg-gray-900/60 backdrop-blur-xl p-8 rounded-2xl border border-teal-500/20 shadow-xl shadow-teal-500/5 hover:shadow-lg hover:shadow-teal-500/10 transition-all duration-300">
-              {/* Tech grid lines for tech effect - lighter */}
-              <div className="absolute inset-0 rounded-xl overflow-hidden opacity-15">
-                <div className="absolute inset-0 bg-[radial-gradient(#4fd1c515_1px,transparent_1px)] [background-size:8px_8px] opacity-70"></div>
-                <div className="absolute inset-0 bg-[linear-gradient(to_right,transparent_0%,#4fd1c508_50%,transparent_100%)] animate-scanner"></div>
-              </div>
-              
+          <div className={`mb-8 transition-all duration-700 delay-300 ease-out ${visible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-8'}`}>
+            <div className="bg-gray-900/60 backdrop-blur-xl p-8 rounded-2xl border border-teal-500/20 shadow-xl shadow-teal-500/5 transition-all duration-300">              
               {!submitted ? (
                 <form onSubmit={handleSubmit} className="relative z-10 flex flex-col gap-4">
                   <input
@@ -142,35 +155,33 @@ const CallToAction = () => {
                 </div>
               )}
             </div>
-          </ScrollRevealContainer>
+          </div>
           
-          <ScrollAnimationWrapper animationVariant="fadeUp" delay={0.4}>
-            <div className="flex flex-wrap justify-center gap-6 items-center">
-              <div className="flex items-center">
-                <div className="w-12 h-12 rounded-full bg-gray-800/60 backdrop-blur-sm flex items-center justify-center mr-3 border border-teal-400/20 shadow-lg shadow-teal-500/5">
-                  <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6 text-teal-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 5a2 2 0 012-2h3.28a1 1 0 01.948.684l1.498 4.493a1 1 0 01-.502 1.21l-2.257 1.13a11.042 11.042 0 005.516 5.516l1.13-2.257a1 1 0 011.21-.502l4.493 1.498a1 1 0 01.684.949V19a2 2 0 01-2 2h-1C9.716 21 3 14.284 3 6V5z" />
-                  </svg>
-                </div>
-                <div className="text-left">
-                  <div className="text-sm text-gray-400">Call us</div>
-                  <div className="text-white">+1 (555) 123-4567</div>
-                </div>
+          <div className={`flex flex-wrap justify-center gap-6 items-center transition-all duration-700 delay-400 ease-out ${visible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-8'}`}>
+            <div className="flex items-center">
+              <div className="w-12 h-12 rounded-full bg-gray-800/60 backdrop-blur-sm flex items-center justify-center mr-3 border border-teal-400/20 shadow-lg shadow-teal-500/5">
+                <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6 text-teal-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 5a2 2 0 012-2h3.28a1 1 0 01.948.684l1.498 4.493a1 1 0 01-.502 1.21l-2.257 1.13a11.042 11.042 0 005.516 5.516l1.13-2.257a1 1 0 011.21-.502l4.493 1.498a1 1 0 01.684.949V19a2 2 0 01-2 2h-1C9.716 21 3 14.284 3 6V5z" />
+                </svg>
               </div>
-              
-              <div className="flex items-center">
-                <div className="w-12 h-12 rounded-full bg-gray-800/60 backdrop-blur-sm flex items-center justify-center mr-3 border border-teal-400/20 shadow-lg shadow-teal-500/5">
-                  <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6 text-teal-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" />
-                  </svg>
-                </div>
-                <div className="text-left">
-                  <div className="text-sm text-gray-400">Email us</div>
-                  <div className="text-white">info@asyncstudios.ai</div>
-                </div>
+              <div className="text-left">
+                <div className="text-sm text-gray-400">Call us</div>
+                <div className="text-white">+1 (555) 123-4567</div>
               </div>
             </div>
-          </ScrollAnimationWrapper>
+            
+            <div className="flex items-center">
+              <div className="w-12 h-12 rounded-full bg-gray-800/60 backdrop-blur-sm flex items-center justify-center mr-3 border border-teal-400/20 shadow-lg shadow-teal-500/5">
+                <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6 text-teal-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" />
+                </svg>
+              </div>
+              <div className="text-left">
+                <div className="text-sm text-gray-400">Email us</div>
+                <div className="text-white">info@asyncstudios.ai</div>
+              </div>
+            </div>
+          </div>
         </div>
       </div>
     </div>
