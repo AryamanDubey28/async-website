@@ -341,7 +341,7 @@ function processData(data) {
               
               {/* Right content column - Interactive UI mockup */}
               <div className="lg:w-1/2 relative">
-                <div className="relative max-w-xl mx-auto">
+                <div className="relative max-w-2xl mx-auto"> {/* Increased from max-w-xl */}
                   {/* Main UI mockup */}
                   <div className="aspect-[16/10] relative rounded-xl overflow-hidden border border-teal-500/30 shadow-xl shadow-teal-500/10 backdrop-blur-sm bg-gray-900/80">
                     <div className="absolute inset-0 bg-gradient-to-br from-teal-500/10 via-purple-500/10 to-blue-600/10"></div>
