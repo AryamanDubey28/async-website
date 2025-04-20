@@ -307,3 +307,62 @@ body {
 .animate-ping-slow {
   animation: ping-slow 2.5s cubic-bezier(0, 0, 0.2, 1) infinite;
 }
+
+/* Scroll Animation Wrapper Styles */
+
+/* Base styles for all animations (initial state) */
+.animate-fade-in,
+.animate-fade-up,
+.animate-fade-right,
+.animate-fade-left,
+.animate-scale {
+  opacity: 0;
+  transition-property: opacity, transform, scale;
+  /* Duration, easing, and delay are applied via inline styles */
+  will-change: opacity, transform, scale;
+}
+
+/* Specific initial transforms */
+.animate-fade-up {
+  transform: translateY(30px);
+}
+.animate-fade-right {
+  transform: translateX(-50px);
+}
+.animate-fade-left {
+  transform: translateX(50px);
+}
+.animate-scale {
+  transform: scale(0.95);
+}
+
+/* Target state when in view */
+.animate-fade-in.is-in-view,
+.animate-fade-up.is-in-view,
+.animate-fade-right.is-in-view,
+.animate-fade-left.is-in-view,
+.animate-scale.is-in-view {
+  opacity: 1;
+  transform: none; /* Resets translate and scale */
+}
+
+/* End of Scroll Animation Wrapper Styles */
+
+/* Staggered Grid Item Animation Styles */
+
+/* Base styles for grid items (initial state) */
+.grid-item-animate {
+  opacity: 0;
+  transform: translateY(20px);
+  transition-property: opacity, transform;
+  /* Duration, easing, and delay are applied via inline styles */
+  will-change: opacity, transform;
+}
+
+/* Target state when in view */
+.grid-item-animate.is-in-view {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+/* End of Staggered Grid Item Animation Styles */

@@ -1,8 +1,7 @@
 'use client';
 
-import { ReactNode } from 'react';
-import { motion } from 'framer-motion';
-import ScrollAnimationWrapper from './ScrollAnimationWrapper';
+import React, { ReactNode, useEffect, useState } from 'react';
+import { useInView } from 'react-intersection-observer';
 
 interface StaggeredGridProps {
   children: ReactNode[];
@@ -11,7 +10,11 @@ interface StaggeredGridProps {
   columns?: { sm?: number; md?: number; lg?: number; xl?: number };
   gap?: string;
   staggerDelay?: number;
-  animationVariant?: 'fadeUp' | 'fadeIn' | 'scale';
+  threshold?: number;
+  triggerOnce?: boolean;
+  viewportMargin?: string;
+  duration?: number;
+  easing?: string;
 }
 
 export const StaggeredGrid = ({
@@ -21,8 +24,23 @@ export const StaggeredGrid = ({
   columns = { sm: 1, md: 2, lg: 3, xl: 3 },
   gap = 'gap-8',
   staggerDelay = 0.05,
-  animationVariant = 'fadeUp',
+  threshold = 0.1,
+  triggerOnce = true,
+  viewportMargin = '-100px',
+  duration = 0.5,
+  easing = 'cubic-bezier(0.22, 1, 0.36, 1)',
 }: StaggeredGridProps) => {
+  const [isClient, setIsClient] = useState(false);
+  const { ref, inView } = useInView({
+    threshold,
+    triggerOnce,
+    rootMargin: viewportMargin,
+  });
+
+  useEffect(() => {
+    setIsClient(true);
+  }, []);
+
   const getGridColumns = () => {
     const colClasses = [];
     
@@ -34,48 +52,46 @@ export const StaggeredGrid = ({
     return colClasses.join(' ');
   };
   
-  // Animation variants for individual children
-  const itemVariants = {
-    hidden: { opacity: 0, y: 20 },
-    visible: (i: number) => ({
-      opacity: 1,
-      y: 0,
-      transition: {
-        delay: i * staggerDelay,
-        duration: 0.5,
-        ease: [0.22, 1, 0.36, 1]
-      }
-    })
-  };
+  // Handle server-side rendering
+  if (!isClient) {
+    return (
+      <div className={`grid ${getGridColumns()} ${gap} ${className}`}>
+        {children.map((child, index) => (
+          <div key={index} className={itemClassName}>{child}</div>
+        ))}
+      </div>
+    );
+  }
 
   return (
-    <ScrollAnimationWrapper
-      animationVariant="stagger"
-      staggerChildren={staggerDelay}
+    <div
+      ref={ref}
       className={`grid ${getGridColumns()} ${gap} ${className}`}
     >
-      {children.map((child, index) => (
-        <motion.div
-          key={index}
-          custom={index}
-          variants={{
-            hidden: { opacity: 0, y: 20 },
-            visible: {
-              opacity: 1,
-              y: 0,
-              transition: {
-                delay: index * staggerDelay,
-                duration: 0.5,
-                ease: [0.22, 1, 0.36, 1]
-              }
-            }
-          }}
-          className={itemClassName}
-        >
-          {child}
-        </motion.div>
-      ))}
-    </ScrollAnimationWrapper>
+      {React.Children.map(children, (child, index) => {
+        // Ensure we are working with valid React elements
+        if (!React.isValidElement(child)) {
+          return child; 
+        }
+        
+        const childStyle: React.CSSProperties = {
+          transitionDelay: `${index * staggerDelay}s`,
+          transitionDuration: `${duration}s`,
+          transitionTimingFunction: easing,
+        };
+
+        // Clone the element to add the animation class and inline styles
+        // Safely access props with type checking
+        const existingProps = child.props as { className?: string; style?: React.CSSProperties };
+        const existingClassName = existingProps.className || '';
+        const existingStyle = existingProps.style || {};
+
+        return React.cloneElement(child as React.ReactElement<{ className?: string; style?: React.CSSProperties }>, {
+          className: `${existingClassName} ${itemClassName} grid-item-animate ${inView ? 'is-in-view' : ''}`.trim(), // Added trim for safety
+          style: { ...existingStyle, ...childStyle },
+        });
+      })}
+    </div>
   );
 };
 
