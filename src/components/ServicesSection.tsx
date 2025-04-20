@@ -19,11 +19,33 @@ const globalStyles = `
   }
   
   .service-card-wrapper {
-    transition: transform 0.3s ease;
+    transition: transform 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
+    min-height: 280px;
+    will-change: transform;
   }
   
   .service-card-wrapper:hover {
     transform: rotate(0deg) scale(1.03) !important;
+    z-index: 20;
+  }
+  
+  /* Ensure the expanded content has room to grow */
+  .service-card-wrapper:hover .service-card {
+    height: auto;
+    min-height: 450px; /* Give extra space for expanded content */
+  }
+  
+  /* Fix for services section content */
+  .service-card {
+    display: flex;
+    flex-direction: column;
+  }
+  
+  /* Ensure the content doesn't get cut off */
+  .service-card-wrapper:hover .expandable-content {
+    pointer-events: auto !important;
+    visibility: visible !important;
+    display: block !important;
   }
   
   @keyframes float-particle-1 {
