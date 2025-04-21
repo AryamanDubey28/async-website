@@ -111,7 +111,16 @@ const Hero = () => {
   }, [generateStaticParticles]);
 
   // Memoize the colors array to prevent recreation on each render
-  const particleColors = useMemo(() => ['#4fd1c5', '#38b2ac', '#805AD5', '#6B46C1', '#00FFFF', '#2D3748'], []);
+  const particleColors = useMemo(() => [
+    '#4FD1C5', // Brighter teal
+    '#38B2AC', 
+    '#9F7AEA', // Brighter purple
+    '#805AD5', 
+    '#00FFFF', // Cyan
+    '#38B2FF', // Bright blue
+    '#F687B3', // Pink
+    '#FC8181'  // Red
+  ], []);
   
   // Memoize the number of particles based on device capabilities
   const particleCount = useMemo(() => {
@@ -165,8 +174,9 @@ const Hero = () => {
         return particleGradientCache.get(cacheKey)!;
       }
 
-      const gradient = ctx.createRadialGradient(0, 0, 0, 0, 0, size * 2);
+      const gradient = ctx.createRadialGradient(0, 0, 0, 0, 0, size * 2.5);
       gradient.addColorStop(0, color + 'ff');
+      gradient.addColorStop(0.6, color + 'aa');
       gradient.addColorStop(1, color + '00');
       particleGradientCache.set(cacheKey, gradient);
       return gradient;
@@ -178,11 +188,11 @@ const Hero = () => {
         particles.push({
           x: Math.random() * canvas.width,
           y: Math.random() * canvas.height,
-          size: Math.random() * 3.5 + 0.5, // More varied sizes
+          size: Math.random() * 4 + 1, // Increased size for better visibility
           speedX: (Math.random() - 0.5) * 0.4, 
           speedY: (Math.random() - 0.5) * 0.4,
           color: particleColors[Math.floor(Math.random() * particleColors.length)],
-          opacity: Math.random() * 0.6 + 0.2, // More varied opacity
+          opacity: Math.random() * 0.8 + 0.3, // Increased opacity
           pulse: 0,
           pulseSpeed: Math.random() * 0.02 + 0.01 // For pulsing animation
         });
@@ -253,7 +263,8 @@ const Hero = () => {
             const lineWidth = 0.5 * (1 - distance / connectionDistance);
             
             ctx.beginPath();
-            const opacity = Math.floor((1 - distance / connectionDistance) * 60).toString(16).padStart(2, '0');
+            // Increase opacity for better visibility on black background
+            const opacity = Math.floor((1 - distance / connectionDistance) * 90).toString(16).padStart(2, '0');
             
             // Use solid color instead of gradient for better performance
             ctx.strokeStyle = particle.color + opacity;
@@ -342,18 +353,18 @@ const Hero = () => {
 
   // Rest of your component remains the same
   return (
-    <div className="relative h-screen w-full overflow-hidden bg-gray-900">
+    <div className="relative h-screen w-full overflow-hidden bg-gray-950">
       <canvas ref={canvasRef} className="absolute inset-0 z-0" />
       
       {/* Subtle radial gradient overlay for depth */}
-      <div className="absolute inset-0 bg-gradient-radial from-transparent to-gray-900/80 z-0"></div>
+      <div className="absolute inset-0 bg-gradient-radial from-transparent to-gray-950/80 z-0"></div>
       
       <div className={`relative z-10 h-full flex items-center justify-center transition-opacity duration-1000 ${isLoaded ? 'opacity-100' : 'opacity-0'}`}>
         <div className="container mx-auto px-4 lg:px-8 pt-16 pb-16">
           <div className="flex flex-col lg:flex-row items-center justify-between gap-16">
             {/* Left content column */}
             <div className="lg:w-1/2 space-y-8">
-              <div className="inline-block px-4 py-1.5 rounded-full bg-gray-800/70 backdrop-blur-lg border border-teal-500/30 mb-3 transform hover:scale-105 transition-all duration-300 shadow-lg shadow-teal-500/10">
+              <div className="inline-block px-4 py-1.5 rounded-full bg-gray-950/70 backdrop-blur-lg border border-teal-500/30 mb-3 transform hover:scale-105 transition-all duration-300 shadow-lg shadow-teal-500/10">
                 <p className="text-sm font-medium text-teal-300 flex items-center">
                   Welcome to Async Studios
                 </p>
@@ -388,7 +399,7 @@ const Hero = () => {
                   onClick={handleLearnMore}
                   className="relative px-8 py-4 rounded-full border border-gray-700 backdrop-blur-lg text-white transition-all duration-300 hover:border-teal-400 focus:outline-none focus:ring-2 focus:ring-teal-400/30 overflow-hidden group">
                   <span className="relative z-10">Learn More</span>
-                  <span className="absolute inset-0 bg-gradient-to-r from-gray-800 to-gray-900 opacity-80"></span>
+                  <span className="absolute inset-0 bg-gradient-to-r from-gray-950 to-gray-950 opacity-80"></span>
                   <span className="absolute inset-0 bg-gradient-to-r from-teal-500/20 to-purple-500/20 opacity-0 group-hover:opacity-100 transition-opacity duration-300"></span>
                 </button>
               </div>
@@ -418,7 +429,7 @@ const Hero = () => {
                   <div className="absolute inset-0 rounded-full border-2 border-teal-400/30 animate-ping-slow"></div>
                   
                   {/* Main circle with glass effect */}
-                  <div className="absolute inset-8 bg-gray-900/60 backdrop-blur-xl rounded-full border border-teal-500/30 shadow-2xl shadow-teal-500/10"></div>
+                  <div className="absolute inset-8 bg-gray-950/60 backdrop-blur-xl rounded-full border border-teal-500/30 shadow-2xl shadow-teal-500/10"></div>
                   
                   {/* Animated grid lines for tech effect */}
                   <div className="absolute inset-8 rounded-full overflow-hidden">
@@ -447,11 +458,12 @@ const Hero = () => {
                             {isLoaded && particlePositions.map((particle, i) => (
                               <div 
                                 key={i}
-                                className="absolute w-1.5 h-1.5 rounded-full bg-teal-400/80"
+                                className="absolute w-2 h-2 rounded-full bg-teal-400/90"
                                 style={{
                                   top: particle.top,
                                   left: particle.left,
-                                  animation: particle.animClass
+                                  animation: particle.animClass,
+                                  backgroundColor: i % 2 === 0 ? '#4FD1C5' : (i % 3 === 0 ? '#9F7AEA' : '#38B2FF')
                                 }}
                               ></div>
                             ))}
@@ -469,7 +481,7 @@ const Hero = () => {
                       </div>
                       
                       {/* Powered by text with better positioning and styling */}
-                      <div className="text-gray-300 text-sm font-medium inline-flex items-center px-3 py-1 rounded-full bg-gray-800/70 backdrop-blur-md border border-gray-700 mt-3 hover:border-teal-500/50 transition-colors duration-300">
+                      <div className="text-gray-300 text-sm font-medium inline-flex items-center px-3 py-1 rounded-full bg-gray-950/70 backdrop-blur-md border border-gray-700 mt-3 hover:border-teal-500/50 transition-colors duration-300">
                         <span className="inline-block w-2 h-2 rounded-full bg-teal-400 mr-2 animate-pulse"></span>
                         Powered by Async
                       </div>
@@ -480,7 +492,7 @@ const Hero = () => {
                   <div className="absolute inset-0">
                     {isLoaded && (
                       <>
-                        <div className="absolute top-[15%] -left-32 max-w-[120px] rounded-md bg-gray-900/80 backdrop-blur-sm border border-gray-800 p-2 transform rotate-12 float-2 hidden lg:block">
+                        <div className="absolute top-[15%] -left-32 max-w-[120px] rounded-md bg-gray-950/80 backdrop-blur-sm border border-gray-800 p-2 transform rotate-12 float-2 hidden lg:block">
                           <div className="text-[8px] font-mono">
                             <span className="text-purple-400">async</span> <span className="text-teal-300">function</span> <span className="text-amber-300">processData</span>() {'{'}
                             <br/>
@@ -490,7 +502,7 @@ const Hero = () => {
                           </div>
                         </div>
                         
-                        <div className="absolute bottom-[20%] -right-36 max-w-[130px] rounded-md bg-gray-900/80 backdrop-blur-sm border border-gray-800 p-2 transform -rotate-6 float-3 hidden lg:block">
+                        <div className="absolute bottom-[20%] -right-36 max-w-[130px] rounded-md bg-gray-950/80 backdrop-blur-sm border border-gray-800 p-2 transform -rotate-6 float-3 hidden lg:block">
                           <div className="text-[8px] font-mono">
                             <span className="text-purple-400">class</span> <span className="text-teal-300">AsyncAgent</span> {'{'}
                             <br/>
@@ -509,13 +521,13 @@ const Hero = () => {
                   
                   {/* Multi-layered orbital rings */}
                   <div className="absolute w-full h-full animate-spin-slow">
-                    <div className="absolute top-0 left-1/2 -translate-x-1/2 w-4 h-4 rounded-full bg-teal-400 shadow-lg shadow-teal-400/50"></div>
-                    <div className="absolute bottom-0 left-1/2 -translate-x-1/2 w-4 h-4 rounded-full bg-purple-400 shadow-lg shadow-purple-400/50"></div>
+                    <div className="absolute top-0 left-1/2 -translate-x-1/2 w-4 h-4 rounded-full bg-teal-400 shadow-lg shadow-teal-400/70"></div>
+                    <div className="absolute bottom-0 left-1/2 -translate-x-1/2 w-4 h-4 rounded-full bg-purple-400 shadow-lg shadow-purple-400/70"></div>
                   </div>
                   
                   <div className="absolute w-full h-full animate-spin-reverse-slow">
-                    <div className="absolute left-0 top-1/2 -translate-y-1/2 w-4 h-4 rounded-full bg-blue-400 shadow-lg shadow-blue-400/50"></div>
-                    <div className="absolute right-0 top-1/2 -translate-y-1/2 w-4 h-4 rounded-full bg-teal-400 shadow-lg shadow-teal-400/50"></div>
+                    <div className="absolute left-0 top-1/2 -translate-y-1/2 w-4 h-4 rounded-full bg-blue-400 shadow-lg shadow-blue-400/70"></div>
+                    <div className="absolute right-0 top-1/2 -translate-y-1/2 w-4 h-4 rounded-full bg-teal-400 shadow-lg shadow-teal-400/70"></div>
                   </div>
                   
                   {/* Data stream effect */}
