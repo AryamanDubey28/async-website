@@ -152,23 +152,36 @@ const Footer = () => {
         </div>
         
         {/* Footer bottom section */}
-        <div className="border-t border-gray-700/50 mt-12 pt-8 flex flex-col sm:flex-row justify-between items-center">
-          <p className="text-gray-400 text-sm">
+        <div className="border-t border-gray-700/50 mt-12 pt-8 flex flex-col sm:flex-row justify-between items-center gap-4">
+          <p className="text-gray-400 text-sm text-center sm:text-left">
             © {currentYear} Async Studios. All rights reserved.
           </p>
           
-          <div className="mt-6 sm:mt-0 flex flex-wrap justify-center gap-2">
-            {['Privacy Policy', 'Terms of Service', 'Cookie Policy', 'Sitemap'].map((item, i) => (
-              <a 
-                key={i}
-                href="#" 
-                className="px-3 py-1.5 text-xs text-gray-300 hover:text-teal-400 transition-colors duration-200 relative group"
-              >
-                {item}
-                <span className="absolute -bottom-0.5 left-0 w-0 h-px bg-teal-400 transition-all duration-300 group-hover:w-full"></span>
-              </a>
-            ))}
+          <div className="text-gray-400 text-sm text-center sm:text-right">
+            A digital experiment gone right by{' '}
+            <a 
+              href="/" 
+              target="_self" 
+              rel="noopener noreferrer" 
+              className="font-semibold bg-clip-text text-transparent bg-gradient-to-r from-teal-400 via-teal-300 to-teal-200 hover:opacity-80 transition-opacity duration-200"
+            >
+              Async Studios
+            </a>
           </div>
+        </div>
+        
+        {/* Legal Links moved below */}
+        <div className="mt-6 flex flex-wrap justify-center gap-2">
+          {['Privacy Policy', 'Terms of Service', 'Cookie Policy', 'Sitemap'].map((item, i) => (
+            <a 
+              key={i}
+              href="#" 
+              className="px-3 py-1.5 text-xs text-gray-300 hover:text-teal-400 transition-colors duration-200 relative group"
+            >
+              {item}
+              <span className="absolute -bottom-0.5 left-0 w-0 h-px bg-teal-400 transition-all duration-300 group-hover:w-full"></span>
+            </a>
+          ))}
         </div>
       </div>
     </footer>
