@@ -81,16 +81,18 @@ const CallToAction = () => {
 
   return (
     <div id="contact" className="relative py-24 overflow-hidden" ref={sectionRef}>
-      {/* Background elements - lighter */}
-      <div className="absolute inset-0 bg-gray-900"></div>
-      <div className="absolute inset-0 bg-gradient-to-br from-teal-500/15 via-purple-500/10 to-blue-600/15"></div>
-      <div className="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-transparent via-teal-400 to-transparent opacity-20"></div>
-      <div className="absolute -top-40 -right-40 w-80 h-80 bg-gradient-to-br from-teal-500/15 via-purple-500/10 to-blue-600/15 rounded-full blur-3xl animate-pulse-slow"></div>
-      <div className="absolute -bottom-40 -left-40 w-80 h-80 bg-gradient-to-tr from-purple-600/15 via-blue-500/10 to-teal-500/15 rounded-full blur-3xl animate-pulse-slower"></div>
+      {/* Background elements - matching Hero */}
+      <div className="absolute inset-0 bg-gray-950"></div>
+      {/* Subtle radial gradient overlay for depth (matches Hero) */}
+      <div className="absolute inset-0 bg-gradient-radial from-transparent to-gray-950/80 z-0 pointer-events-none"></div>
 
-      {/* Animated floating elements - lighter */}
-      <div className="absolute top-1/4 left-20 w-12 h-12 bg-gradient-to-br from-teal-400/20 to-blue-500/20 rounded-xl float-1 opacity-60 shadow-lg shadow-teal-500/10 backdrop-blur-sm border border-teal-400/20"></div>
-      <div className="absolute bottom-1/4 right-20 w-10 h-10 bg-gradient-to-br from-purple-500/20 to-teal-400/20 rounded-lg float-2 opacity-60 shadow-lg shadow-purple-500/10 backdrop-blur-sm border border-purple-400/20"></div>
+      {/* Darker Background decoration elements */}
+      <div className="absolute -top-40 -right-40 w-80 h-80 bg-gradient-to-br from-teal-500/20 via-purple-500/15 to-blue-600/20 rounded-full blur-3xl animate-pulse-slow opacity-60"></div>
+      <div className="absolute -bottom-40 -left-40 w-80 h-80 bg-gradient-to-tr from-purple-600/20 via-blue-500/15 to-teal-500/20 rounded-full blur-3xl animate-pulse-slower opacity-60"></div>
+
+      {/* Adjusted floating elements - slightly more vibrant on dark background */}
+      <div className="absolute top-1/4 left-20 w-12 h-12 bg-gradient-to-br from-teal-400/30 to-blue-500/30 rounded-xl float-1 opacity-80 shadow-lg shadow-teal-500/15 backdrop-blur-sm border border-teal-400/30"></div>
+      <div className="absolute bottom-1/4 right-20 w-10 h-10 bg-gradient-to-br from-purple-500/30 to-teal-400/30 rounded-lg float-2 opacity-80 shadow-lg shadow-purple-500/15 backdrop-blur-sm border border-purple-400/30"></div>
       
       {/* Content */}
       <div className="relative z-10 container mx-auto px-4 md:px-6 text-center">
@@ -107,7 +109,7 @@ const CallToAction = () => {
           </p>
           
           <div className={`mb-8 transition-all duration-700 delay-300 ease-out ${visible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-8'}`}>
-            <div className="bg-gray-900/60 backdrop-blur-xl p-8 rounded-2xl border border-teal-500/20 shadow-xl shadow-teal-500/5 transition-all duration-300">              
+            <div className="bg-gray-900/70 backdrop-blur-xl p-8 rounded-2xl border border-teal-500/30 shadow-xl shadow-teal-500/10 transition-all duration-300">              
               {!submitted ? (
                 <form onSubmit={handleSubmit} className="relative z-10 flex flex-col gap-4">
                   <input
@@ -115,7 +117,7 @@ const CallToAction = () => {
                     value={email}
                     onChange={(e) => setEmail(e.target.value)}
                     placeholder="Enter your email"
-                    className="flex-grow px-4 py-3 rounded-lg bg-gray-800/60 backdrop-blur-sm border border-gray-700 text-white focus:border-teal-400 focus:outline-none focus:ring-2 focus:ring-teal-400/15 transition-all duration-300"
+                    className="flex-grow px-4 py-3 rounded-lg bg-gray-800/70 backdrop-blur-sm border border-gray-700 text-white focus:border-teal-400 focus:outline-none focus:ring-2 focus:ring-teal-400/20 transition-all duration-300"
                     required
                   />
                   <input
@@ -123,14 +125,14 @@ const CallToAction = () => {
                     value={name}
                     onChange={(e) => setName(e.target.value)}
                     placeholder="Your name (optional)"
-                    className="flex-grow px-4 py-3 rounded-lg bg-gray-800/60 backdrop-blur-sm border border-gray-700 text-white focus:border-teal-400 focus:outline-none focus:ring-2 focus:ring-teal-400/15 transition-all duration-300"
+                    className="flex-grow px-4 py-3 rounded-lg bg-gray-800/70 backdrop-blur-sm border border-gray-700 text-white focus:border-teal-400 focus:outline-none focus:ring-2 focus:ring-teal-400/20 transition-all duration-300"
                   />
                   <textarea
                     value={message}
                     onChange={(e) => setMessage(e.target.value)}
                     placeholder="Your message (optional)"
                     rows={3}
-                    className="flex-grow px-4 py-3 rounded-lg bg-gray-800/60 backdrop-blur-sm border border-gray-700 text-white focus:border-teal-400 focus:outline-none focus:ring-2 focus:ring-teal-400/15 transition-all duration-300"
+                    className="flex-grow px-4 py-3 rounded-lg bg-gray-800/70 backdrop-blur-sm border border-gray-700 text-white focus:border-teal-400 focus:outline-none focus:ring-2 focus:ring-teal-400/20 transition-all duration-300"
                   />
                   
                   {error && <p className="text-red-400 text-sm">{error}</p>}
@@ -159,7 +161,7 @@ const CallToAction = () => {
           
           <div className={`flex flex-wrap justify-center gap-6 items-center transition-all duration-700 delay-400 ease-out ${visible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-8'}`}>
             <div className="flex items-center">
-              <div className="w-12 h-12 rounded-full bg-gray-800/60 backdrop-blur-sm flex items-center justify-center mr-3 border border-teal-400/20 shadow-lg shadow-teal-500/5">
+              <div className="w-12 h-12 rounded-full bg-gray-800/70 backdrop-blur-sm flex items-center justify-center mr-3 border border-teal-400/30 shadow-lg shadow-teal-500/10"> 
                 <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6 text-teal-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 5a2 2 0 012-2h3.28a1 1 0 01.948.684l1.498 4.493a1 1 0 01-.502 1.21l-2.257 1.13a11.042 11.042 0 005.516 5.516l1.13-2.257a1 1 0 011.21-.502l4.493 1.498a1 1 0 01.684.949V19a2 2 0 01-2 2h-1C9.716 21 3 14.284 3 6V5z" />
                 </svg>
@@ -171,7 +173,7 @@ const CallToAction = () => {
             </div>
             
             <div className="flex items-center">
-              <div className="w-12 h-12 rounded-full bg-gray-800/60 backdrop-blur-sm flex items-center justify-center mr-3 border border-teal-400/20 shadow-lg shadow-teal-500/5">
+              <div className="w-12 h-12 rounded-full bg-gray-800/70 backdrop-blur-sm flex items-center justify-center mr-3 border border-teal-400/30 shadow-lg shadow-teal-500/10"> 
                 <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6 text-teal-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" />
                 </svg>

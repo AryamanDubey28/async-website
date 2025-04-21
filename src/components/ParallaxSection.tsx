@@ -6,7 +6,6 @@ import { motion, useScroll, useTransform } from 'framer-motion';
 interface ParallaxSectionProps {
   children: ReactNode;
   className?: string;
-  bgColor?: string;
   speed?: number;
   direction?: 'up' | 'down';
   overflow?: 'visible' | 'hidden';
@@ -15,7 +14,6 @@ interface ParallaxSectionProps {
 export const ParallaxSection = ({
   children,
   className = '',
-  bgColor = 'transparent',
   speed = 0.2,
   direction = 'up',
   overflow = 'hidden',
@@ -45,7 +43,6 @@ export const ParallaxSection = ({
       <div
         ref={ref}
         className={`relative ${overflow === 'hidden' ? 'overflow-hidden' : ''} ${className}`}
-        style={{ backgroundColor: bgColor }}
       >
         <div className="relative z-10">{children}</div>
       </div>
@@ -56,7 +53,6 @@ export const ParallaxSection = ({
     <div
       ref={ref}
       className={`relative ${overflow === 'hidden' ? 'overflow-hidden' : ''} ${className}`}
-      style={{ backgroundColor: bgColor }}
     >
       <motion.div 
         className="relative z-10"

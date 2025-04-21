@@ -52,7 +52,7 @@ const globalStyles = `
   
   @keyframes fade-in-out {
     0%, 100% { opacity: 0.1; }
-    50% { opacity: 0.3; }
+    50% { opacity: 0.3; } /* Increased max opacity */
   }
   
   @keyframes pulse-size {
@@ -111,13 +111,13 @@ type BackgroundParticle = {
   className: string;
 };
 
-// Function to generate background particles - same as before
+// Function to generate background particles - Adjusted for darker background
 const generateBackgroundParticles = (count = 20): BackgroundParticle[] => {
   return Array(count).fill(0).map((_, i) => {
     const size = Math.floor(Math.random() * 18) + 6;
     const top = Math.floor(Math.random() * 100);
     const left = Math.floor(Math.random() * 100);
-    const opacity = Math.random() * 0.1 + 0.05;
+    const opacity = Math.random() * 0.2 + 0.1; // Slightly higher opacity
     const delay = Math.floor(Math.random() * 18);
 
     const animationClasses = [
@@ -142,11 +142,12 @@ const generateBackgroundParticles = (count = 20): BackgroundParticle[] => {
     ];
     const shape = shapes[Math.floor(Math.random() * shapes.length)];
 
+    // Adjusted gradients for better visibility on dark background
     const gradients = [
-      'from-cyan-400/10 to-blue-500/10',
-      'from-purple-500/10 to-blue-400/10',
-      'from-cyan-500/10 to-purple-400/10',
-      'from-sky-500/10 to-indigo-500/10',
+      'from-teal-400/20 to-blue-500/20',
+      'from-purple-500/20 to-blue-400/20',
+      'from-teal-500/20 to-purple-400/20',
+      'from-sky-500/20 to-indigo-500/20',
     ];
     const gradientType = gradients[Math.floor(Math.random() * gradients.length)];
 
@@ -251,7 +252,7 @@ const ServicesSection = () => {
       document.head.appendChild(styleEl);
     }
     
-    setBackgroundParticles(generateBackgroundParticles(20));
+    setBackgroundParticles(generateBackgroundParticles(25)); // Slightly more particles
     
     return () => {
       const el = document.getElementById(styleEl.id);
@@ -262,13 +263,18 @@ const ServicesSection = () => {
   return (
     <section 
       id="services" 
-      className="py-16 md:py-20 bg-gradient-to-b from-slate-900 via-slate-950 to-slate-900 relative overflow-hidden"
+      className="py-16 md:py-20 bg-gray-950 relative overflow-hidden" // Changed background to bg-gray-950
     >
+      {/* Subtle radial gradient overlay for depth (matches Hero) */}
+      <div className="absolute inset-0 bg-gradient-radial from-transparent to-gray-950/80 z-0 pointer-events-none"></div>
+
+      {/* Render particles if on client */}
       {isClient && backgroundParticles.map(particle => (
         <div key={particle.id} style={particle.style} className={particle.className}></div>
       ))}
       
-      <div className="absolute inset-0 bg-[radial-gradient(#38b2ac0d_1px,transparent_1px)] [background-size:24px_24px] opacity-20 pointer-events-none"></div>
+      {/* Removed the grid pattern overlay */}
+      {/* <div className="absolute inset-0 bg-[radial-gradient(#38b2ac0d_1px,transparent_1px)] [background-size:24px_24px] opacity-20 pointer-events-none"></div> */}
       
       <div className="container mx-auto px-4 relative z-10">
         <div className="text-center max-w-3xl mx-auto mb-10">
