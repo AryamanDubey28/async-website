@@ -1,16 +1,22 @@
 'use client';
 
 import { useState, useRef, useEffect } from 'react';
-import Image from 'next/image';
 import Navbar from '@/components/Navbar';
 import Footer from '@/components/Footer';
+import Mockup from '@/components/skynet-chat/Mockup';
+import SkynetChatFeatures from '@/components/skynet-chat/SkynetChatFeatures';
+import SkynetChatCallToAction from '@/components/skynet-chat/SkynetChatCallToAction';
+
+// Define the ChatMessage type here to ensure consistency
+type ChatMessage = {
+  role: 'user' | 'assistant';
+  content: string;
+};
 
 export default function SkynetChat() {
   // Controls for the animated features and interactions
-  // const [activeFeature, setActiveFeature] = useState(0); // REMOVED - Replaced with CSS hover
   const [isLoaded, setIsLoaded] = useState(false);
   const [activeChatMessage, setActiveChatMessage] = useState(0);
-  // const [isEditorFocused, setIsEditorFocused] = useState(false); // REMOVED - Replaced with CSS focus-within
   const [showTypingIndicator, setShowTypingIndicator] = useState(false);
   const canvasRef = useRef<HTMLCanvasElement>(null);
   const mainRef = useRef<HTMLElement>(null); // Add ref for the main element
@@ -134,6 +140,7 @@ export default function SkynetChat() {
     };
 
     const animate = () => {
+      if (!ctx || !canvas) return;
       ctx.clearRect(0, 0, canvas.width, canvas.height);
       
       particles.forEach((particle, index) => {
@@ -252,7 +259,7 @@ export default function SkynetChat() {
   ];
 
   // Chat demonstration messages
-  const chatMessages = [
+  const chatMessages: ChatMessage[] = [
     { 
       role: "user",
       content: "Can you help me rewrite this paragraph to be more concise?"
@@ -362,258 +369,24 @@ function processData(data) {
                 </div>
               </div>
               
-              {/* Right content column - Interactive UI mockup */}
+              {/* Right content column - Interactive UI mockup -> Replaced with Mockup component */}
               <div className="lg:w-1/2 relative">
-                <div className="relative max-w-2xl mx-auto"> {/* Increased from max-w-xl */}
-                  {/* Main UI mockup */}
-                  <div className="aspect-[16/10] relative rounded-xl overflow-hidden border border-teal-500/30 shadow-xl shadow-teal-500/10 backdrop-blur-sm bg-gray-900/80">
-                    <div className="absolute inset-0 bg-gradient-to-br from-teal-500/10 via-cyan-500/10 to-blue-600/10"></div>
-                    <div className="absolute inset-0 bg-[radial-gradient(#4fd1c520_1px,transparent_1px)] [background-size:16px_16px] opacity-30"></div>
-                    
-                    {/* Browser chrome */}
-                    <div className="absolute inset-0 flex flex-col">
-                      <div className="h-8 bg-gray-800/60 backdrop-blur-md flex items-center px-3 border-b border-gray-700">
-                        <div className="flex space-x-1.5">
-                          <div className="w-3 h-3 rounded-full bg-red-400"></div>
-                          <div className="w-3 h-3 rounded-full bg-yellow-400"></div>
-                          <div className="w-3 h-3 rounded-full bg-green-400"></div>
-                        </div>
-                        <div className="mx-auto px-4 py-0.5 rounded-md bg-gray-700/50 text-xs text-gray-400 flex items-center gap-1.5 w-64">
-                          <svg xmlns="http://www.w3.org/2000/svg" className="h-3 w-3" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z" />
-                          </svg>
-                          <span>app.skynet-chat.com</span>
-                        </div>
-                      </div>
-                      
-                      {/* App interface */}
-                      <div className="flex-1 flex">
-                        {/* Sidebar */}
-                        <div className="w-14 bg-gray-900/90 backdrop-blur-md border-r border-gray-800 flex flex-col items-center py-4 gap-5">
-                          <div className="w-8 h-8 rounded-full bg-gradient-to-r from-teal-400 to-purple-500 flex items-center justify-center text-white text-xs font-bold">S</div>
-                          <div className="w-8 h-8 flex items-center justify-center text-teal-400 rounded-md hover:bg-gray-800/60">
-                            <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6" />
-                            </svg>
-                          </div>
-                          <div className="w-8 h-8 flex items-center justify-center text-gray-500 rounded-md hover:bg-gray-800/60">
-                            <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8 7v8a2 2 0 002 2h6M8 7V5a2 2 0 012-2h4.586a1 1 0 01.707.293l4.414 4.414a1 1 0 01.293.707V15a2 2 0 01-2 2h-2M8 7H6a2 2 0 00-2 2v10a2 2 0 002 2h8a2 2 0 002-2v-2" />
-                            </svg>
-                          </div>
-                          <div className="w-8 h-8 flex items-center justify-center text-gray-500 rounded-md hover:bg-gray-800/60">
-                            <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 7v10a2 2 0 002 2h14a2 2 0 002-2V9a2 2 0 00-2-2h-6l-2-2H5a2 2 0 00-2 2z" />
-                            </svg>
-                          </div>
-                          <div className="w-8 h-8 flex items-center justify-center text-gray-500 rounded-md hover:bg-gray-800/60">
-                            <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z" />
-                              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
-                            </svg>
-                          </div>
-                          <div className="mt-auto w-8 h-8 rounded-full overflow-hidden bg-gradient-to-b from-gray-700 to-gray-800 flex items-center justify-center text-white text-xs">
-                            <span>U</span>
-                          </div>
-                        </div>
-                        
-                        {/* Main content area */}
-                        <div className="flex-1 flex flex-col">
-                          {/* Header with tabs */}
-                          <div className="h-10 bg-gray-800/60 backdrop-blur-md border-b border-gray-800 flex items-center px-3">
-                            <div className="flex gap-1">
-                              <div className="px-3 py-1 text-xs rounded-t-md bg-gray-900/90 text-white border-t border-l border-r border-teal-500/30">
-                                document.md
-                              </div>
-                              <div className="px-3 py-1 text-xs rounded-t-md bg-gray-800/50 text-gray-400 border-t border-l border-r border-gray-700/50">
-                                notes.md
-                              </div>
-                            </div>
-                            <div className="ml-auto flex gap-2">
-                              <button className="w-6 h-6 rounded-md bg-gray-800/60 hover:bg-gray-700/60 flex items-center justify-center text-gray-400">
-                                <svg xmlns="http://www.w3.org/2000/svg" className="h-3.5 w-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 6v6m0 0v6m0-6h6m-6 0H6" />
-                                </svg>
-                              </button>
-                              <button className="w-6 h-6 rounded-md bg-gray-800/60 hover:bg-gray-700/60 flex items-center justify-center text-gray-400">
-                                <svg xmlns="http://www.w3.org/2000/svg" className="h-3.5 w-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 00-2-2M5 11V9a2 2 0 012-2m0 0V5a2 2 0 012-2h6a2 2 0 012 2v2M7 7h10" />
-                                </svg>
-                              </button>
-                            </div>
-                          </div>
-                          
-                          {/* Split view: Editor and Chat */}
-                          <div className="flex-1 flex">
-                            {/* Document editor */}
-                            <div 
-                              tabIndex={0} // Make focusable
-                              className="flex-1 p-3 text-xs font-mono text-gray-300 overflow-hidden outline-none focus-within:ring-1 focus-within:ring-teal-500/30 focus-within:ring-inset" // Use focus-within for ring
-                            >
-                              <div className="mb-2 font-semibold text-teal-400"># Project Overview</div>
-                              <div className="mb-2">The system integrates advanced AI capabilities with a secure, user-friendly interface to enable collaboration on documents and code.</div>
-                              <div className="mb-2 font-semibold text-teal-400">## Key Features</div>
-                              {/* Use focus-within for highlight */}
-                              <div className="mb-2 focus-within:bg-teal-500/10 focus-within:px-1">- Real-time collaboration with AI assistance</div>
-                              <div className="mb-2">- Secure, on-premise deployment options</div>
-                              <div className="mb-2">- Customizable AI models to suit specific needs</div>
-                              <div className="mb-2 font-semibold text-teal-400">## Technical Specifications</div>
-                              <div className="mb-2">Built with modern technologies...</div>
-                            </div>
-                            
-                            {/* Chat interface */}
-                            <div className="w-72 border-l border-gray-800 flex flex-col bg-gray-800/20 backdrop-blur-md">
-                              {/* Chat header */}
-                              <div className="h-10 bg-gray-800/60 backdrop-blur-md border-b border-gray-800 px-3 flex items-center">
-                                <div className="text-xs font-medium text-white">Skynet Assistant</div>
-                                <div className="ml-auto flex items-center gap-1">
-                                  <div className="w-2 h-2 rounded-full bg-teal-400 animate-pulse"></div>
-                                  <span className="text-[10px] text-teal-400">Online</span>
-                                </div>
-                              </div>
-                              
-                              {/* Chat messages */}
-                              <div className="flex-1 p-3 overflow-auto space-y-3">
-                                {chatMessages.map((msg, idx) => (
-                                  <div 
-                                    key={idx} 
-                                    className={`text-xs rounded-lg p-2 max-w-[85%] ${
-                                      msg.role === 'user' 
-                                        ? 'bg-teal-500/20 ml-auto text-white' 
-                                        : 'bg-gray-800/60 text-gray-300'
-                                    } ${idx >= activeChatMessage ? 'opacity-0' : 'opacity-100'} transition-opacity duration-300`} // Keep JS logic, rely on CSS transition
-                                  >
-                                    {msg.content}
-                                  </div>
-                                ))} {/* NOTE: The sequential reveal still uses JS state `activeChatMessage`, but the fade uses CSS `transition-opacity` */}
-                                
-                                {/* Typing indicator */}
-                                {showTypingIndicator && (
-                                  <div className="bg-gray-800/60 rounded-lg p-2 w-16 flex">
-                                    <div className="w-1.5 h-1.5 rounded-full bg-gray-500 animate-bounce"></div>
-                                    <div className="w-1.5 h-1.5 rounded-full bg-gray-500 animate-bounce [animation-delay:150ms] mx-1"></div>
-                                    <div className="w-1.5 h-1.5 rounded-full bg-gray-500 animate-bounce [animation-delay:300ms]"></div>
-                                  </div>
-                                )}
-                              </div> {/* NOTE: Typing indicator uses JS state `showTypingIndicator` and CSS `animate-bounce` */}
-                              
-                              {/* Chat input - Triggers JS state update */}
-                              <div className="p-3 border-t border-gray-800">
-                                <div className="relative">
-                                  <input 
-                                    type="text" 
-                                    className="w-full bg-gray-800/60 rounded-md border border-gray-700 text-white text-xs px-3 py-2 pr-8 focus:outline-none focus:ring-1 focus:ring-teal-500/50"
-                                    placeholder="Message Skynet..."
-                                    onFocus={() => setActiveChatMessage(1)}
-                                  />
-                                  <button className="absolute right-2 top-1/2 transform -translate-y-1/2 text-teal-400">
-                                    <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 5l7 7-7 7M5 5l7 7-7 7" />
-                                    </svg>
-                                  </button>
-                                </div>
-                              </div>
-                            </div>
-                          </div>
-                        </div>
-                      </div>
-                    </div>
-                    
-                    {/* Animated scan line */}
-                    <div className="absolute inset-0 bg-gradient-to-b from-transparent via-teal-400/5 to-transparent opacity-70 animate-scanner-vertical"></div>
-                  </div>
-                  
-                  {/* Floating decorative elements */}
-                  <div className="absolute -top-8 -right-8 w-24 h-24 bg-gradient-to-br from-teal-400/30 to-blue-500/30 rounded-xl float-1 opacity-70 shadow-lg shadow-teal-500/20 backdrop-blur-sm border border-teal-400/30 overflow-hidden">
-                    <div className="absolute inset-0 flex items-center justify-center p-2">
-                      <div className="text-[8px] text-teal-100/70 font-mono overflow-hidden">
-                        {codeSample.split('\n').slice(0, 6).map((line, i) => (
-                          <div key={i}>{line}</div>
-                        ))}
-                      </div>
-                    </div>
-                  </div>
-                  <div className="absolute bottom-4 -left-12 w-20 h-20 bg-gradient-to-br from-blue-500/30 to-teal-400/30 rounded-lg float-2 opacity-70 shadow-lg shadow-blue-500/20 backdrop-blur-sm border border-blue-400/30">
-                    <div className="absolute inset-0 flex items-center justify-center">
-                      <svg xmlns="http://www.w3.org/2000/svg" className="h-10 w-10 text-white/30" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M12 6v6m0 0v6m0-6h6m-6 0H6" />
-                      </svg>
-                    </div>
-                  </div>
-                  <div className="absolute top-1/3 -left-6 w-12 h-12 bg-gradient-to-r from-blue-500/30 to-teal-400/30 rounded-full float-3 opacity-70 shadow-lg shadow-blue-500/20 backdrop-blur-sm border border-blue-400/30">
-                    <div className="absolute inset-0 flex items-center justify-center">
-                      <div className="w-2 h-2 rounded-full bg-white/70 animate-ping-slow"></div>
-                    </div>
-                  </div>
-                  <div className="absolute -bottom-8 right-1/3 w-16 h-16 bg-gradient-to-r from-teal-500/30 to-blue-500/30 rounded-md float-2 opacity-70 transform rotate-12 shadow-lg shadow-teal-500/20 backdrop-blur-sm border border-teal-400/30"></div>
-                </div>
+                <Mockup 
+                  codeSample={codeSample}
+                  chatMessages={chatMessages}
+                  activeChatMessage={activeChatMessage}
+                  showTypingIndicator={showTypingIndicator}
+                  setActiveChatMessage={setActiveChatMessage}
+                />
               </div>
             </div>
           </div>
         </section>
         
-        {/* Main content sections to be added next */}
-        <section className="py-20 relative">
-          {/* Background effects - Enhanced with more vibrancy */}
-          <div className="absolute inset-0 overflow-hidden">
-            <div className="absolute top-1/4 left-1/5 w-96 h-96 bg-gradient-to-br from-teal-500/10 via-purple-500/8 to-blue-600/10 rounded-full blur-3xl animate-pulse-slow"></div>
-            <div className="absolute bottom-1/4 right-1/5 w-96 h-96 bg-gradient-to-tr from-purple-600/10 via-blue-500/8 to-teal-500/10 rounded-full blur-3xl animate-pulse-slower"></div>
-          </div>
-          
-          <div className="container mx-auto px-4 relative z-10">
-            <div className="text-center mb-16">
-              <h2 className="text-3xl md:text-4xl font-bold relative inline-block">
-                <span className="relative z-10 bg-clip-text text-transparent bg-gradient-to-r from-teal-400 via-purple-400 to-blue-500">
-                  Key Features
-                </span>
-                <div className="absolute -inset-1 bg-gradient-to-r from-teal-500/10 to-purple-400/10 rounded-lg blur-sm"></div>
-              </h2>
-              <p className="text-gray-300 max-w-3xl mx-auto mt-4">
-                Skynet Chat combines AI power with unparalleled privacy to transform your content creation workflow
-              </p>
-            </div>
-            
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
-              {features.map((feature, index) => (
-                <div 
-                  key={index}
-                  // Replaced JS state hover with CSS group-hover
-                  className="relative bg-gray-900/60 backdrop-blur-xl rounded-xl p-6 overflow-hidden group hover:scale-105 border border-teal-500/20 shadow-xl shadow-teal-500/5 h-full transition-all duration-300 hover:border-teal-400/40 hover:shadow-teal-500/10 group-hover:border-teal-400/30 group-hover:shadow-[0_0_15px_rgba(56,178,172,0.1)]" 
-                  // onMouseEnter={() => setActiveFeature(index)}
-                >
-                  {/* Animated background gradient on hover */}
-                  <div className="absolute inset-0 bg-gradient-to-br from-teal-500/15 via-purple-500/10 to-blue-600/15 opacity-0 group-hover:opacity-100 transition-opacity duration-500"></div>
-                  
-                  {/* Tech grid lines for tech effect */}
-                  <div className="absolute inset-0 rounded-xl overflow-hidden opacity-20">
-                    <div className="absolute inset-0 bg-[radial-gradient(#4fd1c515_1px,transparent_1px)] [background-size:16px_16px] opacity-40"></div>
-                    <div className="absolute inset-0 bg-[linear-gradient(to_right,transparent_0%,#4fd1c508_50%,transparent_100%)] animate-scanner"></div>
-                  </div>
-                  
-                  {/* Content */}
-                  <div className="relative z-10">
-                    <div className="w-12 h-12 rounded-lg bg-gray-800/60 backdrop-blur-sm flex items-center justify-center mb-6 text-teal-400 group-hover:bg-teal-400/15 transition-all duration-300 transform group-hover:scale-110 border border-teal-400/20">
-                      {feature.icon}
-                    </div>
-                    
-                    <h3 className="text-xl font-bold mb-3 text-white transition-all duration-300 group-hover:bg-clip-text group-hover:text-transparent group-hover:bg-gradient-to-r group-hover:from-teal-400 group-hover:via-purple-400 group-hover:to-blue-500">
-                      {feature.title}
-                    </h3>
-                    
-                    <p className="text-gray-300 transition-all duration-300 group-hover:text-gray-200">
-                      {feature.description}
-                    </p>
-                  </div>
-                  
-                  {/* Animated border on hover */}
-                  <div className="absolute inset-0 rounded-xl transition-all duration-300 border border-transparent after:opacity-0 group-hover:after:opacity-100 after:content-[''] after:absolute after:inset-0 after:rounded-xl after:border after:border-teal-400/10 after:scale-[1.02] after:transition-all after:duration-300"></div>
-                </div>
-              ))}
-            </div>
-          </div>
-        </section>
+        {/* Key Features Section -> Replaced with SkynetChatFeatures component */}
+        <SkynetChatFeatures features={features} />
         
-        {/* Product Overview Section */}
+        {/* Product Overview Section (Keep as is for now) */}
         <section className="py-24 relative">
           {/* Background decorations - Enhanced with more vibrancy */}
           <div className="absolute inset-0 overflow-hidden">
@@ -887,199 +660,8 @@ function processData(data) {
           </div>
         </section>
         
-        {/* CTA Section */}
-        <section className="py-20 relative">
-          {/* Background decorations - Enhanced with more vibrancy */}
-          <div className="absolute inset-0 overflow-hidden">
-            <div className="absolute top-1/4 right-1/4 w-96 h-96 bg-gradient-to-br from-teal-500/10 via-purple-500/8 to-blue-600/10 rounded-full blur-3xl animate-pulse-slow"></div>
-            <div className="absolute bottom-1/3 left-1/4 w-96 h-96 bg-gradient-to-tr from-purple-600/10 via-blue-500/8 to-teal-500/10 rounded-full blur-3xl animate-pulse-slower"></div>
-          </div>
-          
-          <div className="container mx-auto px-4 relative z-10">
-            <div className="max-w-5xl mx-auto">
-              {/* Stats section above CTA */}
-              <div className="grid grid-cols-2 md:grid-cols-4 gap-6 mb-16">
-                {[
-                  { value: '100%', label: 'Private & Secure', icon: 'shield' },
-                  { value: '24/7', label: 'AI Assistance', icon: 'chat' },
-                  { value: '90%', label: 'Time Savings', icon: 'clock' },
-                  { value: '5x', label: 'Productivity Boost', icon: 'lightning' }
-                ].map((stat, idx) => (
-                  <div key={idx} className="bg-gray-900/60 backdrop-blur-xl rounded-xl p-4 border border-teal-500/20 shadow-lg shadow-teal-500/5 text-center transform hover:scale-105 transition-all duration-300 hover:border-teal-400/40 group">
-                    <div className="w-12 h-12 mx-auto mb-4 rounded-full bg-gray-800/80 flex items-center justify-center">
-                      {stat.icon === 'shield' && (
-                        <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6 text-teal-400 group-hover:text-teal-300 transition-colors duration-300" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z" />
-                        </svg>
-                      )}
-                      {stat.icon === 'chat' && (
-                        <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6 text-purple-400 group-hover:text-purple-300 transition-colors duration-300" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z" />
-                        </svg>
-                      )}
-                      {stat.icon === 'clock' && (
-                        <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6 text-blue-400 group-hover:text-blue-300 transition-colors duration-300" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
-                        </svg>
-                      )}
-                      {stat.icon === 'lightning' && (
-                        <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6 text-amber-400 group-hover:text-amber-300 transition-colors duration-300" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 10V3L4 14h7v7l9-11h-7z" />
-                        </svg>
-                      )}
-                    </div>
-                    <div className="text-2xl font-bold text-white mb-1">{stat.value}</div>
-                    <div className="text-gray-400">{stat.label}</div>
-                  </div>
-                ))}
-              </div>
-              
-              {/* Main CTA Card */}
-              <div className="bg-gray-900/60 backdrop-blur-xl rounded-2xl p-8 md:p-12 border border-teal-500/20 shadow-xl shadow-teal-500/5 overflow-hidden relative">
-                {/* Decorative elements */}
-                <div className="absolute top-0 right-0 w-40 h-40 bg-gradient-to-bl from-teal-400/20 via-purple-400/15 to-transparent rounded-bl-3xl"></div>
-                <div className="absolute bottom-0 left-0 w-40 h-40 bg-gradient-to-tr from-purple-400/20 via-teal-400/15 to-transparent rounded-tr-3xl"></div>
-                
-                {/* Tech pattern overlay */}
-                <div className="absolute inset-0 bg-[radial-gradient(#4fd1c515_1px,transparent_1px)] [background-size:16px_16px] opacity-20"></div>
-                
-                {/* Animated scanner effect */}
-                <div className="absolute inset-0 bg-gradient-to-r from-transparent via-teal-400/5 to-transparent opacity-30 animate-scanner"></div>
-                
-                <div className="relative z-10">
-                  <div className="text-center mb-10">
-                    <div className="inline-block px-4 py-1.5 rounded-full bg-gray-800/70 backdrop-blur-lg border border-teal-500/30 mb-3">
-                      <p className="text-sm font-medium text-teal-300 flex items-center">
-                        <span className="inline-block w-2 h-2 rounded-full bg-teal-400 mr-2 animate-pulse"></span>
-                        Limited Early Access Available
-                      </p>
-                    </div>
-                    <h2 className="text-3xl md:text-4xl font-bold mb-4">
-                      Ready to <span className="bg-clip-text text-transparent bg-gradient-to-r from-teal-400 via-purple-400 to-blue-500">Transform</span> Your Workflow?
-                    </h2>
-                    <p className="text-gray-300 max-w-3xl mx-auto">
-                      Join innovative companies already using Skynet Chat to enhance their content creation and collaboration.
-                    </p>
-                  </div>
-                  
-                  <div className="flex flex-col md:flex-row gap-8 items-stretch">
-                    {/* Form side */}
-                    <div className="md:w-1/2">
-                      <div className="bg-gray-800/40 backdrop-blur-md rounded-xl p-6 border border-gray-700 h-full">
-                        <div className="space-y-4">
-                          <div>
-                            <label className="block text-sm font-medium text-gray-300 mb-1">Name</label>
-                            <input type="text" className="w-full px-4 py-2 rounded-lg bg-gray-900/60 border border-gray-700 text-white focus:outline-none focus:ring-2 focus:ring-teal-500/50 focus:border-transparent" placeholder="Your name" />
-                          </div>
-                          <div>
-                            <label className="block text-sm font-medium text-gray-300 mb-1">Email</label>
-                            <input type="email" className="w-full px-4 py-2 rounded-lg bg-gray-900/60 border border-gray-700 text-white focus:outline-none focus:ring-2 focus:ring-teal-500/50 focus:border-transparent" placeholder="your@email.com" />
-                          </div>
-                          <div>
-                            <label className="block text-sm font-medium text-gray-300 mb-1">Company</label>
-                            <input type="text" className="w-full px-4 py-2 rounded-lg bg-gray-900/60 border border-gray-700 text-white focus:outline-none focus:ring-2 focus:ring-teal-500/50 focus:border-transparent" placeholder="Your company" />
-                          </div>
-                          <div>
-                            <label className="block text-sm font-medium text-gray-300 mb-1">Message</label>
-                            <textarea className="w-full px-4 py-2 rounded-lg bg-gray-900/60 border border-gray-700 text-white focus:outline-none focus:ring-2 focus:ring-teal-500/50 focus:border-transparent h-24" placeholder="Tell us about your needs"></textarea>
-                          </div>
-                          <div className="pt-4">
-                            <button className="w-full group relative px-8 py-4 rounded-lg bg-gradient-to-r from-teal-500 to-purple-500 text-white font-semibold transition-all duration-300 hover:shadow-lg hover:shadow-teal-500/30 hover:scale-[1.02] focus:outline-none focus:ring-2 focus:ring-teal-400/50 overflow-hidden">
-                              <span className="relative z-10">Send Message</span>
-                              <span className="absolute inset-0 bg-gradient-to-r from-teal-400 to-purple-400 opacity-0 group-hover:opacity-100 transition-opacity duration-300 blur-xl"></span>
-                            </button>
-                          </div>
-                        </div>
-                      </div>
-                    </div>
-                    
-                    {/* Info side */}
-                    <div className="md:w-1/2 space-y-6">
-                      <div className="flex items-start group transition-all duration-300 hover:bg-gray-800/30 p-4 rounded-lg cursor-pointer">
-                        <div className="flex-shrink-0 h-12 w-12 rounded-md bg-teal-400/20 flex items-center justify-center text-teal-400 group-hover:scale-110 transition-transform duration-300">
-                          <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 5a2 2 0 012-2h3.28a1 1 0 01.948.684l1.498 4.493a1 1 0 01-.502 1.21l-2.257 1.13a11.042 11.042 0 005.516 5.516l1.13-2.257a1 1 0 011.21-.502l4.493 1.498a1 1 0 01.684.949V19a2 2 0 01-2 2h-1C9.716 21 3 14.284 3 6V5z" />
-                          </svg>
-                        </div>
-                        <div className="ml-3">
-                          <p className="text-gray-200 font-medium group-hover:text-teal-300 transition-colors duration-300">Contact Us</p>
-                          <p className="text-gray-400">info@asyncstudios.com</p>
-                        </div>
-                      </div>
-                      
-                      <div className="flex items-start group transition-all duration-300 hover:bg-gray-800/30 p-4 rounded-lg cursor-pointer">
-                        <div className="flex-shrink-0 h-12 w-12 rounded-md bg-purple-400/20 flex items-center justify-center text-purple-400 group-hover:scale-110 transition-transform duration-300">
-                          <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" />
-                          </svg>
-                        </div>
-                        <div className="ml-3">
-                          <p className="text-gray-200 font-medium group-hover:text-purple-300 transition-colors duration-300">Schedule a Demo</p>
-                          <p className="text-gray-400">See how Skynet Chat works in real-time</p>
-                        </div>
-                      </div>
-                      
-                      <div className="flex items-start group transition-all duration-300 hover:bg-gray-800/30 p-4 rounded-lg cursor-pointer">
-                        <div className="flex-shrink-0 h-12 w-12 rounded-md bg-blue-400/20 flex items-center justify-center text-blue-400 group-hover:scale-110 transition-transform duration-300">
-                          <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
-                          </svg>
-                        </div>
-                        <div className="ml-3">
-                          <p className="text-gray-200 font-medium group-hover:text-blue-300 transition-colors duration-300">Documentation</p>
-                          <p className="text-gray-400">Explore our technical guides</p>
-                        </div>
-                      </div>
-                      
-                      <div className="pt-4">
-                        <div className="inline-flex items-center px-4 py-2 rounded-full bg-gray-800/70 backdrop-blur-sm border border-gray-700 text-gray-300">
-                          <span className="inline-block w-2 h-2 rounded-full bg-teal-400 mr-2 animate-pulse"></span>
-                          <span>Limited early access program</span>
-                        </div>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-              </div>
-              
-              {/* Testimonials ticker */}
-              <div className="mt-20 overflow-hidden">
-                <div className="text-center mb-8">
-                  <h3 className="text-2xl font-bold text-white">What Our Users Say</h3>
-                </div>
-                
-                <div className="relative">
-                  {/* Gradient overlays for smooth scrolling effect */}
-                  <div className="absolute left-0 top-0 bottom-0 w-20 bg-gradient-to-r from-gray-900 to-transparent z-10"></div>
-                  <div className="absolute right-0 top-0 bottom-0 w-20 bg-gradient-to-l from-gray-900 to-transparent z-10"></div>
-                  
-                  <div className="flex gap-6 animate-ticker">
-                    {[
-                      { name: 'Alex Chen', title: 'Content Director', quote: 'Skynet Chat has transformed how our team creates content. The AI assistance is like having an expert collaborator for every project.' },
-                      { name: 'Sarah Johnson', title: 'Tech Lead', quote: 'The code assistance is remarkable. It helps our developers document and optimize code faster than ever before.' },
-                      { name: 'Michael Torres', title: 'Product Manager', quote: 'Having the entire system deployed within our infrastructure gives us the security we need while still leveraging cutting-edge AI.' },
-                      { name: 'Priya Patel', title: 'Marketing Strategist', quote: 'The memory feature is game-changing. It learns our brand voice and applies it consistently across all content.' },
-                      { name: 'James Wilson', title: 'CTO', quote: 'Being able to customize the underlying AI model gives us exactly the right balance of performance and cost efficiency.' }
-                    ].map((testimonial, idx) => (
-                      <div key={idx} className="flex-shrink-0 w-80 bg-gray-800/40 backdrop-blur-sm rounded-lg p-6 border border-gray-700">
-                        <div className="text-gray-300 italic mb-4">"{testimonial.quote}"</div>
-                        <div className="flex items-center gap-3">
-                          <div className="w-10 h-10 rounded-full bg-gradient-to-r from-teal-400 to-purple-500 flex items-center justify-center text-white font-medium">
-                            {testimonial.name.charAt(0)}
-                          </div>
-                          <div>
-                            <div className="text-white font-medium">{testimonial.name}</div>
-                            <div className="text-gray-400 text-sm">{testimonial.title}</div>
-                          </div>
-                        </div>
-                      </div>
-                    ))}
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
-        </section>
+        <SkynetChatCallToAction />
+        
       </div>
       
       <Footer />
