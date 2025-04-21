@@ -45,20 +45,23 @@ const FeatureSection = () => {
   const [activeFeature, setActiveFeature] = useState('skynet-chat');
 
   return (
-    <ParallaxSection speed={0.15} className="py-24 bg-gray-900 overflow-hidden relative">
-      {/* Background decoration elements */}
-      <div className="absolute top-40 -left-32 w-64 h-64 rounded-full bg-gradient-to-br from-teal-500/15 via-purple-500/10 to-blue-600/15 blur-3xl animate-pulse-slow"></div>
-      <div className="absolute bottom-40 -right-32 w-80 h-80 rounded-full bg-gradient-to-tr from-purple-600/15 via-blue-500/10 to-teal-500/15 blur-3xl animate-pulse-slower"></div>
+    <ParallaxSection speed={0.15} className="py-24 bg-gray-950 overflow-hidden relative">
+      {/* Subtle radial gradient overlay for depth (matches Hero) */}
+      <div className="absolute inset-0 bg-gradient-radial from-transparent to-gray-950/80 z-0"></div>
       
-      {/* Additional floating elements - lighter */}
-      <div className="absolute top-1/4 left-20 w-12 h-12 bg-gradient-to-br from-teal-400/20 to-blue-500/20 rounded-xl float-1 opacity-60 shadow-lg shadow-teal-500/10 backdrop-blur-sm border border-teal-400/20"></div>
-      <div className="absolute bottom-1/4 right-20 w-10 h-10 bg-gradient-to-br from-purple-500/20 to-teal-400/20 rounded-lg float-2 opacity-60 shadow-lg shadow-purple-500/10 backdrop-blur-sm border border-purple-400/20"></div>
+      {/* Darker Background decoration elements */}
+      <div className="absolute top-40 -left-32 w-64 h-64 rounded-full bg-gradient-to-br from-teal-500/20 via-purple-500/15 to-blue-600/20 blur-3xl animate-pulse-slow opacity-70"></div>
+      <div className="absolute bottom-40 -right-32 w-80 h-80 rounded-full bg-gradient-to-tr from-purple-600/20 via-blue-500/15 to-teal-500/20 blur-3xl animate-pulse-slower opacity-70"></div>
       
-      <div className="container mx-auto px-4 md:px-6 relative">
+      {/* Adjusted floating elements - slightly more vibrant on dark background */}
+      <div className="absolute top-1/4 left-20 w-12 h-12 bg-gradient-to-br from-teal-400/30 to-blue-500/30 rounded-xl float-1 opacity-80 shadow-lg shadow-teal-500/15 backdrop-blur-sm border border-teal-400/30"></div>
+      <div className="absolute bottom-1/4 right-20 w-10 h-10 bg-gradient-to-br from-purple-500/30 to-teal-400/30 rounded-lg float-2 opacity-80 shadow-lg shadow-purple-500/15 backdrop-blur-sm border border-purple-400/30"></div>
+      
+      <div className="container mx-auto px-4 md:px-6 relative z-10">
         <ScrollAnimationWrapper animationVariant="fadeUp" className="text-center mb-16">
           <div className="inline-block relative mb-4">
-            {/* Even more reduced glow on the heading */}
-            <div className="absolute -inset-1 bg-gradient-to-r from-teal-500/10 to-purple-400/10 rounded-lg blur-sm"></div>
+            {/* Adjusted glow */}
+            <div className="absolute -inset-1 bg-gradient-to-r from-teal-500/15 to-purple-400/15 rounded-lg blur-md"></div>
             <h2 className="relative text-3xl md:text-4xl font-bold">
               Our AI <span className="bg-clip-text text-transparent bg-gradient-to-r from-teal-400 via-purple-400 to-blue-500">Solutions</span>
             </h2>
@@ -76,21 +79,21 @@ const FeatureSection = () => {
               delay={0.2 * index}
             >
               <div 
-                className={`relative group overflow-hidden rounded-2xl transition-all duration-500 hover-scale backdrop-blur-xl ${
+                className={`relative group overflow-hidden rounded-2xl transition-all duration-500 hover-scale ${
                   activeFeature === feature.id 
-                    ? 'border-2 border-teal-400/30 bg-gray-800/80 shadow-xl shadow-teal-500/10' 
-                    : 'border border-teal-500/20 bg-gray-900/80 shadow-lg shadow-teal-500/5'
+                    ? 'border-2 border-teal-400/40 bg-gray-900/80 shadow-xl shadow-teal-500/15 backdrop-blur-xl' // Slightly adjusted active state for darker bg
+                    : 'border border-teal-500/30 bg-gray-950/70 shadow-lg shadow-teal-500/10 backdrop-blur-lg' // Adjusted inactive state
                 }`}
                 onMouseEnter={() => setActiveFeature(feature.id)}
               >
-                {/* Soft gradient background */}
-                <div className="absolute inset-0 bg-gradient-to-br from-teal-500/10 via-purple-500/5 to-blue-600/10 opacity-30 group-hover:opacity-70 transition-opacity duration-500"></div>
+                {/* Adjusted gradient */}
+                <div className="absolute inset-0 bg-gradient-to-br from-teal-500/15 via-purple-500/10 to-blue-600/15 opacity-40 group-hover:opacity-70 transition-opacity duration-500"></div>
                 
-                {/* Glass-like overlay for better readability */}
-                <div className="absolute inset-0 backdrop-blur-sm bg-gray-900/40"></div>
+                {/* Glass-like overlay */}
+                <div className="absolute inset-0 backdrop-blur-sm bg-gray-950/50"></div>
                 
                 <div className="relative z-10 p-8">
-                  <div className="w-12 h-12 rounded-xl bg-gradient-to-br from-teal-500/20 to-purple-500/20 flex items-center justify-center mb-6 text-teal-400 group-hover:from-teal-500/30 group-hover:to-purple-500/30 transition-colors duration-300 border border-teal-400/20 group-hover:scale-110 transform transition-transform duration-300 shadow-md shadow-teal-500/10">
+                  <div className="w-12 h-12 rounded-xl bg-gradient-to-br from-teal-500/30 to-purple-500/30 flex items-center justify-center mb-6 text-teal-400 group-hover:from-teal-500/40 group-hover:to-purple-500/40 transition-colors duration-300 border border-teal-400/30 group-hover:scale-110 transform transition-transform duration-300 shadow-md shadow-teal-500/15">
                     {feature.icon}
                   </div>
                   
@@ -100,9 +103,9 @@ const FeatureSection = () => {
                   <ul className="space-y-3">
                     {feature.benefits.map((benefit, index) => (
                       <li key={index} className="flex items-start">
-                        <span className="flex-shrink-0 w-6 h-6 rounded-full bg-gradient-to-r from-teal-500/30 to-purple-500/30 flex items-center justify-center mr-3 shadow-sm shadow-teal-500/10">
+                        <span className="flex-shrink-0 w-6 h-6 rounded-full bg-gradient-to-r from-teal-500/40 to-purple-500/40 flex items-center justify-center mr-3 shadow-sm shadow-teal-500/15">
                           <svg 
-                            className="h-4 w-4 text-teal-400" 
+                            className="h-4 w-4 text-teal-300" // Slightly brighter checkmark
                             fill="none" 
                             viewBox="0 0 24 24" 
                             stroke="currentColor"
@@ -131,7 +134,7 @@ const FeatureSection = () => {
                 </div>
                 
                 {/* Subtle corner gradient decoration */}
-                <div className="absolute bottom-0 right-0 w-32 h-32 bg-gradient-to-tl from-teal-400/10 via-purple-400/5 to-transparent rounded-tl-3xl"></div>
+                <div className="absolute bottom-0 right-0 w-32 h-32 bg-gradient-to-tl from-teal-400/15 via-purple-400/10 to-transparent rounded-tl-3xl opacity-70"></div>
               </div>
             </ScrollAnimationWrapper>
           ))}

@@ -5,26 +5,31 @@ const Footer = () => {
   const currentYear = new Date().getFullYear();
   
   return (
-    <footer className="relative mt-20">
-      {/* Enhanced glass effect background with deeper transparency */}
-      <div className="absolute inset-0 bg-gray-900/90 backdrop-blur-lg border-t border-gray-800/80 z-0"></div>
+    <footer className="relative">
+      {/* Base dark background */}
+      <div className="absolute inset-0 bg-gray-950 z-[-2]"></div> 
+      {/* Subtle radial gradient overlay for depth (matches Hero) - Placed below other effects */}
+      <div className="absolute inset-0 bg-gradient-radial from-transparent to-gray-950/80 z-[-1]"></div>
+
+      {/* Enhanced glass effect background with slightly more transparency */}
+      <div className="absolute inset-0 bg-gray-950/80 backdrop-blur-lg border-t border-gray-800/70 z-0"></div>
       
-      {/* Enhanced top gradient overlay */}
-      <div className="absolute top-0 inset-x-0 h-24 bg-gradient-to-b from-gray-900 to-transparent z-0"></div>
+      {/* Top gradient overlay */}
+      <div className="absolute top-0 inset-x-0 h-24 bg-gradient-to-b from-gray-950 to-transparent z-0"></div>
       
-      {/* Enhanced background decorations */}
+      {/* Enhanced background decorations - Adjusted opacity */}
       <div className="absolute inset-0 overflow-hidden z-0">
-        <div className="absolute -bottom-40 left-1/4 w-96 h-96 bg-gradient-to-tr from-teal-500/10 via-purple-500/10 to-blue-600/10 rounded-full blur-3xl"></div>
-        <div className="absolute -top-20 right-1/3 w-96 h-96 bg-gradient-to-br from-purple-600/10 via-blue-500/10 to-teal-500/10 rounded-full blur-3xl"></div>
-        <div className="absolute top-1/2 left-1/2 w-80 h-80 bg-gradient-to-bl from-blue-600/5 via-teal-500/5 to-indigo-500/5 rounded-full blur-3xl transform -translate-x-1/2 -translate-y-1/2"></div>
+        <div className="absolute -bottom-40 left-1/4 w-96 h-96 bg-gradient-to-tr from-teal-500/15 via-purple-500/10 to-blue-600/15 rounded-full blur-3xl opacity-60"></div>
+        <div className="absolute -top-20 right-1/3 w-96 h-96 bg-gradient-to-br from-purple-600/15 via-blue-500/10 to-teal-500/15 rounded-full blur-3xl opacity-60"></div>
+        <div className="absolute top-1/2 left-1/2 w-80 h-80 bg-gradient-to-bl from-blue-600/10 via-teal-500/10 to-indigo-500/10 rounded-full blur-3xl transform -translate-x-1/2 -translate-y-1/2 opacity-60"></div>
         
-        {/* Enhanced animated scanner effects */}
-        <div className="absolute inset-0 bg-gradient-to-r from-transparent via-teal-400/8 to-transparent opacity-60 animate-scanner"></div>
-        <div className="absolute inset-0 bg-gradient-to-b from-transparent via-teal-400/5 to-transparent opacity-50 animate-scanner-vertical"></div>
+        {/* Enhanced animated scanner effects - Adjusted opacity */}
+        <div className="absolute inset-0 bg-gradient-to-r from-transparent via-teal-400/10 to-transparent opacity-50 animate-scanner"></div>
+        <div className="absolute inset-0 bg-gradient-to-b from-transparent via-teal-400/8 to-transparent opacity-40 animate-scanner-vertical"></div>
       </div>
       
-      {/* Enhanced tech pattern overlay */}
-      <div className="absolute inset-0 bg-[radial-gradient(#4fd1c515_1px,transparent_1px)] [background-size:14px_14px] opacity-30 z-0"></div>
+      {/* Enhanced tech pattern overlay - Adjusted opacity */}
+      <div className="absolute inset-0 bg-[radial-gradient(#4fd1c510_1px,transparent_1px)] [background-size:14px_14px] opacity-20 z-0"></div>
       
       {/* Content with higher z-index */}
       <div className="container mx-auto px-6 lg:px-8 py-16 relative z-10">
@@ -50,7 +55,7 @@ const Footer = () => {
                 <a 
                   key={social.name}
                   href="#" 
-                  className="w-10 h-10 rounded-full bg-gray-800/90 backdrop-blur-sm border border-gray-700/60 flex items-center justify-center text-gray-400 hover:text-teal-400 hover:bg-teal-400/10 hover:border-teal-400/40 hover:scale-110 transform transition-all duration-300 shadow-lg shadow-teal-900/5"
+                  className="w-10 h-10 rounded-full bg-gray-800/70 backdrop-blur-sm border border-gray-700/50 flex items-center justify-center text-gray-400 hover:text-teal-400 hover:bg-teal-400/15 hover:border-teal-400/50 hover:scale-110 transform transition-all duration-300 shadow-lg shadow-teal-900/10"
                   aria-label={social.name}
                 >
                   <span className="sr-only">{social.name}</span>

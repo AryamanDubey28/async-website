@@ -94,19 +94,42 @@ export default function SkynetChat() {
     };
 
     const createParticles = () => {
-      // More particles with varied behavior for a richer tech effect
-      for (let i = 0; i < 90; i++) {
+      particles.length = 0; // Clear existing particles first
+      const heroParticleCount = 80; // More particles in the hero area
+      const otherParticleCount = 40; // Fewer particles below
+      const heroHeight = window.innerHeight; // Approximate hero section height
+
+      // Generate particles for the hero section
+      for (let i = 0; i < heroParticleCount; i++) {
         particles.push({
           x: Math.random() * canvas.width,
-          y: Math.random() * canvas.height,
-          size: Math.random() * 3.5 + 0.5, // More varied sizes
-          speedX: (Math.random() - 0.5) * 0.4, 
+          y: Math.random() * heroHeight, // Confine y to hero height
+          size: Math.random() * 3.5 + 0.5,
+          speedX: (Math.random() - 0.5) * 0.4,
           speedY: (Math.random() - 0.5) * 0.4,
           color: colors[Math.floor(Math.random() * colors.length)],
-          opacity: Math.random() * 0.6 + 0.2, // More varied opacity
-          pulse: 0,
-          pulseSpeed: Math.random() * 0.02 + 0.01 // For pulsing animation
+          opacity: Math.random() * 0.6 + 0.2,
+          pulse: Math.random() * Math.PI * 2, // Start pulse randomly
+          pulseSpeed: Math.random() * 0.02 + 0.01
         });
+      }
+
+      // Generate particles for the section below hero
+      // Check if canvas is taller than the hero section before adding more particles
+      if (canvas.height > heroHeight) {
+        for (let i = 0; i < otherParticleCount; i++) {
+          particles.push({
+            x: Math.random() * canvas.width,
+            y: heroHeight + Math.random() * (canvas.height - heroHeight), // Confine y below hero height
+            size: Math.random() * 3.5 + 0.5,
+            speedX: (Math.random() - 0.5) * 0.4,
+            speedY: (Math.random() - 0.5) * 0.4,
+            color: colors[Math.floor(Math.random() * colors.length)],
+            opacity: Math.random() * 0.6 + 0.2,
+            pulse: Math.random() * Math.PI * 2, // Start pulse randomly
+            pulseSpeed: Math.random() * 0.02 + 0.01
+          });
+        }
       }
     };
 
@@ -260,7 +283,7 @@ function processData(data) {
 }`;
 
   return (
-    <main ref={mainRef} className="relative min-h-screen bg-gray-900 text-white overflow-hidden flex flex-col">
+    <main ref={mainRef} className="relative min-h-screen bg-gray-950 text-white overflow-hidden flex flex-col">
       <Navbar />
       
       {/* Canvas background */}
