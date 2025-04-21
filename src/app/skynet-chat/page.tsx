@@ -298,9 +298,9 @@ function processData(data) {
         <section className="relative pt-32 pb-20">
           {/* Background decorations - Adjusted for more depth */}
           <div className="absolute inset-0 overflow-hidden">
-            <div className="absolute -top-20 -left-20 w-96 h-96 bg-gradient-to-br from-teal-500/10 via-purple-500/10 to-blue-600/10 rounded-full blur-3xl animate-pulse-slow"></div>
-            <div className="absolute top-1/3 -right-20 w-80 h-80 bg-gradient-to-tr from-purple-600/10 via-blue-500/10 to-teal-500/10 rounded-full blur-3xl animate-pulse-slower"></div>
-            <div className="absolute bottom-0 left-1/3 w-96 h-96 bg-gradient-to-br from-teal-400/10 via-purple-400/10 to-blue-500/10 rounded-full blur-3xl"></div>
+            <div className="absolute -top-20 -left-20 w-96 h-96 bg-gradient-to-br from-teal-500/10 via-cyan-500/10 to-blue-600/10 rounded-full blur-3xl animate-pulse-slow"></div>
+            <div className="absolute top-1/3 -right-20 w-80 h-80 bg-gradient-to-tr from-cyan-600/10 via-blue-500/10 to-teal-500/10 rounded-full blur-3xl animate-pulse-slower"></div>
+            <div className="absolute bottom-0 left-1/3 w-96 h-96 bg-gradient-to-br from-teal-400/10 via-cyan-400/10 to-blue-500/10 rounded-full blur-3xl"></div>
           </div>
           
           <div className="container mx-auto px-4 relative z-10">
@@ -324,7 +324,7 @@ function processData(data) {
                     </span>
                   </div>
                   <div className="overflow-hidden">
-                    <span className={`block bg-clip-text text-transparent bg-gradient-to-r from-teal-400 via-purple-400 to-blue-500 transform ${isLoaded ? 'translate-y-0' : 'translate-y-full'} transition-transform duration-700 delay-[300ms] ease-out`}>
+                    <span className={`block bg-clip-text text-transparent bg-gradient-to-r from-teal-400 via-cyan-400 to-blue-500 transform ${isLoaded ? 'translate-y-0' : 'translate-y-full'} transition-transform duration-700 delay-[300ms] ease-out`}>
                       Intelligent Collaboration
                     </span>
                   </div>
@@ -335,14 +335,14 @@ function processData(data) {
                 </p>
                 
                 <div className="flex flex-col sm:flex-row gap-5 pt-4">
-                  <button className="group relative px-8 py-4 rounded-full bg-gradient-to-r from-teal-500 to-purple-500 text-white font-semibold transition-all duration-300 hover:shadow-lg hover:shadow-teal-500/30 hover:scale-105 focus:outline-none focus:ring-2 focus:ring-teal-400/50 overflow-hidden">
+                  <button className="group relative px-8 py-4 rounded-full bg-gradient-to-r from-teal-500 to-cyan-500 text-white font-semibold transition-all duration-300 hover:shadow-lg hover:shadow-teal-500/30 hover:scale-105 focus:outline-none focus:ring-2 focus:ring-teal-400/50 overflow-hidden">
                     <span className="relative z-10">Request Demo</span>
-                    <span className="absolute inset-0 bg-gradient-to-r from-teal-400 to-purple-400 opacity-0 group-hover:opacity-100 transition-opacity duration-300 blur-xl"></span>
+                    <span className="absolute inset-0 bg-gradient-to-r from-teal-400 to-cyan-400 opacity-0 group-hover:opacity-100 transition-opacity duration-300 blur-xl"></span>
                   </button>
                   <button className="relative px-8 py-4 rounded-full border border-gray-700 backdrop-blur-lg text-white transition-all duration-300 hover:border-teal-400 focus:outline-none focus:ring-2 focus:ring-teal-400/30 overflow-hidden group">
                     <span className="relative z-10">Learn More</span>
                     <span className="absolute inset-0 bg-gradient-to-r from-gray-800 to-gray-900 opacity-80"></span>
-                    <span className="absolute inset-0 bg-gradient-to-r from-teal-500/20 to-purple-500/20 opacity-0 group-hover:opacity-100 transition-opacity duration-300"></span>
+                    <span className="absolute inset-0 bg-gradient-to-r from-teal-500/20 to-cyan-500/20 opacity-0 group-hover:opacity-100 transition-opacity duration-300"></span>
                   </button>
                 </div>
                 
@@ -367,7 +367,7 @@ function processData(data) {
                 <div className="relative max-w-2xl mx-auto"> {/* Increased from max-w-xl */}
                   {/* Main UI mockup */}
                   <div className="aspect-[16/10] relative rounded-xl overflow-hidden border border-teal-500/30 shadow-xl shadow-teal-500/10 backdrop-blur-sm bg-gray-900/80">
-                    <div className="absolute inset-0 bg-gradient-to-br from-teal-500/10 via-purple-500/10 to-blue-600/10"></div>
+                    <div className="absolute inset-0 bg-gradient-to-br from-teal-500/10 via-cyan-500/10 to-blue-600/10"></div>
                     <div className="absolute inset-0 bg-[radial-gradient(#4fd1c520_1px,transparent_1px)] [background-size:16px_16px] opacity-30"></div>
                     
                     {/* Browser chrome */}
@@ -533,7 +533,7 @@ function processData(data) {
                       </div>
                     </div>
                   </div>
-                  <div className="absolute bottom-4 -left-12 w-20 h-20 bg-gradient-to-br from-purple-500/30 to-teal-400/30 rounded-lg float-2 opacity-70 shadow-lg shadow-purple-500/20 backdrop-blur-sm border border-purple-400/30">
+                  <div className="absolute bottom-4 -left-12 w-20 h-20 bg-gradient-to-br from-blue-500/30 to-teal-400/30 rounded-lg float-2 opacity-70 shadow-lg shadow-blue-500/20 backdrop-blur-sm border border-blue-400/30">
                     <div className="absolute inset-0 flex items-center justify-center">
                       <svg xmlns="http://www.w3.org/2000/svg" className="h-10 w-10 text-white/30" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                         <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M12 6v6m0 0v6m0-6h6m-6 0H6" />
@@ -545,7 +545,7 @@ function processData(data) {
                       <div className="w-2 h-2 rounded-full bg-white/70 animate-ping-slow"></div>
                     </div>
                   </div>
-                  <div className="absolute -bottom-8 right-1/3 w-16 h-16 bg-gradient-to-r from-teal-500/30 to-purple-500/30 rounded-md float-2 opacity-70 transform rotate-12 shadow-lg shadow-purple-500/20 backdrop-blur-sm border border-teal-400/30"></div>
+                  <div className="absolute -bottom-8 right-1/3 w-16 h-16 bg-gradient-to-r from-teal-500/30 to-blue-500/30 rounded-md float-2 opacity-70 transform rotate-12 shadow-lg shadow-teal-500/20 backdrop-blur-sm border border-teal-400/30"></div>
                 </div>
               </div>
             </div>
@@ -747,7 +747,7 @@ function processData(data) {
                       </div>
                     </div>
                   </div>
-                  <div className="absolute bottom-4 -left-12 w-20 h-20 bg-gradient-to-br from-purple-500/30 to-teal-400/30 rounded-lg float-2 opacity-70 shadow-lg shadow-purple-500/20 backdrop-blur-sm border border-purple-400/30">
+                  <div className="absolute bottom-4 -left-12 w-20 h-20 bg-gradient-to-br from-blue-500/30 to-teal-400/30 rounded-lg float-2 opacity-70 shadow-lg shadow-blue-500/20 backdrop-blur-sm border border-blue-400/30">
                     <div className="absolute inset-0 flex items-center justify-center">
                       <svg xmlns="http://www.w3.org/2000/svg" className="h-10 w-10 text-white/30" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                         <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M12 6v6m0 0v6m0-6h6m-6 0H6" />
@@ -759,7 +759,7 @@ function processData(data) {
                       <div className="w-2 h-2 rounded-full bg-white/70 animate-ping-slow"></div>
                     </div>
                   </div>
-                  <div className="absolute -bottom-8 right-1/3 w-16 h-16 bg-gradient-to-r from-teal-500/30 to-purple-500/30 rounded-md float-2 opacity-70 transform rotate-12 shadow-lg shadow-purple-500/20 backdrop-blur-sm border border-teal-400/30"></div>
+                  <div className="absolute -bottom-8 right-1/3 w-16 h-16 bg-gradient-to-r from-teal-500/30 to-blue-500/30 rounded-md float-2 opacity-70 transform rotate-12 shadow-lg shadow-teal-500/20 backdrop-blur-sm border border-teal-400/30"></div>
                 </div>
               </div>
               
@@ -877,9 +877,9 @@ function processData(data) {
                 </div>
                 
                 <div className="pt-6">
-                  <button className="group relative px-8 py-4 rounded-full bg-gradient-to-r from-teal-500 to-purple-500 text-white font-semibold transition-all duration-300 hover:shadow-lg hover:shadow-teal-500/30 hover:scale-105 focus:outline-none focus:ring-2 focus:ring-teal-400/50 overflow-hidden">
+                  <button className="group relative px-8 py-4 rounded-full bg-gradient-to-r from-teal-500 to-cyan-500 text-white font-semibold transition-all duration-300 hover:shadow-lg hover:shadow-teal-500/30 hover:scale-105 focus:outline-none focus:ring-2 focus:ring-teal-400/50 overflow-hidden">
                     <span className="relative z-10">Get Early Access</span>
-                    <span className="absolute inset-0 bg-gradient-to-r from-teal-400 to-purple-400 opacity-0 group-hover:opacity-100 transition-opacity duration-300 blur-xl"></span>
+                    <span className="absolute inset-0 bg-gradient-to-r from-teal-400 to-cyan-400 opacity-0 group-hover:opacity-100 transition-opacity duration-300 blur-xl"></span>
                   </button>
                 </div>
               </div>
