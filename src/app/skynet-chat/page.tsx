@@ -16,7 +16,7 @@ type ChatMessage = {
 export default function SkynetChat() {
   // Controls for the animated features and interactions
   const [isLoaded, setIsLoaded] = useState(false);
-  const [activeChatMessage, setActiveChatMessage] = useState(0);
+  const [activeChatMessage, setActiveChatMessage] = useState(1);
   const [showTypingIndicator, setShowTypingIndicator] = useState(false);
   const canvasRef = useRef<HTMLCanvasElement>(null);
   const mainRef = useRef<HTMLElement>(null); // Add ref for the main element
@@ -274,20 +274,27 @@ export default function SkynetChat() {
     }
   ];
 
-  // Code demonstration for the interface
-  const codeSample = `// Example function with Skynet assistance
-function processData(data) {
-  // Skynet helped optimize this algorithm
-  const results = data.map(item => {
-    return {
-      id: item.id,
-      value: item.value * 1.5,
-      normalized: normalizeValue(item.value)
-    };
-  });
-  
-  return results.filter(item => item.normalized > 0.5);
-}`;
+  // Artefact content (example email in Markdown)
+  const artefactContent = `
+# Follow-up Email: Project Skynet Sync
+
+**Subject: Sync on Project Skynet - Action Items**
+
+Hi Team,
+
+<mark>Great sync call today regarding the upcoming Project Skynet milestones.
+
+Here's a summary of the key discussion points and action items:</mark>
+
+*   **UI Mockup:** Finalize the design by EOD Friday. [@Alice]
+*   **API Integration:** Begin integration testing next Monday. [@Bob]
+*   **Deployment:** Schedule preliminary deployment for Wednesday week.
+
+Let me know if I missed anything.
+
+Best,
+Charlie
+`;
 
   return (
     <main ref={mainRef} className="relative min-h-screen bg-gray-950 text-white overflow-hidden flex flex-col">
@@ -372,7 +379,7 @@ function processData(data) {
               {/* Right content column - Interactive UI mockup -> Replaced with Mockup component */}
               <div className="lg:w-1/2 relative">
                 <Mockup 
-                  codeSample={codeSample}
+                  artefactContent={artefactContent}
                   chatMessages={chatMessages}
                   activeChatMessage={activeChatMessage}
                   showTypingIndicator={showTypingIndicator}
@@ -514,7 +521,7 @@ function processData(data) {
                   <div className="absolute -top-8 -right-8 w-24 h-24 bg-gradient-to-br from-teal-400/30 to-blue-500/30 rounded-xl float-1 opacity-70 shadow-lg shadow-teal-500/20 backdrop-blur-sm border border-teal-400/30 overflow-hidden">
                     <div className="absolute inset-0 flex items-center justify-center p-2">
                       <div className="text-[8px] text-teal-100/70 font-mono overflow-hidden">
-                        {codeSample.split('\n').slice(0, 6).map((line, i) => (
+                        {artefactContent.split('\n').slice(0, 6).map((line, i) => (
                           <div key={i}>{line}</div>
                         ))}
                       </div>
