@@ -35,6 +35,11 @@ export default function Mockup({
         <div className="relative z-10 flex-1 flex">
           <div className="w-1/2 border-r border-gray-800 flex flex-col bg-gray-900/50 backdrop-blur-sm">
             <div className="h-10 bg-gray-800/60 backdrop-blur-md border-b border-gray-800 px-3 flex items-center">
+              <div className="flex items-center gap-1.5 mr-2">
+                <div className="w-2.5 h-2.5 rounded-full bg-red-500"></div>
+                <div className="w-2.5 h-2.5 rounded-full bg-yellow-500"></div>
+                <div className="w-2.5 h-2.5 rounded-full bg-green-500"></div>
+              </div>
               <div className="text-xs font-medium text-white">Skynet</div>
               <div className="ml-auto flex items-center gap-1">
                 <div className="w-2 h-2 rounded-full bg-teal-400 animate-pulse"></div>
