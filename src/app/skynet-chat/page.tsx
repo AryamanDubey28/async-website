@@ -16,11 +16,55 @@ type ChatMessage = {
 export default function SkynetChat() {
   // Controls for the animated features and interactions
   const [isLoaded, setIsLoaded] = useState(false);
-  const [activeChatMessage, setActiveChatMessage] = useState(0);
+  const [activeChatMessage, setActiveChatMessage] = useState(1);
   const [showTypingIndicator, setShowTypingIndicator] = useState(false);
   const canvasRef = useRef<HTMLCanvasElement>(null);
   const mainRef = useRef<HTMLElement>(null); // Add ref for the main element
   
+  // Initial Artefact content (example email in Markdown) - Restored mark
+  const initialArtefactContent = `
+# Follow-up Email: Project Skynet Sync
+
+**Subject: Sync on Project Skynet - Action Items**
+
+Hi Team,
+
+<mark>Great sync call today regarding the upcoming Project Skynet milestones.
+
+Here's a summary of the key discussion points and action items:</mark>
+
+*   **UI Mockup:** Finalize the design by EOD Friday. [@Alice]
+*   **API Integration:** Begin integration testing next Monday. [@Bob]
+*   **Deployment:** Schedule preliminary deployment for Wednesday week.
+
+Let me know if I missed anything.
+
+Best,
+Charlie
+`;
+
+  // Updated Artefact content reflecting assistant's suggestion - Added specific highlight
+  const updatedArtefactContent = `
+# Follow-up Email: Project Skynet Sync
+
+**Subject: Sync on Project Skynet - Action Items**
+
+Hi Team,
+
+<strong class="updated-line">Following up on our sync call today. Here are the key action items, incorporating Alice's points on ownership:</strong>
+*   Finalize UI mockup by EOD Friday ([@Alice])
+*   Begin API integration testing next Monday ([@Bob])
+*   Schedule preliminary deployment for Wednesday week. 
+
+Does this accurately capture the core tasks?
+
+Best,
+Charlie
+`;
+
+  // State for the currently displayed artefact
+  const [currentArtefactContent, setCurrentArtefactContent] = useState(initialArtefactContent);
+
   // Set loaded state for animations
   useEffect(() => {
     const timer = setTimeout(() => {
@@ -30,16 +74,43 @@ export default function SkynetChat() {
     return () => clearTimeout(timer);
   }, []);
 
-  // Typing indicator effect
+  // Typing indicator effect - Refactored again for sequential state updates
   useEffect(() => {
+    let timer: NodeJS.Timeout | null = null;
+
     if (activeChatMessage === 1) {
+      // User just "sent" message (triggered by input focus)
       setShowTypingIndicator(true);
-      const timer = setTimeout(() => {
+      timer = setTimeout(() => {
         setShowTypingIndicator(false);
-        setActiveChatMessage(2);
-      }, 1500);
-      return () => clearTimeout(timer);
+        setActiveChatMessage(2); // Move to show first assistant response
+      }, 2500); // Increased typing duration
+
+    } else if (activeChatMessage === 2) {
+      // First assistant response is now shown, wait before updating artefact
+      timer = setTimeout(() => {
+        setCurrentArtefactContent(updatedArtefactContent); // Update the artefact
+        // Now that artefact is updated, immediately trigger the next state 
+        // which will show the final confirmation message.
+        setActiveChatMessage(3); 
+      }, 2500); // Increased delay after showing response 1 before updating artefact
+
+    } else if (activeChatMessage === 3) {
+      // Final assistant message (index 2) is now shown because activeChatMessage is 3.
+      // No further automatic actions needed in this step.
     }
+
+    // Cleanup function for the current step's timer
+    return () => {
+      if (timer) clearTimeout(timer);
+      // Ensure typing indicator is turned off if the sequence is interrupted
+      // specifically during the typing phase (activeChatMessage was 1).
+      if (activeChatMessage === 1) {
+         setShowTypingIndicator(false);
+      }
+    };
+    // Rerun this effect whenever activeChatMessage changes.
+    // updatedArtefactContent is constant derived from a variable, so it doesn't need to be a dependency.
   }, [activeChatMessage]);
 
   // Canvas particle effect
@@ -260,34 +331,20 @@ export default function SkynetChat() {
 
   // Chat demonstration messages
   const chatMessages: ChatMessage[] = [
-    { 
+    {
       role: "user",
-      content: "Can you help me rewrite this paragraph to be more concise?"
+      content: "Can you help me rewrite this line and include the points Alice mentioned in yesterdays meeting?"
     },
     { 
       role: "assistant",
-      content: "I'd be happy to help make this more concise. I'll preserve the key points while trimming unnecessary words."
+      content: "Absolutely. I will add the points from yesterday's standup regarding the need for clear ownership."
     },
     { 
       role: "assistant",
-      content: "Here's a more concise version: \"Skynet Chat combines AI assistance with content creation in a secure environment. Deploy on your infrastructure for maximum privacy, while benefiting from personalized assistance that adapts to your style over time.\""
+      // Updated content for the final confirmation message
+      content: "Okay, I've updated the artefact." 
     }
   ];
-
-  // Code demonstration for the interface
-  const codeSample = `// Example function with Skynet assistance
-function processData(data) {
-  // Skynet helped optimize this algorithm
-  const results = data.map(item => {
-    return {
-      id: item.id,
-      value: item.value * 1.5,
-      normalized: normalizeValue(item.value)
-    };
-  });
-  
-  return results.filter(item => item.normalized > 0.5);
-}`;
 
   return (
     <main ref={mainRef} className="relative min-h-screen bg-gray-950 text-white overflow-hidden flex flex-col">
@@ -313,7 +370,7 @@ function processData(data) {
           <div className="container mx-auto px-4 relative z-10">
             <div className="flex flex-col lg:flex-row items-center justify-between gap-16">
               {/* Left content column */}
-              <div className="lg:w-1/2 space-y-8">
+              <div className="lg:w-2/5 space-y-8">
                 <div 
                   className="inline-block px-4 py-1.5 rounded-full bg-gray-800/70 backdrop-blur-lg border border-teal-500/30 mb-3 transform hover:scale-105 transition-all duration-300 shadow-lg shadow-teal-500/10"
                 >
@@ -353,32 +410,48 @@ function processData(data) {
                   </button>
                 </div>
                 
-                {/* Social proof */}
-                {/* CSS Transition applied directly */}
-                <div className={`flex items-center gap-4 transition-opacity duration-1000 ${isLoaded ? 'opacity-100' : 'opacity-0'}`}>
-                  <div className="flex -space-x-3">
-                    {Array(4).fill(0).map((_, i) => (
-                      <div key={i} className="w-10 h-10 rounded-full border-2 border-gray-800 bg-gradient-to-br from-gray-800 to-gray-900 flex items-center justify-center overflow-hidden">
-                        <span className="text-xs font-medium text-gray-300">{i+1}</span>
-                      </div>
-                    ))}
+                {/* New Feature Highlights */}
+                <div className={`flex items-center gap-3 pt-8 transition-opacity duration-1000 ${isLoaded ? 'opacity-100' : 'opacity-0'}`}>
+                  {/* Security Highlight */}
+                  <div className="flex items-center gap-2">
+                    <div className="w-10 h-10 rounded-full border-2 border-teal-400/70 flex items-center justify-center transition-transform duration-300 hover:scale-110">
+                      <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5 text-teal-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z" />
+                      </svg>
+                    </div>
+                    <span className="text-sm font-medium text-gray-300">Secure Deployment</span>
                   </div>
-                  <div className="text-sm text-gray-400">
-                    Trusted by innovative companies
+                  
+                  {/* Collaboration Highlight */}
+                  <div className="flex items-center gap-2">
+                    <div className="w-10 h-10 rounded-full border-2 border-purple-400/70 flex items-center justify-center transition-transform duration-300 hover:scale-110">
+                      <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5 text-purple-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                         <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M17 8h2a2 2 0 012 2v6a2 2 0 01-2 2h-2v4l-4-4H9a1.994 1.994 0 01-1.414-.586m0 0L11 14h4a2 2 0 002-2V6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2v4l.586-.586z" />
+                      </svg>
+                    </div>
+                    <span className="text-sm font-medium text-gray-300">Easy Collaboration</span>
+                  </div>
+                  
+                  {/* Efficiency Highlight */}
+                  <div className="flex items-center gap-2">
+                    <div className="w-10 h-10 rounded-full border-2 border-blue-400/70 flex items-center justify-center transition-transform duration-300 hover:scale-110">
+                      <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5 text-blue-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M13 10V3L4 14h7v7l9-11h-7z" />
+                      </svg>
+                    </div>
+                    <span className="text-sm font-medium text-gray-300">AI Productivity</span>
                   </div>
                 </div>
               </div>
               
               {/* Right content column - Interactive UI mockup -> Replaced with Mockup component */}
-              <div className="lg:w-1/2 relative">
-                <Mockup 
-                  codeSample={codeSample}
-                  chatMessages={chatMessages}
-                  activeChatMessage={activeChatMessage}
-                  showTypingIndicator={showTypingIndicator}
-                  setActiveChatMessage={setActiveChatMessage}
-                />
-              </div>
+              <Mockup 
+                artefactContent={currentArtefactContent}
+                chatMessages={chatMessages}
+                activeChatMessage={activeChatMessage}
+                showTypingIndicator={showTypingIndicator}
+                setActiveChatMessage={setActiveChatMessage}
+              />
             </div>
           </div>
         </section>
@@ -514,8 +587,8 @@ function processData(data) {
                   <div className="absolute -top-8 -right-8 w-24 h-24 bg-gradient-to-br from-teal-400/30 to-blue-500/30 rounded-xl float-1 opacity-70 shadow-lg shadow-teal-500/20 backdrop-blur-sm border border-teal-400/30 overflow-hidden">
                     <div className="absolute inset-0 flex items-center justify-center p-2">
                       <div className="text-[8px] text-teal-100/70 font-mono overflow-hidden">
-                        {codeSample.split('\n').slice(0, 6).map((line, i) => (
-                          <div key={i}>{line}</div>
+                        {currentArtefactContent.split('\n').slice(0, 6).map((line, i) => (
+                          <div key={i}>{line.substring(0, 20)}{line.length > 20 ? '...' : ''}</div>
                         ))}
                       </div>
                     </div>
