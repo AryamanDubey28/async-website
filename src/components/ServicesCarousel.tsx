@@ -246,12 +246,12 @@ const carouselStyles = `
     bottom: 0;
     background: linear-gradient(90deg, rgb(56, 224, 204), rgb(185, 105, 254), rgb(75, 141, 250));
     background-size: 200% 100%;
-    animation: shimmer 2s infinite linear;
+    animation: fill-duration 7s linear infinite;
   }
   
-  @keyframes shimmer {
-    0% { background-position: 100% 0; }
-    100% { background-position: 0 0; }
+  @keyframes fill-duration {
+    from { width: 0%; }
+    to { width: 100%; }
   }
 `;
 
