@@ -96,8 +96,12 @@ Charlie
       }, 2500); // Increased delay after showing response 1 before updating artefact
 
     } else if (activeChatMessage === 3) {
-      // Final assistant message (index 2) is now shown because activeChatMessage is 3.
-      // No further automatic actions needed in this step.
+      // Final assistant message (index 2) is now shown.
+      // Wait for a bit, then reset to loop the animation.
+      timer = setTimeout(() => {
+        setCurrentArtefactContent(initialArtefactContent); // Reset artefact
+        setActiveChatMessage(1); // Restart the sequence
+      }, 3000); // Delay before looping
     }
 
     // Cleanup function for the current step's timer
