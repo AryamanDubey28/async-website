@@ -3,6 +3,7 @@
 import Navbar from '@/components/Navbar';
 import Footer from '@/components/Footer';
 import { useEffect, useState } from 'react';
+import { useRouter, usePathname } from 'next/navigation';
 
 // Client-only component for the animated particles
 const GlobeParticles = () => {
@@ -109,6 +110,8 @@ interface LeadershipItem {
 
 export default function About() {
   const [isLoaded, setIsLoaded] = useState(false);
+  const router = useRouter();
+  const pathname = usePathname();
 
   useEffect(() => {
     const timer = setTimeout(() => {
@@ -117,6 +120,19 @@ export default function About() {
     
     return () => clearTimeout(timer);
   }, []);
+
+  const scrollToSection = (sectionId: string) => {
+    // If we're on the homepage, scroll to the section
+    if (pathname === '/') {
+      const element = document.getElementById(sectionId);
+      if (element) {
+        element.scrollIntoView({ behavior: 'smooth' });
+      }
+    } else {
+      // Navigate to home page with hash
+      router.push(`/#${sectionId}`);
+    }
+  };
 
   // Data for Values section - makes rendering cleaner
   const coreValues: ValueItem[] = [
@@ -389,14 +405,14 @@ export default function About() {
                 Let's discuss how our bespoke AI expertise can help optimise your operations, drive innovation, and achieve sustainable growth.
               </p>
               {/* Enhanced Button Style */}
-              <a 
-                href="#contact" // Assuming you have a contact section with id="contact"
+              <button 
+                onClick={() => scrollToSection('contact')}
                 className="group relative inline-block px-10 py-5 rounded-full bg-gradient-to-r from-teal-500 via-purple-500 to-blue-500 text-white text-lg font-semibold transition-all duration-300 ease-in-out hover:shadow-[0_0_25px] hover:shadow-purple-500/50 hover:scale-[1.03] focus:outline-none focus:ring-4 focus:ring-purple-500/40 overflow-hidden"
               >
                 <span className="relative z-10 tracking-wide">Get in Touch</span>
                 {/* Shine effect on hover */}
                 <span className="absolute top-0 left-[-100%] w-full h-full bg-gradient-to-r from-transparent via-white/30 to-transparent transition-all duration-700 ease-in-out group-hover:left-[100%]"></span>
-              </a>
+              </button>
             </div>
           </div>
         </div>
