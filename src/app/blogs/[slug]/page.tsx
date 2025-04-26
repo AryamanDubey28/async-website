@@ -19,11 +19,14 @@ export async function generateStaticParams() {
 
 // Function to generate metadata for the page (e.g., title)
 export async function generateMetadata(
-  { params }: PostPageProps,
+  props: PostPageProps,
   parent: ResolvingMetadata
 ): Promise<Metadata> {
+  // Await params before accessing slug
+  const params = await props.params;
+  const slug = params.slug;
   try {
-    const post = await getPostData(params.slug);
+    const post = await getPostData(slug);
     return {
       title: `${post.title} | Blog`,
       description: post.summary,
@@ -38,59 +41,74 @@ export async function generateMetadata(
 }
 
 // The page component
-export default async function PostPage({ params }: PostPageProps) {
+export default async function PostPage(props: PostPageProps) {
+  // Await params before accessing slug
+  const params = await props.params;
+  const slug = params.slug;
   let post: PostData;
   try {
-    post = await getPostData(params.slug);
+    post = await getPostData(slug);
   } catch (error) {
     // If getPostData throws (e.g., file not found), trigger a 404 page
     notFound();
   }
 
   return (
-    <main className="min-h-screen bg-gray-900 text-white">
+    <main className="min-h-screen bg-gray-950 text-white">
       <Navbar />
-      <div className="pt-32 pb-20 px-4">
-        <div className="container mx-auto max-w-3xl">
-          <article className="prose prose-invert prose-lg mx-auto 
-                            prose-headings:text-teal-300 
-                            prose-a:text-teal-400 hover:prose-a:text-teal-300 
-                            prose-strong:text-white 
-                            prose-blockquote:border-l-teal-500 prose-blockquote:text-gray-400 
-                            prose-code:text-pink-400 prose-code:bg-gray-800 prose-code:p-1 prose-code:rounded 
-                            prose-pre:bg-gray-800 prose-pre:border prose-pre:border-gray-700">
-            
-            {/* Post Header */}
-            <div className="mb-8 border-b border-gray-700 pb-4">
-                <h1 className="text-4xl md:text-5xl font-bold mb-3 !text-transparent bg-clip-text bg-gradient-to-r from-teal-400 to-teal-200">
-                    {post.title}
-                </h1>
-                <p className="text-gray-400 text-lg">
-                    {post.summary}
-                </p>
-                <div className="text-sm text-gray-500 mt-3">
-                    <span>By {post.author}</span> | 
-                    <span> 
-                        {new Date(post.date).toLocaleDateString('en-US', {
-                            year: 'numeric',
-                            month: 'long',
-                            day: 'numeric',
-                        })}
-                    </span>
-                </div>
-            </div>
+      <div className="relative pt-36 pb-24 px-4 overflow-hidden">
+        <div className="absolute inset-0 -z-10 h-full w-full bg-gray-950 bg-[linear-gradient(to_right,#8080800a_1px,transparent_1px),linear-gradient(to_bottom,#8080800a_1px,transparent_1px)] bg-[size:14px_24px]"></div>
+        <div className="absolute inset-0 -z-20 bg-gradient-to-br from-gray-950 via-purple-950/10 to-teal-950/10"></div>
 
-            {/* Post Content */}
-            <div dangerouslySetInnerHTML={{ __html: post.contentHtml || '' }} />
+        <div className="container mx-auto max-w-4xl">
+          <div className="relative rounded-2xl border border-gray-800/80 bg-gray-950/60 backdrop-blur-lg p-6 md:p-10 lg:p-12 shadow-xl">
+            <article className="prose prose-invert prose-lg max-w-none 
+                              prose-headings:font-semibold prose-headings:text-transparent prose-headings:bg-clip-text prose-headings:bg-gradient-to-r prose-headings:from-teal-300 prose-headings:to-blue-300 
+                              prose-a:text-teal-400 hover:prose-a:text-teal-300 prose-a:transition-colors prose-a:duration-300 prose-a:font-medium 
+                              prose-strong:text-teal-100 prose-strong:font-semibold
+                              prose-blockquote:border-l-purple-500 prose-blockquote:text-gray-400 prose-blockquote:pl-4 prose-blockquote:italic
+                              prose-code:text-pink-400 prose-code:bg-gray-800/50 prose-code:px-1.5 prose-code:py-0.5 prose-code:rounded prose-code:font-mono prose-code:text-sm
+                              prose-pre:bg-gray-800/70 prose-pre:border prose-pre:border-gray-700 prose-pre:rounded-lg prose-pre:p-4 prose-pre:text-sm
+                              prose-ul:list-disc prose-ul:marker:text-teal-400 prose-ol:list-decimal prose-ol:marker:text-teal-400
+                              prose-img:rounded-lg prose-img:border prose-img:border-gray-700 prose-img:shadow-md">
+              
+              <div className="mb-10 pb-6 border-b border-gray-700/50 not-prose">
+                  <h1 className="text-4xl md:text-5xl font-bold mb-4 !text-transparent bg-clip-text bg-gradient-to-r from-teal-400 via-purple-400 to-blue-500 leading-tight">
+                      {post.title}
+                  </h1>
+                  <p className="text-gray-400 text-xl mb-5 leading-relaxed">
+                      {post.summary}
+                  </p>
+                  <div className="text-sm text-gray-500 flex items-center space-x-3">
+                      <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5 text-gray-500" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
+                        <path strokeLinecap="round" strokeLinejoin="round" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" />
+                      </svg>
+                      <span>By {post.author}</span> 
+                      <span className="text-gray-600">|</span>
+                      <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5 text-gray-500" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
+                        <path strokeLinecap="round" strokeLinejoin="round" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" />
+                      </svg>
+                      <span> 
+                          {new Date(post.date).toLocaleDateString('en-US', {
+                              year: 'numeric',
+                              month: 'long',
+                              day: 'numeric',
+                          })}
+                      </span>
+                  </div>
+              </div>
 
-            {/* Back to Blogs link */}
-            <div className="mt-12 pt-8 border-t border-gray-700 text-center">
-                <Link href="/blogs"
-                      className="inline-block bg-teal-600 hover:bg-teal-700 text-white font-bold py-2 px-4 rounded transition-colors duration-300 no-underline">
-                    &larr; Back to All Posts
-                </Link>
-            </div>
-          </article>
+              <div dangerouslySetInnerHTML={{ __html: post.contentHtml || '' }} />
+
+              <div className="mt-12 pt-8 border-t border-gray-700/50 text-center not-prose">
+                  <Link href="/blogs"
+                        className="group relative inline-block px-8 py-4 rounded-full bg-gradient-to-r from-teal-500 via-purple-500 to-blue-500 text-white text-base font-semibold transition-all duration-300 ease-in-out hover:shadow-[0_0_20px] hover:shadow-purple-500/40 hover:scale-[1.03] focus:outline-none focus:ring-4 focus:ring-purple-500/40 overflow-hidden">
+                     <span className="relative z-10 tracking-wide">&larr; Back to All Posts</span>
+                     <span className="absolute top-0 left-[-100%] w-full h-full bg-gradient-to-r from-transparent via-white/30 to-transparent transition-all duration-700 ease-in-out group-hover:left-[100%]"></span>
+                  </Link>
+              </div>
+            </article>
+          </div>
         </div>
       </div>
       <Footer />

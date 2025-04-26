@@ -3,6 +3,7 @@ import path from 'path';
 import matter from 'gray-matter';
 import { remark } from 'remark';
 import html from 'remark-html';
+import { notFound } from 'next/navigation';
 
 // Define the directory where blog posts are stored
 const postsDirectory = path.join(process.cwd(), 'content/blogs');
@@ -76,11 +77,18 @@ export async function getPostData(slug: string): Promise<PostData> {
   let fileContents;
   try {
      fileContents = fs.readFileSync(fullPath, 'utf8');
-  } catch (err) {
-    // Handle file not found specifically maybe?
-    // For now, rethrow or throw a custom error
-    console.error(`Error reading post file: ${fullPath}`, err);
-    throw new Error(`Post with slug "${slug}" not found.`);
+  } catch (err: any) {
+    // Check specifically for file not found errors
+    if (err.code === 'ENOENT') {
+      console.error(`Post file not found: ${fullPath}`);
+      // Trigger the 404 page in the calling component
+      notFound(); 
+    } else {
+      // Log other file system errors
+      console.error(`Error reading post file: ${fullPath}`, err);
+      // Re-throw other errors to be handled potentially differently
+      throw new Error(`Failed to read post: ${slug}`);
+    }
   }
 
   // Use gray-matter to parse the post metadata section

@@ -456,3 +456,24 @@ body {
     rgba(128, 90, 213, 0) 100% /* purple-500 transparent */
   );
 }
+
+/* Add Keyframes and Classes for Blog Page Styles */
+@keyframes text-gradient {
+  to {
+    background-position: 200% center;
+  }
+}
+
+.animate-text-gradient {
+  background-size: 200% auto;
+  animation: text-gradient 3s linear infinite;
+}
+
+@keyframes pulse-border {
+  0%, 100% { opacity: 0.5; transform: scale(1); }
+  50% { opacity: 1; transform: scale(1.01); }
+}
+
+.animate-pulse-border {
+  animation: pulse-border 2s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+}
