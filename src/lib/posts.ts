@@ -2,7 +2,11 @@ import fs from 'fs';
 import path from 'path';
 import matter from 'gray-matter';
 import { remark } from 'remark';
-import html from 'remark-html';
+import remarkRehype from 'remark-rehype';
+import rehypePrism from 'rehype-prism-plus';
+import { unified } from 'unified';
+import remarkParse from 'remark-parse';
+import rehypeStringify from 'rehype-stringify';
 import { notFound } from 'next/navigation';
 
 // Define the directory where blog posts are stored
@@ -26,7 +30,7 @@ export function getSortedPostsData(): PostData[] {
     .filter((fileName) => fileName.endsWith('.md')) // Filter out non-markdown files
     .map((fileName) => {
       // Remove ".md" from file name to get id (slug)
-      const slug = fileName.replace(/\.md$/, '');
+      const fileSlug = fileName.replace(/\.md$/, '');
 
       // Read markdown file as string
       const fullPath = path.join(postsDirectory, fileName);
@@ -35,10 +39,13 @@ export function getSortedPostsData(): PostData[] {
       // Use gray-matter to parse the post metadata section
       const matterResult = matter(fileContents);
 
+      // Use the slug from frontmatter if provided, otherwise use the filename
+      const slug = matterResult.data.slug || fileSlug;
+
       // Combine the data with the id
       // Ensure the returned object conforms to PostData
       const postData: PostData = {
-        slug,
+        slug, // Use the slug from frontmatter
         title: matterResult.data.title || 'Untitled',
         date: matterResult.data.date || 'No date',
         summary: matterResult.data.summary || '',
@@ -60,23 +67,52 @@ export function getSortedPostsData(): PostData[] {
 
 export function getAllPostSlugs() {
   const fileNames = fs.readdirSync(postsDirectory);
-  // Returns an array that looks like: [{ params: { slug: 'ssg-ssr' } }, ...]
+  
+  // Returns an array of objects with the slug params
   return fileNames
     .filter((fileName) => fileName.endsWith('.md'))
     .map((fileName) => {
+      const fileSlug = fileName.replace(/\.md$/, '');
+      
+      // Read the file to get the frontmatter
+      const fullPath = path.join(postsDirectory, fileName);
+      const fileContents = fs.readFileSync(fullPath, 'utf8');
+      const matterResult = matter(fileContents);
+      
+      // Use the slug from frontmatter if provided, otherwise use the filename
+      const slug = matterResult.data.slug || fileSlug;
+      
       return {
         params: {
-          slug: fileName.replace(/\.md$/, ''),
+          slug,
         },
       };
     });
 }
 
 export async function getPostData(slug: string): Promise<PostData> {
-  const fullPath = path.join(postsDirectory, `${slug}.md`);
+  // First, try to find the post by its frontmatter slug if it exists
+  const fileNames = fs.readdirSync(postsDirectory);
+  let targetFileName = `${slug}.md`;
+  
+  // Check if we need to find the file by frontmatter slug
+  for (const fileName of fileNames) {
+    const fullPath = path.join(postsDirectory, fileName);
+    const fileContents = fs.readFileSync(fullPath, 'utf8');
+    const matterResult = matter(fileContents);
+    
+    // If this file has a matching slug in its frontmatter
+    if (matterResult.data.slug === slug) {
+      targetFileName = fileName;
+      break;
+    }
+  }
+  
+  const fullPath = path.join(postsDirectory, targetFileName);
   let fileContents;
+  
   try {
-     fileContents = fs.readFileSync(fullPath, 'utf8');
+    fileContents = fs.readFileSync(fullPath, 'utf8');
   } catch (err: any) {
     // Check specifically for file not found errors
     if (err.code === 'ENOENT') {
@@ -94,15 +130,22 @@ export async function getPostData(slug: string): Promise<PostData> {
   // Use gray-matter to parse the post metadata section
   const matterResult = matter(fileContents);
 
-  // Use remark to convert markdown into HTML string
-  const processedContent = await remark()
-    .use(html)
+  // Use unified with rehype-prism-plus for better code highlighting
+  const processedContent = await unified()
+    .use(remarkParse)
+    .use(remarkRehype, { allowDangerousHtml: true })
+    .use(rehypePrism, { showLineNumbers: true, ignoreMissing: true })
+    .use(rehypeStringify, { allowDangerousHtml: true })
     .process(matterResult.content);
+    
   const contentHtml = processedContent.toString();
+
+  // Use the slug from frontmatter if provided
+  const postSlug = matterResult.data.slug || slug;
 
   // Combine the data with the slug and contentHtml
   return {
-    slug,
+    slug: postSlug,
     contentHtml,
     title: matterResult.data.title || 'Untitled',
     date: matterResult.data.date || 'No date',

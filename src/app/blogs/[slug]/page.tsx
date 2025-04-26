@@ -4,6 +4,7 @@ import Footer from '@/components/Footer';
 import Link from 'next/link';
 import { Metadata, ResolvingMetadata } from 'next';
 import { notFound } from 'next/navigation';
+import BlogContent from '@/components/BlogContent';
 
 interface PostPageProps {
   params: {
@@ -68,7 +69,7 @@ export default async function PostPage(props: PostPageProps) {
                               prose-strong:text-teal-100 prose-strong:font-semibold
                               prose-blockquote:border-l-purple-500 prose-blockquote:text-gray-400 prose-blockquote:pl-4 prose-blockquote:italic
                               prose-code:text-pink-400 prose-code:bg-gray-800/50 prose-code:px-1.5 prose-code:py-0.5 prose-code:rounded prose-code:font-mono prose-code:text-sm
-                              prose-pre:bg-gray-800/70 prose-pre:border prose-pre:border-gray-700 prose-pre:rounded-lg prose-pre:p-4 prose-pre:text-sm
+                              prose-pre:bg-transparent prose-pre:border prose-pre:border-gray-700 prose-pre:rounded-lg prose-pre:p-0 prose-pre:m-0
                               prose-ul:list-disc prose-ul:marker:text-teal-400 prose-ol:list-decimal prose-ol:marker:text-teal-400
                               prose-img:rounded-lg prose-img:border prose-img:border-gray-700 prose-img:shadow-md">
               
@@ -98,7 +99,7 @@ export default async function PostPage(props: PostPageProps) {
                   </div>
               </div>
 
-              <div dangerouslySetInnerHTML={{ __html: post.contentHtml || '' }} />
+              <BlogContent contentHtml={post.contentHtml || ''} />
 
               <div className="mt-12 pt-8 border-t border-gray-700/50 text-center not-prose">
                   <Link href="/blogs"
