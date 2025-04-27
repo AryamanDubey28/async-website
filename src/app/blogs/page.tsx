@@ -14,18 +14,15 @@ export default function Blogs() {
         <div className="absolute inset-0 -z-20 bg-gradient-to-br from-gray-950 via-purple-950/10 to-teal-950/10"></div>
 
         <div className="container mx-auto">
-          <div className="text-center mb-20">
-            <h1 className="text-5xl md:text-6xl font-bold mb-6">
+          <div className="text-center mb-16 md:mb-20">
+            <h1 className="text-5xl md:text-6xl font-bold mb-4 md:mb-6">
               <span className="bg-clip-text text-transparent bg-gradient-to-r from-teal-400 via-purple-400 to-blue-500 animate-text-gradient">
-                Latest Insights
+                Insights from Async Studios
               </span>
             </h1>
-            <p className="text-gray-400 text-xl max-w-3xl mx-auto leading-relaxed">
-              Exploring the frontiers of AI, business transformation, and technology.
+            <p className="text-gray-400 text-lg md:text-xl max-w-3xl mx-auto leading-relaxed">
+              Explore our team's latest blog posts on AI, business transformation, and technology.
             </p>
-            <div className="flex justify-center mt-10">
-              <div className="w-28 h-1.5 bg-gradient-to-r from-teal-500 via-purple-500 to-blue-500 rounded-full shadow-lg shadow-purple-500/30"></div>
-            </div>
           </div>
 
           <div className="max-w-4xl mx-auto grid gap-10 md:gap-12">
