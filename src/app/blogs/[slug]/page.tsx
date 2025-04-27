@@ -20,11 +20,10 @@ export async function generateStaticParams() {
 
 // Function to generate metadata for the page (e.g., title)
 export async function generateMetadata(
-  props: PostPageProps,
+  { params }: PostPageProps,
   parent: ResolvingMetadata
 ): Promise<Metadata> {
-  // Await params before accessing slug
-  const params = await props.params;
+  // Access slug directly from params
   const slug = params.slug;
   try {
     const post = await getPostData(slug);
@@ -42,9 +41,8 @@ export async function generateMetadata(
 }
 
 // The page component
-export default async function PostPage(props: PostPageProps) {
-  // Await params before accessing slug
-  const params = await props.params;
+export default async function PostPage({ params }: PostPageProps) {
+  // Access slug directly from params
   const slug = params.slug;
   let post: PostData;
   try {
