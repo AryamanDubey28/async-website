@@ -89,7 +89,7 @@ const Footer = () => {
               title: "Legal",
               links: [
                 { name: 'Privacy Policy', href: '/privacy-policy' },
-                { name: 'Terms of Service', href: '#' }
+                { name: 'Terms of Service', href: '/terms-of-service' }
               ]
             }
           ].map((section, idx) => (
@@ -175,7 +175,7 @@ const Footer = () => {
           {
             [
               { name: 'Privacy Policy', href: '/privacy-policy' }, 
-              { name: 'Terms of Service', href: '#' }, 
+              { name: 'Terms of Service', href: '/terms-of-service' },
               { name: 'Cookie Policy', href: '/privacy-policy#cookie-policy' },
               { name: 'Sitemap', href: '#' }
             ].map((item, i) => (
