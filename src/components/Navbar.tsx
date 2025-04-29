@@ -24,6 +24,22 @@ const Navbar = () => {
     return () => window.removeEventListener('scroll', handleScroll);
   }, []);
 
+  // Add body scroll locking effect
+  useEffect(() => {
+    if (isMobileMenuOpen) {
+      // Prevent scrolling on the body when menu is open
+      document.body.style.overflow = 'hidden';
+    } else {
+      // Allow scrolling when menu is closed
+      document.body.style.overflow = 'unset';
+    }
+    
+    // Cleanup function
+    return () => {
+      document.body.style.overflow = 'unset';
+    };
+  }, [isMobileMenuOpen]);
+
   const scrollToSection = (sectionId: string) => {
     // If we're on the homepage, scroll to the section
     if (pathname === '/') {
@@ -213,53 +229,54 @@ const Navbar = () => {
         </div>
       </div>
 
-      <div
-        className={`md:hidden fixed inset-0 bg-gray-950/95 backdrop-blur-sm pt-20 transition-transform duration-300 ease-in-out ${isMobileMenuOpen ? 'translate-x-0' : 'translate-x-full'}`}
-      >
-        <div className="flex flex-col items-center space-y-6 p-8">
-          {navItems.map((item) => (
-            item.isDropdown ? (
-              <div key={item.name} className="text-center">
-                <span className="text-lg font-medium text-gray-300 mb-2 block">{item.name}</span>
-                <div className="flex flex-col space-y-3">
-                  {item.dropdownItems?.map((dropdownItem) => (
-                    <Link
-                      key={dropdownItem.name}
-                      href={dropdownItem.path}
-                      onClick={closeMobileMenu}
-                      className="text-gray-400 hover:text-teal-300 transition-colors duration-200"
-                    >
-                      {dropdownItem.name}
-                    </Link>
-                  ))}
+      {/* Mobile Menu - Complete replacement */}
+      {isMobileMenuOpen && (
+        <div className="md:hidden fixed inset-0 bg-black z-[55]">
+          <div className="flex flex-col items-center space-y-6 p-8 pt-24 h-full">
+            {navItems.map((item) => (
+              item.isDropdown ? (
+                <div key={item.name} className="text-center">
+                  <span className="text-lg font-medium text-gray-300 mb-2 block">{item.name}</span>
+                  <div className="flex flex-col space-y-3">
+                    {item.dropdownItems?.map((dropdownItem) => (
+                      <Link
+                        key={dropdownItem.name}
+                        href={dropdownItem.path}
+                        onClick={closeMobileMenu}
+                        className="text-gray-400 hover:text-teal-300 transition-colors duration-200"
+                      >
+                        {dropdownItem.name}
+                      </Link>
+                    ))}
+                  </div>
                 </div>
-              </div>
-            ) : item.onClick ? (
-              <button 
-                key={item.name}
-                onClick={() => handleMobileLinkClick(item.onClick!)}
-                className="text-lg font-medium text-gray-300 hover:text-teal-300 transition-colors duration-200"
-              >
-                {item.name}
-              </button>
-            ) : (
-              <Link 
-                key={item.name}
-                href={item.path}
-                onClick={closeMobileMenu}
-                className="text-lg font-medium text-gray-300 hover:text-teal-300 transition-colors duration-200"
-              >
-                {item.name}
-              </Link>
-            )
-          ))}
-          <button 
-            onClick={() => handleMobileLinkClick(() => scrollToSection('contact'))}
-            className="mt-6 px-8 py-3 rounded-full bg-gradient-to-r from-teal-500 to-teal-400 text-gray-900 font-semibold transition-all duration-300 hover:shadow-lg hover:shadow-teal-500/20 hover:scale-105">
-            Get Started
-          </button>
+              ) : item.onClick ? (
+                <button 
+                  key={item.name}
+                  onClick={() => handleMobileLinkClick(item.onClick!)}
+                  className="text-lg font-medium text-gray-300 hover:text-teal-300 transition-colors duration-200"
+                >
+                  {item.name}
+                </button>
+              ) : (
+                <Link 
+                  key={item.name}
+                  href={item.path}
+                  onClick={closeMobileMenu}
+                  className="text-lg font-medium text-gray-300 hover:text-teal-300 transition-colors duration-200"
+                >
+                  {item.name}
+                </Link>
+              )
+            ))}
+            <button 
+              onClick={() => handleMobileLinkClick(() => scrollToSection('contact'))}
+              className="mt-6 px-8 py-3 rounded-full bg-gradient-to-r from-teal-500 to-teal-400 text-gray-900 font-semibold transition-all duration-300 hover:shadow-lg hover:shadow-teal-500/20 hover:scale-105">
+              Get Started
+            </button>
+          </div>
         </div>
-      </div>
+      )}
     </nav>
   );
 };

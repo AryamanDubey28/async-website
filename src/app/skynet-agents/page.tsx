@@ -340,7 +340,7 @@ export default function SkynetAgents() {
                 </div>
                 
                 {/* New Feature Highlights */}
-                <div className={`flex flex-col sm:flex-row items-center sm:items-start gap-6 pt-8 transition-opacity duration-1000 ${isLoaded ? 'opacity-100' : 'opacity-0'}`}>
+                <div className={`flex flex-col sm:flex-row items-center sm:items-start gap-6 pt-8 pb-16 transition-opacity duration-1000 ${isLoaded ? 'opacity-100' : 'opacity-0'}`}>
                   {/* Secure Execution Highlight */}
                   <div className="flex items-center gap-2">
                     <div className="w-10 h-10 rounded-full border-2 border-purple-400/70 flex items-center justify-center transition-transform duration-300 hover:scale-110">
