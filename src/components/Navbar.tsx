@@ -7,6 +7,7 @@ import { useRouter, usePathname } from 'next/navigation';
 
 const Navbar = () => {
   const [scrolled, setScrolled] = useState(false);
+  const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const router = useRouter();
   const pathname = usePathname();
   
@@ -35,6 +36,18 @@ const Navbar = () => {
       router.push(`/#${sectionId}`);
     }
   };
+
+  const closeMobileMenu = () => setIsMobileMenuOpen(false);
+
+  const handleMobileLinkClick = (action: () => void) => {
+    action();
+    closeMobileMenu();
+  };
+
+  const handleMobileNavClick = (path: string) => {
+    router.push(path);
+    closeMobileMenu();
+  }
 
   const navItems = [
     { name: 'Home', path: '/' },
@@ -182,10 +195,68 @@ const Navbar = () => {
             className="hidden md:block px-6 py-2 rounded-full bg-gradient-to-r from-teal-500 to-teal-400 text-gray-900 font-medium transition-all duration-300 hover:shadow-lg hover:shadow-teal-500/20 hover:scale-105">
             Get Started
           </button>
-          <button className="block md:hidden text-white">
-            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" className="w-6 h-6">
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 6h16M4 12h16M4 18h16" />
-            </svg>
+          <button 
+            className="block md:hidden text-white z-[60]"
+            onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
+            aria-label="Toggle menu"
+          >
+            {isMobileMenuOpen ? (
+              <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="w-6 h-6">
+                <path strokeLinecap="round" strokeLinejoin="round" d="M6 18L18 6M6 6l12 12" />
+              </svg>
+            ) : (
+              <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" className="w-6 h-6">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 6h16M4 12h16M4 18h16" />
+              </svg>
+            )}
+          </button>
+        </div>
+      </div>
+
+      <div
+        className={`md:hidden fixed inset-0 bg-gray-950/95 backdrop-blur-sm pt-20 transition-transform duration-300 ease-in-out ${isMobileMenuOpen ? 'translate-x-0' : 'translate-x-full'}`}
+      >
+        <div className="flex flex-col items-center space-y-6 p-8">
+          {navItems.map((item) => (
+            item.isDropdown ? (
+              <div key={item.name} className="text-center">
+                <span className="text-lg font-medium text-gray-300 mb-2 block">{item.name}</span>
+                <div className="flex flex-col space-y-3">
+                  {item.dropdownItems?.map((dropdownItem) => (
+                    <Link
+                      key={dropdownItem.name}
+                      href={dropdownItem.path}
+                      onClick={closeMobileMenu}
+                      className="text-gray-400 hover:text-teal-300 transition-colors duration-200"
+                    >
+                      {dropdownItem.name}
+                    </Link>
+                  ))}
+                </div>
+              </div>
+            ) : item.onClick ? (
+              <button 
+                key={item.name}
+                onClick={() => handleMobileLinkClick(item.onClick!)}
+                className="text-lg font-medium text-gray-300 hover:text-teal-300 transition-colors duration-200"
+              >
+                {item.name}
+              </button>
+            ) : (
+              <Link 
+                key={item.name}
+                href={item.path}
+                onClick={closeMobileMenu}
+                className="text-lg font-medium text-gray-300 hover:text-teal-300 transition-colors duration-200"
+              >
+                {item.name}
+              </Link>
+            )
+          ))}
+          <button 
+            onClick={() => handleMobileLinkClick(() => scrollToSection('contact'))}
+            className="mt-6 px-8 py-3 rounded-full bg-gradient-to-r from-teal-500 to-teal-400 text-gray-900 font-semibold transition-all duration-300 hover:shadow-lg hover:shadow-teal-500/20 hover:scale-105">
+            Get Started
           </button>
         </div>
       </div>
