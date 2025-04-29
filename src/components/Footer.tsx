@@ -88,7 +88,7 @@ const Footer = () => {
             {
               title: "Legal",
               links: [
-                { name: 'Privacy Policy', href: '#' },
+                { name: 'Privacy Policy', href: '/privacy-policy' },
                 { name: 'Terms of Service', href: '#' }
               ]
             }
@@ -172,15 +172,21 @@ const Footer = () => {
         
         {/* Legal Links moved below */}
         <div className="mt-6 flex flex-wrap justify-center gap-2">
-          {['Privacy Policy', 'Terms of Service', 'Cookie Policy', 'Sitemap'].map((item, i) => (
-            <a 
+          {
+            [
+              { name: 'Privacy Policy', href: '/privacy-policy' }, 
+              { name: 'Terms of Service', href: '#' }, 
+              { name: 'Cookie Policy', href: '/privacy-policy#cookie-policy' },
+              { name: 'Sitemap', href: '#' }
+            ].map((item, i) => (
+            <Link 
               key={i}
-              href="#" 
+              href={item.href} 
               className="px-3 py-1.5 text-xs text-gray-300 hover:text-teal-400 transition-colors duration-200 relative group"
             >
-              {item}
+              {item.name}
               <span className="absolute -bottom-0.5 left-0 w-0 h-px bg-teal-400 transition-all duration-300 group-hover:w-full"></span>
-            </a>
+            </Link>
           ))}
         </div>
       </div>
