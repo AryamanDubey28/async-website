@@ -83,7 +83,7 @@ const Mockup: React.FC<MockupProps> = ({ activeAgent, setActiveAgent }) => {
   const currentAgent = agentData[activeAgent]; // Get the data for the currently selected agent
 
   return (
-    <div className="lg:w-3/5 relative">
+    <div className="w-full lg:w-3/5 relative">
       <div className="relative max-w-2xl mx-auto">
         {/* Main UI mockup */}
         <div className="aspect-[16/10] relative rounded-xl overflow-hidden border border-purple-500/40 shadow-xl shadow-purple-500/15 backdrop-blur-sm bg-gray-900/80 group">
@@ -266,28 +266,34 @@ const Mockup: React.FC<MockupProps> = ({ activeAgent, setActiveAgent }) => {
             <div className="absolute inset-0 bg-gradient-to-b from-transparent via-purple-400/5 to-transparent opacity-70 animate-scanner-vertical pointer-events-none"></div>
           </div>
 
-          {/* Floating decorative elements with animations */}
-          <div className="absolute -top-8 -right-8 w-24 h-24 bg-gradient-to-br from-purple-400/30 to-blue-500/30 rounded-xl opacity-70 shadow-lg shadow-purple-500/20 backdrop-blur-sm border border-purple-400/30 overflow-hidden float-1 pointer-events-none">
-            <div className="absolute inset-0 flex items-center justify-center">
-              <div className="text-[10px] text-white/70 text-center">
-                <div>8,000+</div>
-                <div>API</div>
-                <div>Integrations</div>
-              </div>
-            </div>
-          </div>
-          <div className="absolute bottom-4 -left-12 w-20 h-20 bg-gradient-to-br from-indigo-500/30 to-purple-400/30 rounded-lg opacity-70 shadow-lg shadow-purple-500/20 backdrop-blur-sm border border-purple-400/30 float-2 pointer-events-none">
-            <div className="absolute inset-0 flex items-center justify-center">
-              <div className="text-[10px] text-white/70 text-center">
-                <div className="text-xl">📧</div>
-                <div>Notification</div>
-                <div>System</div>
-              </div>
-            </div>
-          </div>
-          <div className="absolute -bottom-8 right-1/3 w-16 h-16 bg-gradient-to-r from-purple-500/30 to-indigo-500/30 rounded-md opacity-70 transform rotate-12 shadow-lg shadow-purple-500/20 backdrop-blur-sm border border-purple-400/30 float-3 pointer-events-none"></div>
+          {/* Floating decorative elements adapted from skynet-chat */}
+          {/* Removed original 3 elements */}
         </div>
       </div>
+      {/* Added 4 new elements here, outside the inner container */}
+      <div className="absolute -top-8 -right-8 w-24 h-24 bg-gradient-to-br from-purple-400/30 to-blue-500/30 rounded-xl float-1 opacity-70 shadow-lg shadow-purple-500/20 backdrop-blur-sm border border-purple-400/30 overflow-hidden pointer-events-none">
+        <div className="absolute inset-0 flex items-center justify-center p-2">
+          {/* Content can be adapted if needed */}
+          <div className="text-[10px] text-purple-100/70 font-mono overflow-hidden">
+            <div>Agent v1.2</div>
+            <div>Task: Analyse</div>
+            <div>Status: Active</div>
+          </div>
+        </div>
+      </div>
+      <div className="absolute bottom-4 -left-12 w-20 h-20 bg-gradient-to-br from-blue-500/30 to-indigo-400/30 rounded-lg float-2 opacity-70 shadow-lg shadow-blue-500/20 backdrop-blur-sm border border-blue-400/30 pointer-events-none">
+        <div className="absolute inset-0 flex items-center justify-center">
+          <svg xmlns="http://www.w3.org/2000/svg" className="h-10 w-10 text-white/30" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M13 10V3L4 14h7v7l9-11h-7z" /> {/* Bolt icon */}
+          </svg>
+        </div>
+      </div>
+      <div className="absolute top-1/3 -left-10 w-12 h-12 bg-gradient-to-r from-blue-500/30 to-indigo-400/30 rounded-full float-3 opacity-70 shadow-lg shadow-blue-500/20 backdrop-blur-sm border border-blue-400/30 pointer-events-none">
+        <div className="absolute inset-0 flex items-center justify-center">
+          <div className="w-2 h-2 rounded-full bg-white/70 animate-ping-slow"></div>
+        </div>
+      </div>
+      <div className="absolute -bottom-8 right-1/3 w-16 h-16 bg-gradient-to-r from-purple-500/30 to-blue-500/30 rounded-md float-2 opacity-70 transform rotate-12 shadow-lg shadow-purple-500/20 backdrop-blur-sm border border-purple-400/30 pointer-events-none"></div>
     </div>
   );
 };

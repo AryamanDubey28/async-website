@@ -417,7 +417,8 @@ const Hero = () => {
             </div>
             
             {/* Right content column - Enhanced visual element */}
-            <div className="lg:w-1/2 relative">
+            {/* Hide this entire column on screens smaller than lg */}
+            <div className="lg:w-1/2 relative hidden lg:block">
               <div className="relative w-full max-w-xl mx-auto">
                 {/* Animated background glow with multiple layers */}
                 <div className="absolute inset-0 bg-gradient-to-br from-teal-500/20 via-purple-500/20 to-blue-600/20 rounded-full blur-3xl animate-pulse-slow"></div>
