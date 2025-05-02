@@ -61,14 +61,14 @@ export default function BlogList({ allPostsData }: BlogListProps) {
       {/* Latest Posts Section */}
       {latestPosts.length > 0 && (
         <div className="mb-16 md:mb-24">
-           <h2 className="text-3xl md:text-4xl font-semibold mb-8 md:mb-10 text-center text-teal-300">Latest Articles</h2>
+           <h2 className="text-3xl md:text-4xl font-semibold mb-8 md:mb-10 text-center text-white">Latest Articles</h2>
            <div className="max-w-4xl mx-auto grid gap-10 md:gap-12">
             {latestPosts.map(({ slug, date, title, summary, author }) => (
               <Link href={`/blogs/${slug}`} key={slug} className="block group">
-                <div className="relative p-6 md:p-8 rounded-2xl border border-gray-800/80 bg-gray-950/60 backdrop-blur-lg transition-all duration-300 ease-in-out hover:border-teal-500/50 hover:bg-gray-900/70 hover:shadow-xl hover:scale-[1.02]">
-                  <div className="absolute -inset-px rounded-2xl border-2 border-transparent opacity-0 group-hover:opacity-100 group-hover:border-teal-500/30 transition-opacity duration-300 pointer-events-none animate-pulse-border"></div>
+                <div className="relative p-6 md:p-8 rounded-2xl border border-gray-800/80 bg-gray-950/60 backdrop-blur-lg transition-all duration-300 ease-in-out hover:border-indigo-500/50 hover:bg-gray-900/70 hover:shadow-xl hover:scale-[1.02]">
+                  <div className="absolute -inset-px rounded-2xl border-2 border-transparent opacity-0 group-hover:opacity-100 group-hover:border-indigo-500/30 transition-opacity duration-300 pointer-events-none animate-pulse-border"></div>
                   <div className="relative z-10">
-                    <h3 className="text-2xl md:text-3xl font-semibold mb-3 text-transparent bg-clip-text bg-gradient-to-r from-teal-300 to-teal-100 group-hover:from-teal-200 group-hover:to-teal-50 transition-colors duration-300">
+                    <h3 className="text-2xl md:text-3xl font-semibold mb-3 text-transparent bg-clip-text bg-gradient-to-r from-indigo-300 to-purple-200 group-hover:from-indigo-200 group-hover:to-purple-100 transition-colors duration-300">
                       {title}
                     </h3>
                     <PostMeta date={date} author={author} />
@@ -86,16 +86,16 @@ export default function BlogList({ allPostsData }: BlogListProps) {
       {/* Other Posts Section */}
       {otherPosts.length > 0 && (
         <div className="mt-16 md:mt-24">
-          <h2 className="text-3xl md:text-4xl font-semibold mb-8 md:mb-10 text-center text-teal-300">More Articles</h2>
+          <h2 className="text-3xl md:text-4xl font-semibold mb-8 md:mb-10 text-center text-white">More Articles</h2>
 
           <div className="max-w-6xl mx-auto">
             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 md:gap-8">
               {postsToShow.map(({ slug, date, title, author, summary }) => (
                 <Link href={`/blogs/${slug}`} key={slug} className="block group">
-                     <div className="relative flex flex-col min-h-[250px] p-5 md:p-6 rounded-xl border border-gray-800/60 bg-gray-950/50 backdrop-blur-md transition-all duration-300 ease-in-out hover:border-teal-600/60 hover:bg-gray-900/60 hover:shadow-lg hover:-translate-y-1">
-                       <div className="absolute -inset-px rounded-xl border border-transparent opacity-0 group-hover:opacity-70 group-hover:border-teal-600/30 transition-opacity duration-300 pointer-events-none"></div>
+                     <div className="relative flex flex-col min-h-[250px] p-5 md:p-6 rounded-xl border border-gray-800/60 bg-gray-950/50 backdrop-blur-md transition-all duration-300 ease-in-out hover:border-purple-600/60 hover:bg-gray-900/60 hover:shadow-lg hover:-translate-y-1">
+                       <div className="absolute -inset-px rounded-xl border border-transparent opacity-0 group-hover:opacity-70 group-hover:border-purple-600/30 transition-opacity duration-300 pointer-events-none"></div>
                        <div className="relative z-10 flex flex-col h-full">
-                         <h3 className="text-lg md:text-xl font-semibold mb-2 text-transparent bg-clip-text bg-gradient-to-r from-teal-400 to-teal-200 group-hover:from-teal-300 group-hover:to-teal-100 transition-colors duration-300">
+                         <h3 className="text-lg md:text-xl font-semibold mb-2 text-transparent bg-clip-text bg-gradient-to-r from-blue-400 to-indigo-300 group-hover:from-blue-300 group-hover:to-indigo-200 transition-colors duration-300">
                            {title}
                          </h3>
                          <p className="text-gray-400 text-sm mb-4 line-clamp-3 group-hover:text-gray-300 transition-colors duration-300 flex-grow">
@@ -131,7 +131,7 @@ export default function BlogList({ allPostsData }: BlogListProps) {
             <div className="text-center mt-8">
                <button
                 onClick={() => setIsExpanded(!isExpanded)}
-                className="text-teal-400 hover:text-teal-200 hover:underline transition-colors duration-200 font-medium inline-flex items-center group"
+                className="text-indigo-400 hover:text-indigo-200 hover:underline transition-colors duration-200 font-medium inline-flex items-center group"
                >
                  <span>{isExpanded ? 'View Less' : 'View More'}</span>
                  <ChevronDownIcon className={`ml-1.5 ${isExpanded ? 'rotate-180' : ''}`} />
