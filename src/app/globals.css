@@ -672,3 +672,434 @@ pre[class*="language-"]::before {
   font-size: 0.9em !important;
   line-height: 1.5 !important;
 }
+
+/* Sequential workflow animation */
+@keyframes workflow-highlight {
+  0%, 33%, 100% {
+    background-color: rgba(168, 85, 247, 0.1);
+    border-color: rgba(168, 85, 247, 0.3);
+    box-shadow: 0 0 15px rgba(168, 85, 247, 0.1);
+  }
+  3%, 30% {
+    background-color: rgba(168, 85, 247, 0.25);
+    border-color: rgba(168, 85, 247, 0.6);
+    box-shadow: 0 0 20px rgba(168, 85, 247, 0.2);
+  }
+}
+
+@keyframes workflow-path {
+  0%, 33%, 100% {
+    opacity: 0.3;
+    transform: translateY(0);
+  }
+  3%, 30% {
+    opacity: 1;
+    transform: translateY(-2px);
+  }
+}
+
+@keyframes workflow-highlight-2 {
+  0%, 30%, 63%, 100% {
+    background-color: rgba(168, 85, 247, 0.1);
+    border-color: rgba(168, 85, 247, 0.3);
+    box-shadow: 0 0 15px rgba(168, 85, 247, 0.1);
+  }
+  33%, 60% {
+    background-color: rgba(168, 85, 247, 0.25);
+    border-color: rgba(168, 85, 247, 0.6);
+    box-shadow: 0 0 20px rgba(168, 85, 247, 0.2);
+  }
+}
+
+@keyframes workflow-path-2 {
+  0%, 30%, 63%, 100% {
+    opacity: 0.3;
+    transform: translateY(0);
+  }
+  33%, 60% {
+    opacity: 1;
+    transform: translateY(-2px);
+  }
+}
+
+@keyframes workflow-highlight-3 {
+  0%, 60%, 93%, 100% {
+    background-color: rgba(168, 85, 247, 0.1);
+    border-color: rgba(168, 85, 247, 0.3);
+    box-shadow: 0 0 15px rgba(168, 85, 247, 0.1);
+  }
+  63%, 90% {
+    background-color: rgba(168, 85, 247, 0.25);
+    border-color: rgba(168, 85, 247, 0.6);
+    box-shadow: 0 0 20px rgba(168, 85, 247, 0.2);
+  }
+}
+
+.workflow-step-1 {
+  animation: workflow-highlight 9s ease-in-out infinite;
+}
+
+.workflow-step-2 {
+  animation: workflow-highlight-2 9s ease-in-out infinite;
+}
+
+.workflow-step-3 {
+  animation: workflow-highlight-3 9s ease-in-out infinite;
+}
+
+.workflow-path {
+  animation: workflow-path 9s ease-in-out infinite;
+}
+
+.workflow-path-2 {
+  animation: workflow-path-2 9s ease-in-out infinite;
+}
+
+/* Progress bar animation for workflow steps */
+@keyframes progress-fill {
+  0%, 100% { width: 0%; opacity: 0.7; }
+  3%, 30% { width: 100%; opacity: 1; }
+  33% { width: 0%; opacity: 0.7; }
+}
+
+@keyframes progress-fill-2 {
+  0%, 30%, 100% { width: 0%; opacity: 0.7; }
+  33%, 60% { width: 100%; opacity: 1; }
+  63% { width: 0%; opacity: 0.7; }
+}
+
+@keyframes progress-fill-3 {
+  0%, 60%, 100% { width: 0%; opacity: 0.7; }
+  63%, 90% { width: 100%; opacity: 1; }
+  93% { width: 0%; opacity: 0.7; }
+}
+
+.progress-bar-1 {
+  animation: progress-fill 9s ease-in-out infinite;
+}
+
+.progress-bar-2 {
+  animation: progress-fill-2 9s ease-in-out infinite;
+}
+
+.progress-bar-3 {
+  animation: progress-fill-3 9s ease-in-out infinite;
+}
+
+/* Border trace animations around the entire rectangle */
+@keyframes border-trace-1 {
+  0%, 100% { 
+    clip-path: inset(0 100% 100% 0); 
+    opacity: 0.7; 
+  }
+  3%, 6% { 
+    clip-path: inset(0 0 100% 0); /* Top side */
+    opacity: 1; 
+  }
+  9%, 12% { 
+    clip-path: inset(0 0 100% 0) inset(0 0 0 100%); /* Top and right sides */
+    opacity: 1; 
+  }
+  15%, 18% { 
+    clip-path: inset(0 0 0 0) inset(100% 0 0 100%); /* Top, right, and bottom sides */
+    opacity: 1; 
+  }
+  21%, 30% { 
+    clip-path: inset(0 0 0 0); /* All sides */
+    opacity: 1; 
+  }
+  33% { 
+    clip-path: inset(0 100% 100% 0); 
+    opacity: 0.7; 
+  }
+}
+
+@keyframes border-trace-2 {
+  0%, 30%, 100% { 
+    clip-path: inset(0 100% 100% 0); 
+    opacity: 0.7; 
+  }
+  33%, 36% { 
+    clip-path: inset(0 0 100% 0); /* Top side */
+    opacity: 1; 
+  }
+  39%, 42% { 
+    clip-path: inset(0 0 100% 0) inset(0 0 0 100%); /* Top and right sides */
+    opacity: 1; 
+  }
+  45%, 48% { 
+    clip-path: inset(0 0 0 0) inset(100% 0 0 100%); /* Top, right, and bottom sides */
+    opacity: 1; 
+  }
+  51%, 60% { 
+    clip-path: inset(0 0 0 0); /* All sides */
+    opacity: 1; 
+  }
+  63% { 
+    clip-path: inset(0 100% 100% 0); 
+    opacity: 0.7; 
+  }
+}
+
+@keyframes border-trace-3 {
+  0%, 60%, 100% { 
+    clip-path: inset(0 100% 100% 0); 
+    opacity: 0.7; 
+  }
+  63%, 66% { 
+    clip-path: inset(0 0 100% 0); /* Top side */
+    opacity: 1; 
+  }
+  69%, 72% { 
+    clip-path: inset(0 0 100% 0) inset(0 0 0 100%); /* Top and right sides */
+    opacity: 1; 
+  }
+  75%, 78% { 
+    clip-path: inset(0 0 0 0) inset(100% 0 0 100%); /* Top, right, and bottom sides */
+    opacity: 1; 
+  }
+  81%, 90% { 
+    clip-path: inset(0 0 0 0); /* All sides */
+    opacity: 1; 
+  }
+  93% { 
+    clip-path: inset(0 100% 100% 0); 
+    opacity: 0.7; 
+  }
+}
+
+.border-trace-1 {
+  animation: border-trace-1 9s ease-in-out infinite;
+}
+
+.border-trace-2 {
+  animation: border-trace-2 9s ease-in-out infinite;
+}
+
+.border-trace-3 {
+  animation: border-trace-3 9s ease-in-out infinite;
+}
+
+/* Border animation using corners */
+@keyframes border-progress-1 {
+  0%, 100% { 
+    background-position: 0% 0%;
+    opacity: 0.5;
+  }
+  3%, 30% { 
+    background-position: 100% 100%;
+    opacity: 1;
+  }
+  33% { 
+    background-position: 0% 0%;
+    opacity: 0.5;
+  }
+}
+
+@keyframes border-progress-2 {
+  0%, 30%, 100% { 
+    background-position: 0% 0%;
+    opacity: 0.5;
+  }
+  33%, 60% { 
+    background-position: 100% 100%;
+    opacity: 1;
+  }
+  63% { 
+    background-position: 0% 0%;
+    opacity: 0.5;
+  }
+}
+
+@keyframes border-progress-3 {
+  0%, 60%, 100% { 
+    background-position: 0% 0%;
+    opacity: 0.5;
+  }
+  63%, 90% { 
+    background-position: 100% 100%;
+    opacity: 1;
+  }
+  93% { 
+    background-position: 0% 0%;
+    opacity: 0.5;
+  }
+}
+
+.border-progress-1 {
+  background: linear-gradient(90deg, rgb(168, 85, 247, 0.5), rgb(45, 212, 191, 0.5));
+  background-size: 300% 300%;
+  animation: border-progress-1 9s ease-in-out infinite;
+}
+
+.border-progress-2 {
+  background: linear-gradient(90deg, rgb(168, 85, 247, 0.5), rgb(45, 212, 191, 0.5));
+  background-size: 300% 300%;
+  animation: border-progress-2 9s ease-in-out infinite;
+}
+
+.border-progress-3 {
+  background: linear-gradient(90deg, rgb(168, 85, 247, 0.5), rgb(45, 212, 191, 0.5));
+  background-size: 300% 300%;
+  animation: border-progress-3 9s ease-in-out infinite;
+}
+
+/* Dot indicator animations */
+@keyframes dot-pulse-1 {
+  0%, 33%, 100% { opacity: 0.3; transform: scale(1); }
+  3%, 30% { opacity: 1; transform: scale(1.3); }
+}
+
+@keyframes dot-pulse-2 {
+  0%, 30%, 63%, 100% { opacity: 0.3; transform: scale(1); }
+  33%, 60% { opacity: 1; transform: scale(1.3); }
+}
+
+@keyframes dot-pulse-3 {
+  0%, 60%, 93%, 100% { opacity: 0.3; transform: scale(1); }
+  63%, 90% { opacity: 1; transform: scale(1.3); }
+}
+
+.dot-indicator-1 {
+  animation: dot-pulse-1 9s ease-in-out infinite;
+}
+
+.dot-indicator-2 {
+  animation: dot-pulse-2 9s ease-in-out infinite;
+}
+
+.dot-indicator-3 {
+  animation: dot-pulse-3 9s ease-in-out infinite;
+}
+
+/* Conic gradient border animations */
+@keyframes rotate-border-1 {
+  0%, 100% { 
+    --angle: 0deg;
+    opacity: 0.4;
+  }
+  3%, 30% { 
+    --angle: 360deg;
+    opacity: 1;
+  }
+  33% { 
+    --angle: 360deg;
+    opacity: 0.4; 
+  }
+}
+
+@keyframes rotate-border-2 {
+  0%, 30%, 100% { 
+    --angle: 0deg;
+    opacity: 0.4;
+  }
+  33%, 60% { 
+    --angle: 360deg;
+    opacity: 1;
+  }
+  63% { 
+    --angle: 360deg;
+    opacity: 0.4; 
+  }
+}
+
+@keyframes rotate-border-3 {
+  0%, 60%, 100% { 
+    --angle: 0deg;
+    opacity: 0.4;
+  }
+  63%, 90% { 
+    --angle: 360deg;
+    opacity: 1;
+  }
+  93% { 
+    --angle: 360deg;
+    opacity: 0.4; 
+  }
+}
+
+@property --angle {
+  syntax: '<angle>';
+  initial-value: 0deg;
+  inherits: false;
+}
+
+.conic-border-1 {
+  --angle: 0deg;
+  background: conic-gradient(from var(--angle), rgba(168, 85, 247, 0) 0deg, rgba(168, 85, 247, 0.8) 90deg, rgba(45, 212, 191, 0.8) 180deg, rgba(168, 85, 247, 0) 360deg);
+  animation: rotate-border-1 9s ease-in-out infinite;
+}
+
+.conic-border-2 {
+  --angle: 0deg;
+  background: conic-gradient(from var(--angle), rgba(168, 85, 247, 0) 0deg, rgba(168, 85, 247, 0.8) 90deg, rgba(45, 212, 191, 0.8) 180deg, rgba(168, 85, 247, 0) 360deg);
+  animation: rotate-border-2 9s ease-in-out infinite;
+}
+
+.conic-border-3 {
+  --angle: 0deg;
+  background: conic-gradient(from var(--angle), rgba(168, 85, 247, 0) 0deg, rgba(168, 85, 247, 0.8) 90deg, rgba(45, 212, 191, 0.8) 180deg, rgba(168, 85, 247, 0) 360deg);
+  animation: rotate-border-3 9s ease-in-out infinite;
+}
+
+/* Alternative animation for browsers that don't support @property */
+@keyframes border-spin-1 {
+  0%, 100% { 
+    transform: rotate(0deg);
+    opacity: 0.4;
+  }
+  3%, 30% { 
+    transform: rotate(360deg);
+    opacity: 1;
+  }
+  33% { 
+    transform: rotate(360deg);
+    opacity: 0.4; 
+  }
+}
+
+@keyframes border-spin-2 {
+  0%, 30%, 100% { 
+    transform: rotate(0deg);
+    opacity: 0.4;
+  }
+  33%, 60% { 
+    transform: rotate(360deg);
+    opacity: 1;
+  }
+  63% { 
+    transform: rotate(360deg);
+    opacity: 0.4; 
+  }
+}
+
+@keyframes border-spin-3 {
+  0%, 60%, 100% { 
+    transform: rotate(0deg);
+    opacity: 0.4;
+  }
+  63%, 90% { 
+    transform: rotate(360deg);
+    opacity: 1;
+  }
+  93% { 
+    transform: rotate(360deg);
+    opacity: 0.4; 
+  }
+}
+
+/* Fallback animations that use transform instead of CSS Properties */
+.fallback-border-1 {
+  background: conic-gradient(rgba(168, 85, 247, 0) 0deg, rgba(168, 85, 247, 0.8) 90deg, rgba(45, 212, 191, 0.8) 180deg, rgba(168, 85, 247, 0) 360deg);
+  animation: border-spin-1 9s ease-in-out infinite;
+}
+
+.fallback-border-2 {
+  background: conic-gradient(rgba(168, 85, 247, 0) 0deg, rgba(168, 85, 247, 0.8) 90deg, rgba(45, 212, 191, 0.8) 180deg, rgba(168, 85, 247, 0) 360deg);
+  animation: border-spin-2 9s ease-in-out infinite;
+}
+
+.fallback-border-3 {
+  background: conic-gradient(rgba(168, 85, 247, 0) 0deg, rgba(168, 85, 247, 0.8) 90deg, rgba(45, 212, 191, 0.8) 180deg, rgba(168, 85, 247, 0) 360deg);
+  animation: border-spin-3 9s ease-in-out infinite;
+}

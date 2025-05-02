@@ -3,6 +3,7 @@ import React from 'react';
 interface MockupProps {
   activeAgent: number;
   setActiveAgent: (index: number) => void;
+  className?: string;
 }
 
 // Define data for each agent
@@ -79,11 +80,11 @@ const agentsList = [
   { name: "Email Assistant", status: "Running", icon: "📧" },
 ];
 
-const Mockup: React.FC<MockupProps> = ({ activeAgent, setActiveAgent }) => {
+const Mockup: React.FC<MockupProps> = ({ activeAgent, setActiveAgent, className }) => {
   const currentAgent = agentData[activeAgent]; // Get the data for the currently selected agent
 
   return (
-    <div className="w-full lg:w-3/5 relative">
+    <div className={`w-full lg:w-3/5 relative ${className || ''}`}>
       <div className="relative max-w-2xl mx-auto">
         {/* Main UI mockup */}
         <div className="aspect-[16/10] relative rounded-xl overflow-hidden border border-purple-500/40 shadow-xl shadow-purple-500/15 backdrop-blur-sm bg-gray-900/80 group">

@@ -1,0 +1,41 @@
+@keyframes text-shine-slow {
+  0%, 20% {
+    background-position: 0% 50%;
+  }
+  80%, 100% {
+    background-position: 100% 50%;
+  }
+}
+
+@keyframes scan-slow {
+  from {
+    transform: translateY(-100%);
+  }
+  to {
+    transform: translateY(100%);
+  }
+}
+
+@keyframes gradient-x {
+  0%, 100% {
+    opacity: 0;
+    transform: translateX(-50%);
+  }
+  50% {
+    opacity: 0.5;
+    transform: translateX(0%);
+  }
+}
+
+.animate-text-shine-slow {
+  animation: text-shine-slow 8s ease-in-out infinite;
+  background-size: 200% auto;
+}
+
+.animate-scan-slow {
+  animation: scan-slow 15s linear infinite;
+}
+
+.animate-gradient-x {
+  animation: gradient-x 10s ease infinite;
+} 

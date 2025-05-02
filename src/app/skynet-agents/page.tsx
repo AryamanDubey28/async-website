@@ -375,7 +375,11 @@ export default function SkynetAgents() {
               </div>
               
               {/* Right content column - Interactive agents mockup */}
-              <Mockup activeAgent={activeAgent} setActiveAgent={setActiveAgent} />
+              <Mockup 
+                activeAgent={activeAgent} 
+                setActiveAgent={setActiveAgent} 
+                className="hidden lg:block"
+              />
             </div>
           </div>
         </section>

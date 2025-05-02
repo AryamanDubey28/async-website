@@ -1,6 +1,6 @@
 'use client';
 
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import React from 'react';
 
 const tabsData = [
@@ -108,6 +108,20 @@ const additionalUseCases = [
 export default function UseCaseTabs() {
   const [activeTabIndex, setActiveTabIndex] = useState(0);
 
+  // Detect browser support for CSS Properties API
+  useEffect(() => {
+    // Check if the browser supports @property
+    try {
+      if (!CSS.supports('syntax', '<angle>')) {
+        // If not supported, enable the fallback
+        document.documentElement.style.setProperty('--fallback-display', 'block');
+      }
+    } catch (e) {
+      // If the browser doesn't support CSS.supports or throws an error, enable the fallback
+      document.documentElement.style.setProperty('--fallback-display', 'block');
+    }
+  }, []);
+
   return (
     <section className="py-32 relative">
       {/* Background decorations */}
@@ -131,19 +145,24 @@ export default function UseCaseTabs() {
 
           {/* Use cases tabs */}
           <div className="mb-12 flex justify-center">
-            <div className="inline-flex bg-gray-800/40 backdrop-blur-sm rounded-full p-1.5 border border-gray-700">
-              {tabsData.map((tab, idx) => (
-                <button
-                  key={tab.id}
-                  onClick={() => setActiveTabIndex(idx)}
-                  className={`px-5 py-2 text-sm font-medium rounded-full transition-all duration-300 ${activeTabIndex === idx
-                      ? 'bg-gradient-to-r from-purple-500 to-teal-500 text-white shadow-lg shadow-purple-500/20'
-                      : 'text-gray-300 hover:bg-gray-700/50'
-                    }`}
-                >
-                  {tab.title}
-                </button>
-              ))}
+            {/* Add wrapper div for horizontal scrolling */}
+            <div className="w-full overflow-hidden"> 
+              <div className="flex justify-center overflow-x-auto pb-2 -mb-2 [-ms-overflow-style:none] [scrollbar-width:none]"> {/* Add flex justify-center & scrollbar hiding classes */}
+                <div className="inline-flex bg-gray-800/40 backdrop-blur-sm rounded-full p-1.5 border border-gray-700 whitespace-nowrap"> {/* Add whitespace-nowrap */}
+                  {tabsData.map((tab, idx) => (
+                    <button
+                      key={tab.id}
+                      onClick={() => setActiveTabIndex(idx)}
+                      className={`px-5 py-2 text-sm font-medium rounded-full transition-all duration-300 ${activeTabIndex === idx
+                          ? 'bg-gradient-to-r from-purple-500 to-teal-500 text-white shadow-lg shadow-purple-500/20'
+                          : 'text-gray-300 hover:bg-gray-700/50'
+                        }`}
+                    >
+                      {tab.title}
+                    </button>
+                  ))}
+                </div>
+              </div>
             </div>
           </div>
 
@@ -169,17 +188,48 @@ export default function UseCaseTabs() {
                           <div className="space-y-5">
                             {tabData.illustrationSteps.map((step, stepIdx) => (
                               <React.Fragment key={stepIdx}>
-                                <div className="bg-gray-800/60 backdrop-blur-md rounded-lg border border-gray-700 p-3 transform transition-all duration-300 hover:border-purple-500/30 hover:shadow-lg hover:shadow-purple-500/5">
+                                <div className={`bg-gray-800/60 backdrop-blur-md rounded-lg border border-gray-700 p-3 transform transition-all duration-300 hover:border-purple-500/30 hover:shadow-lg hover:shadow-purple-500/5 relative overflow-hidden ${stepIdx === 0 ? 'workflow-step-1' : stepIdx === 1 ? 'workflow-step-2' : 'workflow-step-3'}`}>
+                                  {/* Animated border that traces around the entire rectangle - modern browsers */}
+                                  <div 
+                                    className={`absolute -inset-[2px] rounded-lg pointer-events-none ${stepIdx === 0 ? 'conic-border-1' : stepIdx === 1 ? 'conic-border-2' : 'conic-border-3'}`} 
+                                    style={{
+                                      mask: 'linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0)',
+                                      maskComposite: 'xor',
+                                      WebkitMaskComposite: 'xor',
+                                      maskClip: 'padding-box, border-box',
+                                      padding: '2px',
+                                      borderRadius: '8px'
+                                    }}
+                                  ></div>
+                                  
+                                  {/* Fallback for browsers that don't support CSS Properties API */}
+                                  <div 
+                                    className={`absolute -inset-[2px] rounded-lg pointer-events-none ${stepIdx === 0 ? 'fallback-border-1' : stepIdx === 1 ? 'fallback-border-2' : 'fallback-border-3'}`} 
+                                    style={{
+                                      mask: 'linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0)',
+                                      maskComposite: 'xor',
+                                      WebkitMaskComposite: 'xor',
+                                      maskClip: 'padding-box, border-box',
+                                      padding: '2px',
+                                      borderRadius: '8px',
+                                      transform: 'translateZ(0)',
+                                      display: 'var(--fallback-display, none)'
+                                    }}
+                                  ></div>
+
                                   <div className="flex items-center mb-2">
                                     <div className="w-8 h-8 rounded-md bg-purple-500/20 flex items-center justify-center text-lg mr-2">{step.icon}</div>
                                     <div className="text-sm font-medium text-white">{step.title}</div>
-                                    <div className="ml-auto"><div className="w-2 h-2 rounded-full bg-green-400 animate-pulse"></div></div>
+                                    <div className="ml-auto">
+                                      <div className={`w-2 h-2 rounded-full bg-green-400 ${stepIdx === 0 ? 'dot-indicator-1' : stepIdx === 1 ? 'dot-indicator-2' : 'dot-indicator-3'}`}></div>
+                                    </div>
                                   </div>
                                   <p className="text-xs text-gray-400">{step.desc}</p>
                                 </div>
                                 {stepIdx < tabData.illustrationSteps.length - 1 && (
                                   <div className="flex justify-center">
-                                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" className="text-purple-400 animate-bounce-slow">
+                                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" 
+                                      className={`text-purple-400 ${stepIdx === 0 ? 'workflow-path' : 'workflow-path-2'}`}>
                                       <path d="M12 16L12 8M12 16L8 12M12 16L16 12" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
                                     </svg>
                                   </div>
