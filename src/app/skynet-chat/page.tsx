@@ -455,6 +455,7 @@ Charlie
                 activeChatMessage={activeChatMessage}
                 showTypingIndicator={showTypingIndicator}
                 setActiveChatMessage={setActiveChatMessage}
+                className="hidden lg:block lg:w-3/5 relative max-w-2xl mx-auto"
               />
             </div>
           </div>
