@@ -1,6 +1,48 @@
 import React from 'react';
 
 const ApiIntegrations = () => {
+  const servicesRow1 = [
+    { name: "Wordpress", logo: "/logos/wordpress-icon.svg", bg: "bg-gray-800", border: "border-gray-700" },
+    { name: "X Social Media", logo: "/logos/x-social-media-black-icon.svg", bg: "bg-gray-800", border: "border-gray-700" },
+    { name: "Slack", logo: "/logos/slack-icon.svg", bg: "bg-gray-800", border: "border-gray-700" },
+    { name: "Trello", logo: "/logos/trello-icon.svg", bg: "bg-gray-800", border: "border-gray-700" },
+    { name: "Whatsapp Business", logo: "/logos/whatsapp-business-icon.svg", bg: "bg-gray-800", border: "border-gray-700" },
+    { name: "Salesforce", logo: "/logos/salesforce-icon.svg", bg: "bg-gray-800", border: "border-gray-700" },
+    { name: "Sharepoint", logo: "/logos/sharepoint-icon.svg", bg: "bg-gray-800", border: "border-gray-700" },
+    { name: "Shopify", logo: "/logos/shopify-icon.svg", bg: "bg-gray-800", border: "border-gray-700" },
+    { name: "Oracle", logo: "/logos/oracle-icon.svg", bg: "bg-gray-800", border: "border-gray-700" },
+    { name: "Notion", logo: "/logos/notion-icon.svg", bg: "bg-gray-800", border: "border-gray-700" },
+    { name: "Onedrive Color", logo: "/logos/onedrive-color-icon.svg", bg: "bg-gray-800", border: "border-gray-700" },
+    { name: "Microsoft Powerpoint", logo: "/logos/microsoft-powerpoint-icon.svg", bg: "bg-gray-800", border: "border-gray-700" },
+    { name: "Microsoft Teams", logo: "/logos/microsoft-teams-icon.svg", bg: "bg-gray-800", border: "border-gray-700" },
+    { name: "Microsoft Word", logo: "/logos/microsoft-word-icon.svg", bg: "bg-gray-800", border: "border-gray-700" },
+    { name: "Microsoft Excel", logo: "/logos/microsoft-excel-icon.svg", bg: "bg-gray-800", border: "border-gray-700" },
+    { name: "Squarespace", logo: "/logos/squarespace-icon.svg", bg: "bg-gray-800", border: "border-gray-700" },
+    { name: "AWS", logo: "/logos/aws-icon.svg", bg: "bg-gray-800", border: "border-gray-700" },
+    { name: "Azure", logo: "/logos/azure-icon.svg", bg: "bg-gray-800", border: "border-gray-700" },
+    { name: "Facebook Messenger", logo: "/logos/facebook-messenger-icon.svg", bg: "bg-gray-800", border: "border-gray-700" },
+  ];
+
+  const servicesRow2 = [
+    { name: "Microsoft Outlook", logo: "/logos/microsoft-outlook-icon.svg", bg: "bg-gray-800", border: "border-gray-700" },
+    { name: "LinkedIn App", logo: "/logos/linkedin-app-icon.svg", bg: "bg-gray-800", border: "border-gray-700" },
+    { name: "Mailchimp", logo: "/logos/mailchimp-icon.svg", bg: "bg-gray-800", border: "border-gray-700" },
+    { name: "Google Sheets", logo: "/logos/google-sheets-icon.svg", bg: "bg-gray-800", border: "border-gray-700" },
+    { name: "Hubspot", logo: "/logos/hubspot-icon.svg", bg: "bg-gray-800", border: "border-gray-700" },
+    { name: "Instagram", logo: "/logos/ig-instagram-icon.svg", bg: "bg-gray-800", border: "border-gray-700" },
+    { name: "Google Drive Color", logo: "/logos/google-drive-color-icon.svg", bg: "bg-gray-800", border: "border-gray-700" },
+    { name: "Gmail", logo: "/logos/gmail-icon.svg", bg: "bg-gray-800", border: "border-gray-700" },
+    { name: "Google Calendar", logo: "/logos/google-calendar-icon.svg", bg: "bg-gray-800", border: "border-gray-700" },
+    { name: "Facebook Square", logo: "/logos/facebook-square-icon.svg", bg: "bg-gray-800", border: "border-gray-700" },
+    { name: "Github", logo: "/logos/github-icon.svg", bg: "bg-gray-800", border: "border-gray-700" },
+    { name: "Evernote", logo: "/logos/evernote-icon.svg", bg: "bg-gray-800", border: "border-gray-700" },
+    { name: "Dropbox", logo: "/logos/dropbox-icon.svg", bg: "bg-gray-800", border: "border-gray-700" },
+    { name: "Canva", logo: "/logos/canva-icon.svg", bg: "bg-gray-800", border: "border-gray-700" },
+    { name: "Google Analytics", logo: "/logos/google-analytics-icon.svg", bg: "bg-gray-800", border: "border-gray-700" },
+    { name: "Google Cloud", logo: "/logos/google-cloud-icon.svg", bg: "bg-gray-800", border: "border-gray-700" },
+    { name: "Google Firebase", logo: "/logos/google-firebase-icon.svg", bg: "bg-gray-800", border: "border-gray-700" },
+  ];
+
   return (
     <section className="py-24 relative">
       {/* Background decorations */}
@@ -37,24 +79,7 @@ const ApiIntegrations = () => {
           {/* First row - left to right */}
           <div className="flex animate-scroll-left whitespace-nowrap py-5">
             <div className="flex space-x-10 animated-carousel">
-              {[
-                { name: "GitHub", logo: "/logos/github.svg", bg: "bg-gray-800/80", border: "border-gray-700" },
-                { name: "Slack", logo: "/logos/slack.svg", bg: "bg-purple-900/80", border: "border-purple-700" },
-                { name: "Notion", logo: "/logos/notion.svg", bg: "bg-gray-800/80", border: "border-gray-700" },
-                { name: "Google Drive", logo: "/logos/google-drive.svg", bg: "bg-blue-900/80", border: "border-blue-700" },
-                { name: "Google Sheets", logo: "/logos/google-sheets.svg", bg: "bg-green-900/80", border: "border-green-700" },
-                { name: "Airtable", logo: "/logos/airtable.svg", bg: "bg-teal-900/80", border: "border-teal-700" },
-                { name: "Microsoft Excel", logo: "/logos/excel.svg", bg: "bg-green-900/80", border: "border-green-700" },
-                { name: "Brave", logo: "/logos/brave.svg", bg: "bg-orange-900/80", border: "border-orange-700" },
-                { name: "GitLab", logo: "/logos/gitlab.svg", bg: "bg-red-900/80", border: "border-red-700" },
-                { name: "Jira", logo: "/logos/jira.svg", bg: "bg-blue-900/80", border: "border-blue-700" },
-                { name: "GitHub", logo: "/logos/github.svg", bg: "bg-gray-800/80", border: "border-gray-700" },
-                { name: "Slack", logo: "/logos/slack.svg", bg: "bg-purple-900/80", border: "border-purple-700" },
-                { name: "Notion", logo: "/logos/notion.svg", bg: "bg-gray-800/80", border: "border-gray-700" },
-                { name: "Google Drive", logo: "/logos/google-drive.svg", bg: "bg-blue-900/80", border: "border-blue-700" },
-                { name: "Google Sheets", logo: "/logos/google-sheets.svg", bg: "bg-green-900/80", border: "border-green-700" },
-                { name: "Airtable", logo: "/logos/airtable.svg", bg: "bg-teal-900/80", border: "border-teal-700" }
-              ].map((service, idx) => (
+              {[...servicesRow1, ...servicesRow1].map((service, idx) => (
                 <div
                   key={idx}
                   className={`flex-shrink-0 w-20 h-20 rounded-xl ${service.bg} ${service.border} backdrop-blur-md border flex items-center justify-center p-4 transform hover:scale-110 transition-transform duration-300 hover:shadow-md hover:shadow-purple-500/20`}
@@ -68,24 +93,7 @@ const ApiIntegrations = () => {
           {/* Second row - right to left */}
           <div className="flex animate-scroll-right whitespace-nowrap py-5">
             <div className="flex space-x-10 animated-carousel">
-              {[
-                { name: "Figma", logo: "/logos/figma.svg", bg: "bg-purple-900/80", border: "border-purple-700" },
-                { name: "Dropbox", logo: "/logos/dropbox.svg", bg: "bg-blue-900/80", border: "border-blue-700" },
-                { name: "Stripe", logo: "/logos/stripe.svg", bg: "bg-indigo-900/80", border: "border-indigo-700" },
-                { name: "AWS", logo: "/logos/aws.svg", bg: "bg-orange-900/80", border: "border-orange-700" },
-                { name: "Trello", logo: "/logos/github.svg", bg: "bg-blue-900/80", border: "border-blue-700" },
-                { name: "Discord", logo: "/logos/github.svg", bg: "bg-indigo-900/80", border: "border-indigo-700" },
-                { name: "Salesforce", logo: "/logos/github.svg", bg: "bg-blue-900/80", border: "border-blue-700" },
-                { name: "Zoom", logo: "/logos/github.svg", bg: "bg-blue-900/80", border: "border-blue-700" },
-                { name: "Linear", logo: "/logos/github.svg", bg: "bg-gray-800/80", border: "border-gray-700" },
-                { name: "MongoDB", logo: "/logos/github.svg", bg: "bg-green-900/80", border: "border-green-700" },
-                { name: "Figma", logo: "/logos/github.svg", bg: "bg-purple-900/80", border: "border-purple-700" },
-                { name: "Dropbox", logo: "/logos/github.svg", bg: "bg-blue-900/80", border: "border-blue-700" },
-                { name: "Stripe", logo: "/logos/github.svg", bg: "bg-indigo-900/80", border: "border-indigo-700" },
-                { name: "AWS", logo: "/logos/github.svg", bg: "bg-orange-900/80", border: "border-orange-700" },
-                { name: "Trello", logo: "/logos/github.svg", bg: "bg-blue-900/80", border: "border-blue-700" },
-                { name: "Discord", logo: "/logos/github.svg", bg: "bg-indigo-900/80", border: "border-indigo-700" }
-              ].map((service, idx) => (
+              {[...servicesRow2, ...servicesRow2].map((service, idx) => (
                 <div
                   key={idx}
                   className={`flex-shrink-0 w-20 h-20 rounded-xl ${service.bg} ${service.border} backdrop-blur-md border flex items-center justify-center p-4 transform hover:scale-110 transition-transform duration-300 hover:shadow-md hover:shadow-purple-500/20`}

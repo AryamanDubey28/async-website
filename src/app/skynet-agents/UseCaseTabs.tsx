@@ -306,25 +306,6 @@ export default function UseCaseTabs() {
               </div>
             ))}
           </div>
-
-          {/* Additional use cases previews */}
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-8 mt-24">
-            {additionalUseCases.map((useCase, idx) => (
-              <div key={idx} className="bg-gray-800/30 backdrop-blur-sm rounded-xl border border-gray-700 p-8 hover:border-purple-500/30 transition-colors duration-300 flex flex-col">
-                <div className="w-14 h-14 rounded-lg bg-purple-500/10 flex items-center justify-center mb-5 text-3xl">
-                  {useCase.icon}
-                </div>
-                <h3 className="text-xl font-bold text-white mb-3">{useCase.title}</h3>
-                <p className="text-gray-400 text-base mb-5 flex-grow">{useCase.desc}</p>
-                <button className="mt-auto text-purple-400 text-base font-medium hover:text-purple-300 transition-colors duration-300 flex items-center self-start">
-                  <span>Learn more</span>
-                  <svg width="18" height="18" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" className="ml-1.5">
-                    <path d="M5 12h14M12 5l7 7-7 7" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
-                  </svg>
-                </button>
-              </div>
-            ))}
-          </div>
         </div>
       </div>
     </section>

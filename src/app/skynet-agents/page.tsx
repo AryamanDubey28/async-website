@@ -7,6 +7,7 @@ import Footer from '@/components/Footer';
 import UseCaseTabs from './UseCaseTabs'; // Import the new component
 import Mockup from '@/components/skynet-agents/Mockup'; // Import the new Mockup component
 import ApiIntegrations from '@/components/skynet-agents/ApiIntegrations'; // Import the new ApiIntegrations component
+import SkynetAgentsCallToAction from '@/components/skynet-agents/SkynetAgentsCallToAction'; // Import the new CTA component
 
 export default function SkynetAgents() {
   // Controls for animated features and interactions
@@ -21,65 +22,56 @@ export default function SkynetAgents() {
   // Features list for the product
   const features = [
     {
-      title: "Autonomous Agents",
-      description: "Go beyond chat with AI agents that autonomously execute complex tasks across multiple platforms without human intervention.",
+      title: "Orchestrated Agent Teams",
+      description: "Collaborative Force: Tackle Intricate Challenges.",
       icon: (
         <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 10V3L4 14h7v7l9-11h-7z" />
+          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z" />
         </svg>
       ),
-      detail: "While Skynet Chat assists with content, Skynet Agents takes action, autonomously performing tasks from scheduling meetings to data analysis."
-    },
-    {
-      title: "8,000+ API Integrations",
-      description: "Seamlessly connect with thousands of services including Google Workspace, Microsoft 365, Salesforce, and custom enterprise tools.",
-      icon: (
-        <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8 9l3 3-3 3m5 0h3M5 20h14a2 2 0 002-2V6a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" />
-        </svg>
-      ),
-      detail: "Our robust API ecosystem allows your agents to interact with virtually any digital service, dramatically expanding their capabilities beyond simple chat."
+      detail: "Build interconnected teams of specialist agents. Harness shared context and synchronised execution to dismantle complex, multi-step business problems that overwhelm solo automation efforts."
     },
     {
       title: "Custom Agent Configuration",
-      description: "Design specialized agents for specific workflows with customizable permissions, knowledge bases, and execution parameters.",
+      description: "Tailored Precision: Configure Without Compromise.",
       icon: (
         <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
           <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z" />
           <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
         </svg>
       ),
-      detail: "Unlike one-size-fits-all chat interfaces, Skynet Agents can be precisely tailored for specific roles, departments, and use cases."
+      detail: "Dictate exact permissions, knowledge access, and operational parameters. Engineer agents specifically for your unique workflows and roles – a world away from rigid, one-size-fits-all chat AI."
     },
     {
-      title: "Agent Collaboration",
-      description: "Create systems of specialized agents that work together to solve complex problems, sharing context and coordinating tasks.",
+      title: "Custom Agent Configuration",
+      description: "Bespoke Automation: Engineer Your Edge.",
       icon: (
         <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z" />
+          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z" />
+          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
         </svg>
       ),
-      detail: "Move beyond single-agent limitations with collaborative agent systems that divide work efficiently while maintaining unified goals."
+      detail: "Design specialist agents with surgical precision. Define exact permissions, unique knowledge access, and execution parameters – tailoring automation perfectly for your specific workflows, roles, and use cases, leaving rigid chat AI far behind."
     },
     {
-      title: "Advanced Security & Control",
-      description: "Enterprise-grade controls with comprehensive audit trails, permission management, and secure execution environments.",
-      icon: (
-        <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z" />
-        </svg>
-      ),
-      detail: "With autonomous agents comes enhanced security. Monitor actions, set boundaries, and enforce compliance with your organization's policies."
-    },
-    {
-      title: "Workflow Automation",
-      description: "Transform manual processes into automated workflows that agents execute with minimal supervision.",
+      title: "Total Workflow Automation",
+      description: "End-to-End Execution: Crush Repetitive Work.",
       icon: (
         <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
           <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 00-2-2M5 11V9a2 2 0 012-2m0 0V5a2 2 0 012-2h6a2 2 0 012 2v2M7 7h10" />
         </svg>
       ),
-      detail: "Unlike chat-based assistance, agents can execute entire workflows end-to-end, freeing your team from repetitive tasks."
+      detail: "Agents don't just advise, they act. Deploy total, autonomous workflow automation that manages entire processes start-to-finish with minimal oversight, liberating your team from soul-crushing manual tasks."
+    },
+    {
+      title: "Hands-Off Task Execution",
+      description: "Autonomous Action: Beyond Chat, Beyond Limits.",
+      icon: (
+        <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 10V3L4 14h7v7l9-11h-7z" />
+        </svg>
+      ),
+      detail: "Forget advice, demand execution. Deploy agents that autonomously tackle complex tasks – manipulating data, triggering actions across platforms, orchestrating entire workflows. Eliminate manual oversight and liberate your team from process bottlenecks with true hands-off automation power."
     }
   ];
   
@@ -324,7 +316,7 @@ export default function SkynetAgents() {
                 </h1>
                 
                 <p className="text-xl text-gray-300 max-w-xl leading-relaxed">
-                  Beyond chat: Task-driven AI agents that integrate with over 8,000 APIs to autonomously execute complex workflows on your behalf.
+                  Beyond chat: Custom AI agents that automate complex tasks by connecting and working across your existing business software.
                 </p>
                 
                 <div className="flex flex-col sm:flex-row gap-5 pt-4">
@@ -425,7 +417,7 @@ export default function SkynetAgents() {
                             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
                           </svg>
                         </div>
-                        <span className="text-gray-300 text-base">Intelligent conversation & assistance</span>
+                        <span className="text-gray-300 text-base">Integrated Content Creation</span>
                       </li>
                       <li className="flex items-start">
                         <div className="flex-shrink-0 w-6 h-6 rounded-full bg-teal-400/20 flex items-center justify-center mt-0.5 mr-3">
@@ -433,7 +425,7 @@ export default function SkynetAgents() {
                             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
                           </svg>
                         </div>
-                        <span className="text-gray-300 text-base">Content creation & refinement</span>
+                        <span className="text-gray-300 text-base">Deep Context Understanding</span>
                       </li>
                       <li className="flex items-start">
                         <div className="flex-shrink-0 w-6 h-6 rounded-full bg-teal-400/20 flex items-center justify-center mt-0.5 mr-3">
@@ -441,7 +433,7 @@ export default function SkynetAgents() {
                             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
                           </svg>
                         </div>
-                        <span className="text-gray-300 text-base">Code assistance</span>
+                        <span className="text-gray-300 text-base">Persistent AI Personalisation</span>
                       </li>
                       <li className="flex items-start">
                         <div className="flex-shrink-0 w-6 h-6 rounded-full bg-teal-400/20 flex items-center justify-center mt-0.5 mr-3">
@@ -449,7 +441,7 @@ export default function SkynetAgents() {
                             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
                           </svg>
                         </div>
-                        <span className="text-gray-300 text-base">Context-aware memory</span>
+                        <span className="text-gray-300 text-base">Accelerated Workflow Actions</span>
                       </li>
                       <li className="flex items-start">
                         <div className="flex-shrink-0 w-6 h-6 rounded-full bg-gray-700 flex items-center justify-center mt-0.5 mr-3">
@@ -457,7 +449,7 @@ export default function SkynetAgents() {
                             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
                           </svg>
                         </div>
-                        <span className="text-gray-500 text-base">Limited to conversational interface</span>
+                        <span className="text-gray-500 text-base">Workspace-Bound Operation</span>
                       </li>
                       <li className="flex items-start">
                         <div className="flex-shrink-0 w-6 h-6 rounded-full bg-gray-700 flex items-center justify-center mt-0.5 mr-3">
@@ -465,7 +457,7 @@ export default function SkynetAgents() {
                             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
                           </svg>
                         </div>
-                        <span className="text-gray-500 text-base">Requires human execution of suggestions</span>
+                        <span className="text-gray-500 text-base">Manual Task Execution</span>
                       </li>
                     </ul>
                   </div>
@@ -483,7 +475,7 @@ export default function SkynetAgents() {
                             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
                           </svg>
                         </div>
-                        <span className="text-gray-300 text-base">Everything in Skynet Chat, plus:</span>
+                        <span className="text-gray-300 text-base">All Skynet Chat Capabilities, <strong className="font-extrabold text-purple-300">PLUS</strong></span>
                       </li>
                       <li className="flex items-start">
                         <div className="flex-shrink-0 w-6 h-6 rounded-full bg-purple-400/20 flex items-center justify-center mt-0.5 mr-3 animate-pulse-slow">
@@ -491,7 +483,7 @@ export default function SkynetAgents() {
                             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
                           </svg>
                         </div>
-                        <span className="text-white text-base font-medium">Autonomous task execution</span>
+                        <span className="text-white text-base font-medium">Hands-Off Task Execution</span>
                       </li>
                       <li className="flex items-start">
                         <div className="flex-shrink-0 w-6 h-6 rounded-full bg-purple-400/20 flex items-center justify-center mt-0.5 mr-3 animate-pulse-slow">
@@ -499,7 +491,7 @@ export default function SkynetAgents() {
                             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
                           </svg>
                         </div>
-                        <span className="text-white text-base font-medium">8,000+ API integrations</span>
+                        <span className="text-white text-base font-medium">Limitless App Integration</span>
                       </li>
                       <li className="flex items-start">
                         <div className="flex-shrink-0 w-6 h-6 rounded-full bg-purple-400/20 flex items-center justify-center mt-0.5 mr-3 animate-pulse-slow">
@@ -507,7 +499,7 @@ export default function SkynetAgents() {
                             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
                           </svg>
                         </div>
-                        <span className="text-white text-base font-medium">Custom agent configuration</span>
+                        <span className="text-white text-base font-medium">Precision-Engineered Logic</span>
                       </li>
                       <li className="flex items-start">
                         <div className="flex-shrink-0 w-6 h-6 rounded-full bg-purple-400/20 flex items-center justify-center mt-0.5 mr-3 animate-pulse-slow">
@@ -515,7 +507,7 @@ export default function SkynetAgents() {
                             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
                           </svg>
                         </div>
-                        <span className="text-white text-base font-medium">Multi-agent collaboration</span>
+                        <span className="text-white text-base font-medium">Orchestrated Agent Teams</span>
                       </li>
                       <li className="flex items-start">
                         <div className="flex-shrink-0 w-6 h-6 rounded-full bg-purple-400/20 flex items-center justify-center mt-0.5 mr-3 animate-pulse-slow">
@@ -523,7 +515,7 @@ export default function SkynetAgents() {
                             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
                           </svg>
                         </div>
-                        <span className="text-white text-base font-medium">End-to-end workflow automation</span>
+                        <span className="text-white text-base font-medium">Total Workflow Automation</span>
                       </li>
                     </ul>
                   </div>
@@ -532,52 +524,74 @@ export default function SkynetAgents() {
             </div>
             
             {/* Feature grid - Modified to show details only on hover */}
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-              {features.slice(0, 6).map((feature, index) => (
-                <div 
-                  key={index}
-                  className="relative bg-gray-900/60 backdrop-blur-xl rounded-xl p-8 overflow-hidden group hover:scale-[1.02] border border-purple-500/20 shadow-xl shadow-purple-500/5 h-full transition-all duration-300 hover:border-purple-400/40 hover:shadow-purple-500/10"
-                  onMouseEnter={() => setActiveFeature(index)}
-                >
-                  {/* Animated background gradient */}
-                  <div className={`absolute inset-0 bg-gradient-to-br from-purple-500/15 via-teal-500/10 to-blue-600/15 transition-opacity duration-500 ${
-                    activeFeature === index ? 'opacity-100' : 'opacity-0'
-                  }`}></div>
-                  
-                  {/* Tech grid lines for tech effect */}
-                  <div className="absolute inset-0 rounded-xl overflow-hidden opacity-20">
-                    <div className="absolute inset-0 bg-[radial-gradient(#9F7AEA15_1px,transparent_1px)] [background-size:16px_16px] opacity-40"></div>
-                    <div className="absolute inset-0 bg-[linear-gradient(to_right,transparent_0%,#9F7AEA08_50%,transparent_100%)] animate-scanner"></div>
-                  </div>
-                  
-                  {/* Content */}
-                  <div className="relative z-10 h-full flex flex-col">
-                    <div className="w-14 h-14 rounded-lg bg-gray-800/60 backdrop-blur-sm flex items-center justify-center mb-6 text-purple-400 group-hover:bg-purple-400/15 transition-all duration-300 transform group-hover:scale-110 border border-purple-400/20">
-                      {feature.icon}
+            <div className="grid grid-cols-1 md:grid-cols-4 lg:grid-cols-6 gap-8">
+              {features.map((feature, index) => {
+                let mdColClass = "md:col-span-2";
+                let lgColClass = "lg:col-span-2";
+
+                // Assuming features.length is 5, as per the current state of the features array.
+                if (features.length === 5) {
+                  // For medium screens (4-column base), center the last single item.
+                  if (index === 4) { // 5th item is the last.
+                    mdColClass = "md:col-start-2 md:col-span-2";
+                  }
+
+                  // For large screens (6-column base), center the last two items.
+                  if (index === 3) { // 4th item is the first of the last two.
+                    lgColClass = "lg:col-start-2 lg:col-span-2";
+                  }
+                  // The 5th item (index === 4) will use the default lgColClass="lg:col-span-2"
+                  // and flow correctly after the 4th item.
+                }
+
+                const combinedColClasses = `${mdColClass} ${lgColClass}`;
+
+                return (
+                  <div 
+                    key={index}
+                    className={`relative bg-gray-900/60 backdrop-blur-xl rounded-xl p-8 overflow-hidden group hover:scale-[1.02] border border-purple-500/20 shadow-xl shadow-purple-500/5 h-full transition-all duration-300 hover:border-purple-400/40 hover:shadow-purple-500/10 ${combinedColClasses}`}
+                    onMouseEnter={() => setActiveFeature(index)}
+                  >
+                    {/* Animated background gradient */}
+                    <div className={`absolute inset-0 bg-gradient-to-br from-purple-500/15 via-teal-500/10 to-blue-600/15 transition-opacity duration-500 ${
+                      activeFeature === index ? 'opacity-100' : 'opacity-0'
+                    }`}></div>
+                    
+                    {/* Tech grid lines for tech effect */}
+                    <div className="absolute inset-0 rounded-xl overflow-hidden opacity-20">
+                      <div className="absolute inset-0 bg-[radial-gradient(#9F7AEA15_1px,transparent_1px)] [background-size:16px_16px] opacity-40"></div>
+                      <div className="absolute inset-0 bg-[linear-gradient(to_right,transparent_0%,#9F7AEA08_50%,transparent_100%)] animate-scanner"></div>
                     </div>
                     
-                    <h3 className="text-xl font-bold mb-3 text-white transition-all duration-300 group-hover:bg-clip-text group-hover:text-transparent group-hover:bg-gradient-to-r group-hover:from-purple-400 group-hover:via-teal-400 group-hover:to-blue-500">
-                      {feature.title}
-                    </h3>
-                    
-                    <p className="text-gray-300 transition-all duration-300 group-hover:text-gray-200">
-                      {feature.description}
-                    </p>
-                    
-                    {/* Feature detail visible only on hover */}
-                    <div className="mt-4 pt-4 border-t border-gray-700/50 text-sm text-gray-400 transition-all duration-300 opacity-0 group-hover:opacity-100 max-h-0 group-hover:max-h-40 overflow-hidden group-hover:text-gray-300">
-                      {feature.detail}
+                    {/* Content */}
+                    <div className="relative z-10 h-full flex flex-col">
+                      <div className="w-14 h-14 rounded-lg bg-gray-800/60 backdrop-blur-sm flex items-center justify-center mb-6 text-purple-400 group-hover:bg-purple-400/15 transition-all duration-300 transform group-hover:scale-110 border border-purple-400/20">
+                        {feature.icon}
+                      </div>
+                      
+                      <h3 className="text-xl font-bold mb-3 text-white transition-all duration-300 group-hover:bg-clip-text group-hover:text-transparent group-hover:bg-gradient-to-r group-hover:from-purple-400 group-hover:via-teal-400 group-hover:to-blue-500">
+                        {feature.title}
+                      </h3>
+                      
+                      <p className="text-gray-300 transition-all duration-300 group-hover:text-gray-200">
+                        {feature.description}
+                      </p>
+                      
+                      {/* Feature detail visible only on hover */}
+                      <div className="mt-4 pt-4 border-t border-gray-700/50 text-sm text-gray-400 transition-all duration-300 opacity-0 group-hover:opacity-100 max-h-0 group-hover:max-h-40 overflow-hidden group-hover:text-gray-300">
+                        {feature.detail}
+                      </div>
                     </div>
+                    
+                    {/* Animated border */}
+                    <div className={`absolute inset-0 rounded-xl transition-all duration-300 ${
+                      activeFeature === index 
+                        ? 'border border-purple-400/30 shadow-[0_0_15px_rgba(142,81,194,0.15)] after:opacity-100' 
+                        : 'border border-transparent after:opacity-0'
+                    } after:content-[''] after:absolute after:inset-0 after:rounded-xl after:border after:border-purple-400/10 after:scale-[1.02] after:transition-all after:duration-300`}></div>
                   </div>
-                  
-                  {/* Animated border */}
-                  <div className={`absolute inset-0 rounded-xl transition-all duration-300 ${
-                    activeFeature === index 
-                      ? 'border border-purple-400/30 shadow-[0_0_15px_rgba(142,81,194,0.15)] after:opacity-100' 
-                      : 'border border-transparent after:opacity-0'
-                  } after:content-[''] after:absolute after:inset-0 after:rounded-xl after:border after:border-purple-400/10 after:scale-[1.02] after:transition-all after:duration-300`}></div>
-                </div>
-              ))}
+                );
+              })}
             </div>
           </div>
         </section>
@@ -585,6 +599,7 @@ export default function SkynetAgents() {
         {/* API Integrations Section */}
         <ApiIntegrations />
         <UseCaseTabs />
+        <SkynetAgentsCallToAction />
 
       </div>
       

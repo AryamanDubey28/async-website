@@ -157,9 +157,9 @@ export default function About() {
 
   // Data for Thought Leadership section (Adjusted colors - teal -> indigo)
   const leadershipItems: LeadershipItem[] = [
-      { title: "Conference Speakers", description: "Our team regularly presents at leading technology conferences, sharing insights on practical AI implementation strategies.", hoverBorderColor: "hover:border-indigo-500/60", textColor: "text-indigo-300" }, // Changed from teal
-      { title: "AI Workshops", description: "We conduct hands-on workshops to help businesses understand and leverage the latest AI technologies for their specific needs.", hoverBorderColor: "hover:border-purple-500/60", textColor: "text-purple-300" },
-      { title: "Industry Publications", description: "Our research and case studies are regularly featured in leading industry publications, contributing to the broader AI discourse.", hoverBorderColor: "hover:border-blue-500/60", textColor: "text-blue-300" },
+      { title: "Conference Speakers", description: "Our team aims to present at technology conferences, sharing insights on practical AI implementation strategies.", hoverBorderColor: "hover:border-indigo-500/60", textColor: "text-indigo-300" }, // Changed from teal
+      { title: "AI Workshops", description: "We are developing hands-on workshops to help businesses understand and leverage the latest AI technologies.", hoverBorderColor: "hover:border-purple-500/60", textColor: "text-purple-300" },
+      { title: "Industry Publications", description: "We plan to contribute our research and case studies to industry publications, adding to the broader AI discourse.", hoverBorderColor: "hover:border-blue-500/60", textColor: "text-blue-300" },
   ];
 
 
@@ -216,29 +216,36 @@ export default function About() {
               <div className="absolute inset-0 pattern-bg opacity-5 group-hover:opacity-10 transition-opacity duration-500"></div>
 
               <div className="relative p-8 md:p-12 lg:p-16">
-                <h2 className="text-4xl font-bold mb-8 bg-clip-text text-transparent bg-gradient-to-r from-indigo-300 to-indigo-100"> 
+                <h2 className="text-4xl font-bold mb-6 text-center bg-clip-text text-transparent bg-gradient-to-r from-indigo-300 to-indigo-100"> 
                   Our Mission
                 </h2>
-                <p className="text-gray-300 mb-8 leading-relaxed text-lg max-w-4xl">
-                  At Async Studios, our mission is to help businesses incorporate powerful AI solutions that optimise performance and drive sustainable growth. Based in London but operating worldwide, we are dedicated to:
+                <p className="text-gray-300 mb-12 leading-relaxed text-lg max-w-3xl mx-auto text-center">
+                  Our core mission is to empower your business by integrating cutting-edge AI solutions. We focus on optimizing performance, fostering sustainable growth, and are dedicated to the following key areas:
                 </p>
-                <ul className="space-y-6 text-gray-300 text-lg">
+                {/* Grid for Mission Cards */}
+                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
                   {[
                     // Changed teal to indigo
                     { text: "Educating businesses", detail: "Demystifying AI technologies and showcasing their transformative potential for organisations of all sizes", color: "indigo" },
                     { text: "Optimising performance", detail: "Creating tailored AI solutions that seamlessly integrate with existing workflows to enhance efficiency and productivity", color: "purple" },
                     { text: "Driving innovation", detail: "Leading the conversation about emerging AI technologies through industry talks, workshops, and collaborative partnerships", color: "blue" }
                   ].map((item, index) => (
-                    <li key={index} className="flex items-start group/item transition-all duration-300 hover:translate-x-1">
-                      <div className={`flex-shrink-0 w-7 h-7 rounded-full bg-${item.color}-500/20 border-2 border-${item.color}-500/60 flex items-center justify-center mr-4 mt-1 transition-all duration-300 group-hover/item:scale-110 group-hover/item:shadow-[0_0_15px] group-hover/item:shadow-${item.color}-500/50`}>
-                        <svg className={`w-4 h-4 text-${item.color}-400`} xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M5 13l4 4L19 7" />
-                        </svg>
+                    <div key={index}
+                         className={`group/item relative p-8 rounded-2xl bg-gray-900/60 border border-gray-700/50 backdrop-blur-sm transition-all duration-300 hover:border-${item.color}-500/70 hover:shadow-xl hover:shadow-${item.color}-500/20 hover:-translate-y-1.5`}
+                    >
+                      <div className="flex items-center mb-5">
+                        <div className={`flex-shrink-0 w-10 h-10 rounded-xl bg-${item.color}-500/15 border border-${item.color}-500/30 flex items-center justify-center mr-4 transition-all duration-300 group-hover/item:scale-105 group-hover/item:shadow-md group-hover/item:shadow-${item.color}-500/25`}>
+                          <svg className={`w-5 h-5 text-${item.color}-300`} xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M5 13l4 4L19 7" />
+                          </svg>
+                        </div>
+                        <h3 className={`text-xl font-semibold text-${item.color}-200`}>{item.text}</h3>
                       </div>
-                      <span><span className={`font-semibold text-${item.color}-300`}>{item.text}</span> — {item.detail}</span>
-                    </li>
+                      <p className="text-gray-400 text-sm leading-relaxed">{item.detail}</p>
+                      <div className={`absolute top-3 right-3 w-2.5 h-2.5 rounded-full bg-${item.color}-500/40 opacity-0 group-hover/item:opacity-100 scale-75 group-hover/item:scale-100 transition-all duration-300`}></div>
+                    </div>
                   ))}
-                </ul>
+                </div>
               </div>
             </div>
           </div>
@@ -262,22 +269,22 @@ export default function About() {
                   <div className="text-gray-300 leading-relaxed text-lg space-y-5">
                     {/* Adjusted first letter color */}
                     <p className="first-letter:text-2xl first-letter:font-bold first-letter:text-indigo-300">
-                      Founded in London, Async Studios has quickly grown into a global AI consultancy with clients spanning multiple continents. Our team combines local market insights with cutting-edge technical expertise to deliver solutions that resonate with diverse business environments.
+                      Founded in London, Async Studios is an emerging global AI consultancy with a vision to serve clients across diverse business environments.
                     </p>
                     <p>
-                      We pride ourselves on being thought leaders in the AI space, regularly conducting workshops, speaking at conferences, and publishing insights on the latest developments in artificial intelligence. Our educational initiatives have helped countless organisations understand and implement AI strategies that drive measurable business results.
+                      We aspire to be thought leaders in the AI space, aiming to conduct workshops, speak at conferences, and publish insights on the latest developments in artificial intelligence. Our educational initiatives are designed to help organisations understand and implement AI strategies that can drive measurable business results.
                     </p>
                     
                     <div className="grid grid-cols-3 gap-4 mt-8 pt-4 border-t border-gray-800/50">
                       {[
-                        { number: "20+", label: "Countries" },
-                        { number: "100+", label: "Clients" },
-                        { number: "50+", label: "AI Solutions" }
+                        { label: "Global Vision", description: "Aiming for worldwide impact with locally relevant solutions." },
+                        { label: "Client-Focused", description: "Dedicated to building strong partnerships and delivering value." },
+                        { label: "Emerging Solutions", description: "Pioneering innovative AI to meet future challenges." }
                       ].map((stat, index) => (
-                        <div key={index} className="text-center">
-                          {/* Adjusted gradient */}
-                          <div className="text-2xl font-bold text-white bg-clip-text text-transparent bg-gradient-to-r from-indigo-300 to-blue-300">{stat.number}</div>
-                          <div className="text-gray-400 text-sm">{stat.label}</div>
+                        <div key={index} className="text-center p-2">
+                          {/* Adjusted gradient for label */}
+                          <div className="text-xl font-semibold text-white bg-clip-text text-transparent bg-gradient-to-r from-indigo-300 to-blue-300 mb-1">{stat.label}</div>
+                          <div className="text-gray-400 text-xs">{stat.description}</div>
                         </div>
                       ))}
                     </div>

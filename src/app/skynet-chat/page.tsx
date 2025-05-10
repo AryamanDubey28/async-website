@@ -380,7 +380,7 @@ Charlie
                 >
                   <p className="text-sm font-medium text-teal-300 flex items-center">
                     <span className="inline-block w-2 h-2 rounded-full bg-teal-400 mr-2 animate-pulse"></span>
-                    Secure Content Collaboration
+                     Content Collaboration for Business
                   </p>
                 </div>
                 
@@ -399,7 +399,7 @@ Charlie
                 </h1>
                 
                 <p className="text-xl text-gray-300 max-w-xl leading-relaxed">
-                  Your secure, intelligent content collaboration partner that transforms how you create, refine, and collaborate on written content and code.
+                Your intelligent assistant with fast answers for internal queries, instant access to company knowledge, and absolute data confidentiality.
                 </p>
                 
                 <div className="flex flex-col sm:flex-row gap-5 pt-4">
@@ -478,7 +478,7 @@ Charlie
               <div className="lg:w-1/2 relative">
                 <div className="relative max-w-lg mx-auto">
                   {/* Main illustration area */}
-                  <div className="aspect-square relative rounded-2xl overflow-hidden border border-teal-500/30 shadow-xl shadow-teal-500/10 backdrop-blur-sm bg-gray-900/80">
+                  <div className="relative rounded-2xl overflow-hidden border border-teal-500/30 shadow-xl shadow-teal-500/10 backdrop-blur-sm bg-gray-900/80 min-h-[580px] lg:min-h-[620px]">
                     <div className="absolute inset-0 bg-gradient-to-br from-teal-500/10 via-purple-500/10 to-blue-600/10"></div>
                     <div className="absolute inset-0 bg-[radial-gradient(#4fd1c520_1px,transparent_1px)] [background-size:16px_16px] opacity-30"></div>
                     
@@ -626,103 +626,89 @@ Charlie
                   Skynet Chat provides a unified workspace where you interact with a powerful AI assistant through a familiar chat interface, working directly alongside your content.
                 </p>
                 
-                <div className="space-y-6">
-                  {/* Benefit items */}
+                <div className="space-y-8"> {/* Increased spacing slightly for new content */}
+                  {/* Fortress Privacy */}
                   <div className="flex items-start group">
-                    <div className="mr-4 mt-1">
+                    <div className="mr-4 mt-1 flex-shrink-0">
                       <div className="w-10 h-10 rounded-lg bg-teal-400/20 flex items-center justify-center text-teal-400 group-hover:scale-110 transition-transform duration-300 group-hover:bg-teal-400/30 group-hover:shadow-md group-hover:shadow-teal-400/20">
-                        <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z" />
+                        <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
+                          <path strokeLinecap="round" strokeLinejoin="round" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z" />
                         </svg>
                       </div>
                     </div>
                     <div>
-                      <h3 className="text-lg font-semibold text-white mb-2 group-hover:text-teal-400 transition-colors duration-300">Unparalleled Privacy & Security</h3>
-                      <p className="text-gray-300">Deploy the entire application, including AI models, directly within your organization's infrastructure. Your data never leaves your control.</p>
-                      
-                      {/* Expandable detail */}
-                      <div className="mt-2">
-                        <button className="text-sm text-teal-400 flex items-center gap-1 hover:underline">
-                          <span>Learn more</span>
-                          <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
-                          </svg>
-                        </button>
-                      </div>
+                      <h3 className="text-lg font-semibold text-white mb-1 group-hover:text-teal-400 transition-colors duration-300">
+                        <i className="font-semibold">Fortress Privacy: Your Data, Locked Down.</i>
+                      </h3>
+                      <p className="text-gray-300 text-sm leading-relaxed">Eliminate external AI risks. Skynet Chat operates entirely within your company's secure systems. Guarantee absolute confidentiality – your private discussions, documents, and business secrets never leave your control, ensuring safety and compliance.</p>
                     </div>
                   </div>
                   
+                  {/* Content Command Center */}
                   <div className="flex items-start group">
-                    <div className="mr-4 mt-1">
+                    <div className="mr-4 mt-1 flex-shrink-0">
                       <div className="w-10 h-10 rounded-lg bg-purple-400/20 flex items-center justify-center text-purple-400 group-hover:scale-110 transition-transform duration-300 group-hover:bg-purple-400/30 group-hover:shadow-md group-hover:shadow-purple-400/20">
-                        <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9.663 17h4.673M12 3v1m6.364 1.636l-.707.707M21 12h-1M4 12H3m3.343-5.657l-.707-.707m2.828 9.9a5 5 0 117.072 0l-.548.547A3.374 3.374 0 0014 18.469V19a2 2 0 11-4 0v-.531c0-.895-.356-1.754-.988-2.386l-.548-.547z" />
+                        <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
+                          <path strokeLinecap="round" strokeLinejoin="round" d="M16.862 4.487l1.687-1.688a1.875 1.875 0 112.652 2.652L10.582 16.07a4.5 4.5 0 01-1.897 1.13L6 18l.8-2.685a4.5 4.5 0 011.13-1.897l8.932-8.931zm0 0L19.5 7.125M18 14v4.75A2.25 2.25 0 0115.75 21H5.25A2.25 2.25 0 013 18.75V8.25A2.25 2.25 0 015.25 6H10" />
                         </svg>
                       </div>
                     </div>
                     <div>
-                      <h3 className="text-lg font-semibold text-white mb-2 group-hover:text-purple-400 transition-colors duration-300">Deep Personalization & Context</h3>
-                      <p className="text-gray-300">Our sophisticated memory system learns your style over time, remembering preferences and project-specific details for increasingly personalized outputs.</p>
-                      
-                      {/* Expandable detail */}
-                      <div className="mt-2">
-                        <button className="text-sm text-purple-400 flex items-center gap-1 hover:underline">
-                          <span>Learn more</span>
-                          <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
-                          </svg>
-                        </button>
-                      </div>
+                      <h3 className="text-lg font-semibold text-white mb-1 group-hover:text-purple-400 transition-colors duration-300">
+                        <i className="font-semibold">Content Command Center: AI Embedded In Your Workflow.</i>
+                      </h3>
+                      <p className="text-gray-300 text-sm leading-relaxed">Stop switching between apps. Work directly on your documents, reports, or code right next to the AI chat. Simply highlight text and command the AI for help – rewrite, summarise, or check facts – all in one seamless place.</p>
                     </div>
                   </div>
-                  
+
+                  {/* Hyper-Context AI */}
                   <div className="flex items-start group">
-                    <div className="mr-4 mt-1">
+                    <div className="mr-4 mt-1 flex-shrink-0">
                       <div className="w-10 h-10 rounded-lg bg-blue-400/20 flex items-center justify-center text-blue-400 group-hover:scale-110 transition-transform duration-300 group-hover:bg-blue-400/30 group-hover:shadow-md group-hover:shadow-blue-400/20">
-                        <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z" />
-                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
+                        <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
+                          <path strokeLinecap="round" strokeLinejoin="round" d="M9.663 17h4.673M12 3v1m6.364 1.636l-.707.707M21 12h-1M4 12H3m3.343-5.657l-.707-.707m2.828 9.9a5 5 0 117.072 0l-.548.547A3.374 3.374 0 0014 18.469V19a2 2 0 11-4 0v-.531c0-.895-.356-1.754-.988-2.386l-.548-.547z" />
                         </svg>
                       </div>
                     </div>
                     <div>
-                      <h3 className="text-lg font-semibold text-white mb-2 group-hover:text-blue-400 transition-colors duration-300">Flexible & Adaptable AI Core</h3>
-                      <p className="text-gray-300">Choose and customize the underlying AI model that best fits your specific performance requirements and budget constraints.</p>
-                      
-                      {/* Expandable detail */}
-                      <div className="mt-2">
-                        <button className="text-sm text-blue-400 flex items-center gap-1 hover:underline">
-                          <span>Learn more</span>
-                          <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
-                          </svg>
-                        </button>
-                      </div>
+                      <h3 className="text-lg font-semibold text-white mb-1 group-hover:text-blue-400 transition-colors duration-300">
+                        <i className="font-semibold">Hyper-Context AI: Your Business Knowledge, Activated.</i>
+                      </h3>
+                      <p className="text-gray-300 text-sm leading-relaxed">Get truly relevant answers. Easily feed the AI your own company documents, meeting recordings, web pages, or project files. The AI learns from your information, providing insights and assistance based on your actual business reality.</p>
                     </div>
                   </div>
-                  
-                  {/* Additional feature */}
+
+                  {/* Adaptive Intelligence */}
                   <div className="flex items-start group">
-                    <div className="mr-4 mt-1">
-                      <div className="w-10 h-10 rounded-lg bg-amber-400/20 flex items-center justify-center text-amber-400 group-hover:scale-110 transition-transform duration-300 group-hover:bg-amber-400/30 group-hover:shadow-md group-hover:shadow-amber-400/20">
-                        <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 10V3L4 14h7v7l9-11h-7z" />
+                    <div className="mr-4 mt-1 flex-shrink-0">
+                      <div className="w-10 h-10 rounded-lg bg-indigo-400/20 flex items-center justify-center text-indigo-400 group-hover:scale-110 transition-transform duration-300 group-hover:bg-indigo-400/30 group-hover:shadow-md group-hover:shadow-indigo-400/20">
+                        <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
+                          <path strokeLinecap="round" strokeLinejoin="round" d="M6 13.5V3.75m0 9.75a1.5 1.5 0 010 3m0-3a1.5 1.5 0 000 3m0 3.75V16.5m12-3V3.75m0 9.75a1.5 1.5 0 010 3m0-3a1.5 1.5 0 000 3m0 3.75V16.5m-6-9V3.75m0 3.75a1.5 1.5 0 010 3m0-3a1.5 1.5 0 000 3m0 9.75V10.5" />
                         </svg>
                       </div>
                     </div>
                     <div>
-                      <h3 className="text-lg font-semibold text-white mb-2 group-hover:text-amber-400 transition-colors duration-300">Seamless Workflow Integration</h3>
-                      <p className="text-gray-300">By combining the chat interface directly with the content artifact, Skynet Chat eliminates the need to constantly copy and paste between different applications.</p>
-                      
-                      {/* Expandable detail */}
-                      <div className="mt-2">
-                        <button className="text-sm text-amber-400 flex items-center gap-1 hover:underline">
-                          <span>Learn more</span>
-                          <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
-                          </svg>
-                        </button>
+                      <h3 className="text-lg font-semibold text-white mb-1 group-hover:text-indigo-400 transition-colors duration-300">
+                        <i className="font-semibold">Adaptive Intelligence: AI That Evolves With You.</i>
+                      </h3>
+                      <p className="text-gray-300 text-sm leading-relaxed">Experience AI tailored to you. Skynet Chat remembers your preferences and style over time. You can even set up different AI "assistants" for specific tasks (like marketing vs. technical writing), each learning independently to help you best.</p>
+                    </div>
+                  </div>
+
+                  {/* Voice-To-Insight Engine */}
+                  <div className="flex items-start group">
+                    <div className="mr-4 mt-1 flex-shrink-0">
+                      <div className="w-10 h-10 rounded-lg bg-green-400/20 flex items-center justify-center text-green-400 group-hover:scale-110 transition-transform duration-300 group-hover:bg-green-400/30 group-hover:shadow-md group-hover:shadow-green-400/20">
+                        <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
+                          <path strokeLinecap="round" strokeLinejoin="round" d="M19 11a7 7 0 01-7 7m0 0a7 7 0 01-7-7m7 7v4m0 0H8m4 0h4m-4-8a3 3 0 01-3-3V5a3 3 0 116 0v6a3 3 0 01-3 3z" />
+                        </svg>
                       </div>
+                    </div>
+                    <div>
+                      <h3 className="text-lg font-semibold text-white mb-1 group-hover:text-green-400 transition-colors duration-300">
+                        <i className="font-semibold">Voice-To-Insight Engine: Decode Recordings Instantly.</i>
+                      </h3>
+                      <p className="text-gray-300 text-sm leading-relaxed">Unlock value from voice and video. Simply upload recordings of meetings or calls. Skynet Chat turns the spoken words into text and then helps you quickly summarize, analyze, or find key information within those conversations.</p>
                     </div>
                   </div>
                 </div>

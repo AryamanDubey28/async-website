@@ -30,7 +30,7 @@ export default function SkynetChatFeatures({ features }: SkynetChatFeaturesProps
             <div className="absolute -inset-1 bg-gradient-to-r from-teal-500/10 to-purple-400/10 rounded-lg blur-sm"></div>
           </h2>
           <p className="text-gray-300 max-w-3xl mx-auto mt-4">
-            Skynet Chat combines AI power with unparalleled privacy to transform your content creation workflow
+            Skynet Chat combines AI power with your business knowledge, designed to fit within your walls
           </p>
         </div>
         

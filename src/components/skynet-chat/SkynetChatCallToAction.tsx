@@ -20,42 +20,7 @@ export default function SkynetChatCallToAction() {
       
       <div className="container mx-auto px-4 relative z-10">
         <div className="max-w-5xl mx-auto">
-          {/* Stats section above CTA */}
-          <div className="grid grid-cols-2 md:grid-cols-4 gap-6 mb-16">
-            {[
-              { value: '100%', label: 'Private & Secure', icon: 'shield' },
-              { value: '24/7', label: 'AI Assistance', icon: 'chat' },
-              { value: '90%', label: 'Time Savings', icon: 'clock' },
-              { value: '5x', label: 'Productivity Boost', icon: 'lightning' }
-            ].map((stat, idx) => (
-              <div key={idx} className="bg-gray-900/60 backdrop-blur-xl rounded-xl p-4 border border-teal-500/20 shadow-lg shadow-teal-500/5 text-center transform hover:scale-105 transition-all duration-300 hover:border-teal-400/40 group">
-                <div className="w-12 h-12 mx-auto mb-4 rounded-full bg-gray-800/80 flex items-center justify-center">
-                  {stat.icon === 'shield' && (
-                    <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6 text-teal-400 group-hover:text-teal-300 transition-colors duration-300" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z" />
-                    </svg>
-                  )}
-                  {stat.icon === 'chat' && (
-                    <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6 text-purple-400 group-hover:text-purple-300 transition-colors duration-300" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z" />
-                    </svg>
-                  )}
-                  {stat.icon === 'clock' && (
-                    <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6 text-blue-400 group-hover:text-blue-300 transition-colors duration-300" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
-                    </svg>
-                  )}
-                  {stat.icon === 'lightning' && (
-                    <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6 text-amber-400 group-hover:text-amber-300 transition-colors duration-300" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 10V3L4 14h7v7l9-11h-7z" />
-                    </svg>
-                  )}
-                </div>
-                <div className="text-2xl font-bold text-white mb-1">{stat.value}</div>
-                <div className="text-gray-400">{stat.label}</div>
-              </div>
-            ))}
-          </div>
+          {/* Stats section above CTA - REMOVED */}
           
           {/* Main CTA Card */}
           <div className="bg-gray-900/60 backdrop-blur-xl rounded-2xl p-8 md:p-12 border border-teal-500/20 shadow-xl shadow-teal-500/5 overflow-hidden relative">
@@ -165,35 +130,7 @@ export default function SkynetChatCallToAction() {
             </div>
           </div>
           
-          {/* Testimonials ticker */}
-          <div className="mt-20 overflow-hidden">
-            <div className="text-center mb-8">
-              <h3 className="text-2xl font-bold text-white">What Our Users Say</h3>
-            </div>
-            
-            <div className="relative">
-              {/* Gradient overlays for smooth scrolling effect */}
-              <div className="absolute left-0 top-0 bottom-0 w-20 bg-gradient-to-r from-gray-900 to-transparent z-10"></div>
-              <div className="absolute right-0 top-0 bottom-0 w-20 bg-gradient-to-l from-gray-900 to-transparent z-10"></div>
-              
-              <div className="flex gap-6 animate-ticker">
-                {testimonials.map((testimonial, idx) => (
-                  <div key={idx} className="flex-shrink-0 w-80 bg-gray-800/40 backdrop-blur-sm rounded-lg p-6 border border-gray-700">
-                    <div className="text-gray-300 italic mb-4">"{testimonial.quote}"</div>
-                    <div className="flex items-center gap-3">
-                      <div className="w-10 h-10 rounded-full bg-gradient-to-r from-teal-400 to-purple-500 flex items-center justify-center text-white font-medium">
-                        {testimonial.name.charAt(0)}
-                      </div>
-                      <div>
-                        <div className="text-white font-medium">{testimonial.name}</div>
-                        <div className="text-gray-400 text-sm">{testimonial.title}</div>
-                      </div>
-                    </div>
-                  </div>
-                ))}
-              </div>
-            </div>
-          </div>
+          {/* Testimonials ticker - REMOVED */}
         </div>
       </div>
     </section>
