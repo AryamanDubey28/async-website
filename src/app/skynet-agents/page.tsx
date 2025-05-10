@@ -7,6 +7,7 @@ import Footer from '@/components/Footer';
 import UseCaseTabs from './UseCaseTabs'; // Import the new component
 import Mockup from '@/components/skynet-agents/Mockup'; // Import the new Mockup component
 import ApiIntegrations from '@/components/skynet-agents/ApiIntegrations'; // Import the new ApiIntegrations component
+import SkynetAgentsCallToAction from '@/components/skynet-agents/SkynetAgentsCallToAction'; // Import the new CTA component
 
 export default function SkynetAgents() {
   // Controls for animated features and interactions
@@ -324,7 +325,7 @@ export default function SkynetAgents() {
                 </h1>
                 
                 <p className="text-xl text-gray-300 max-w-xl leading-relaxed">
-                  Beyond chat: Task-driven AI agents that integrate with over 8,000 APIs to autonomously execute complex workflows on your behalf.
+                  Beyond chat: Custom AI agents that automate complex tasks by connecting and working across your existing business software.
                 </p>
                 
                 <div className="flex flex-col sm:flex-row gap-5 pt-4">
@@ -425,7 +426,7 @@ export default function SkynetAgents() {
                             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
                           </svg>
                         </div>
-                        <span className="text-gray-300 text-base">Intelligent conversation & assistance</span>
+                        <span className="text-gray-300 text-base">Integrated Content Creation</span>
                       </li>
                       <li className="flex items-start">
                         <div className="flex-shrink-0 w-6 h-6 rounded-full bg-teal-400/20 flex items-center justify-center mt-0.5 mr-3">
@@ -433,7 +434,7 @@ export default function SkynetAgents() {
                             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
                           </svg>
                         </div>
-                        <span className="text-gray-300 text-base">Content creation & refinement</span>
+                        <span className="text-gray-300 text-base">Deep Context Understanding</span>
                       </li>
                       <li className="flex items-start">
                         <div className="flex-shrink-0 w-6 h-6 rounded-full bg-teal-400/20 flex items-center justify-center mt-0.5 mr-3">
@@ -441,7 +442,7 @@ export default function SkynetAgents() {
                             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
                           </svg>
                         </div>
-                        <span className="text-gray-300 text-base">Code assistance</span>
+                        <span className="text-gray-300 text-base">Persistent AI Personalisation</span>
                       </li>
                       <li className="flex items-start">
                         <div className="flex-shrink-0 w-6 h-6 rounded-full bg-teal-400/20 flex items-center justify-center mt-0.5 mr-3">
@@ -449,7 +450,7 @@ export default function SkynetAgents() {
                             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
                           </svg>
                         </div>
-                        <span className="text-gray-300 text-base">Context-aware memory</span>
+                        <span className="text-gray-300 text-base">Accelerated Workflow Actions</span>
                       </li>
                       <li className="flex items-start">
                         <div className="flex-shrink-0 w-6 h-6 rounded-full bg-gray-700 flex items-center justify-center mt-0.5 mr-3">
@@ -457,7 +458,7 @@ export default function SkynetAgents() {
                             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
                           </svg>
                         </div>
-                        <span className="text-gray-500 text-base">Limited to conversational interface</span>
+                        <span className="text-gray-500 text-base">Workspace-Bound Operation</span>
                       </li>
                       <li className="flex items-start">
                         <div className="flex-shrink-0 w-6 h-6 rounded-full bg-gray-700 flex items-center justify-center mt-0.5 mr-3">
@@ -465,7 +466,7 @@ export default function SkynetAgents() {
                             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
                           </svg>
                         </div>
-                        <span className="text-gray-500 text-base">Requires human execution of suggestions</span>
+                        <span className="text-gray-500 text-base">Manual Task Execution</span>
                       </li>
                     </ul>
                   </div>
@@ -483,7 +484,7 @@ export default function SkynetAgents() {
                             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
                           </svg>
                         </div>
-                        <span className="text-gray-300 text-base">Everything in Skynet Chat, plus:</span>
+                        <span className="text-gray-300 text-base">All Skynet Chat Capabilities, <strong className="font-extrabold text-purple-300">PLUS</strong></span>
                       </li>
                       <li className="flex items-start">
                         <div className="flex-shrink-0 w-6 h-6 rounded-full bg-purple-400/20 flex items-center justify-center mt-0.5 mr-3 animate-pulse-slow">
@@ -491,7 +492,7 @@ export default function SkynetAgents() {
                             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
                           </svg>
                         </div>
-                        <span className="text-white text-base font-medium">Autonomous task execution</span>
+                        <span className="text-white text-base font-medium">Hands-Off Task Execution</span>
                       </li>
                       <li className="flex items-start">
                         <div className="flex-shrink-0 w-6 h-6 rounded-full bg-purple-400/20 flex items-center justify-center mt-0.5 mr-3 animate-pulse-slow">
@@ -499,7 +500,7 @@ export default function SkynetAgents() {
                             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
                           </svg>
                         </div>
-                        <span className="text-white text-base font-medium">8,000+ API integrations</span>
+                        <span className="text-white text-base font-medium">Limitless App Integration</span>
                       </li>
                       <li className="flex items-start">
                         <div className="flex-shrink-0 w-6 h-6 rounded-full bg-purple-400/20 flex items-center justify-center mt-0.5 mr-3 animate-pulse-slow">
@@ -507,7 +508,7 @@ export default function SkynetAgents() {
                             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
                           </svg>
                         </div>
-                        <span className="text-white text-base font-medium">Custom agent configuration</span>
+                        <span className="text-white text-base font-medium">Precision-Engineered Logic</span>
                       </li>
                       <li className="flex items-start">
                         <div className="flex-shrink-0 w-6 h-6 rounded-full bg-purple-400/20 flex items-center justify-center mt-0.5 mr-3 animate-pulse-slow">
@@ -515,7 +516,7 @@ export default function SkynetAgents() {
                             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
                           </svg>
                         </div>
-                        <span className="text-white text-base font-medium">Multi-agent collaboration</span>
+                        <span className="text-white text-base font-medium">Orchestrated Agent Teams</span>
                       </li>
                       <li className="flex items-start">
                         <div className="flex-shrink-0 w-6 h-6 rounded-full bg-purple-400/20 flex items-center justify-center mt-0.5 mr-3 animate-pulse-slow">
@@ -523,7 +524,7 @@ export default function SkynetAgents() {
                             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
                           </svg>
                         </div>
-                        <span className="text-white text-base font-medium">End-to-end workflow automation</span>
+                        <span className="text-white text-base font-medium">Total Workflow Automation</span>
                       </li>
                     </ul>
                   </div>
@@ -585,6 +586,7 @@ export default function SkynetAgents() {
         {/* API Integrations Section */}
         <ApiIntegrations />
         <UseCaseTabs />
+        <SkynetAgentsCallToAction />
 
       </div>
       
