@@ -41,6 +41,7 @@ const carouselStyles = `
     opacity: 0.35;
     transform: scale(0.92);
     filter: blur(1px);
+    cursor: pointer;
   }
   
   .carousel-card.active {
@@ -106,6 +107,22 @@ const carouselStyles = `
   
   .carousel-card.active .carousel-card-content {
     animation: pulse-glow 3s ease-in-out infinite;
+  }
+  
+  /* New style for active AND paused card */
+  .carousel-card.active.paused .carousel-card-content {
+    animation: none; /* Stop the pulsing */
+    box-shadow:
+      0 0 35px rgba(45, 212, 191, 0.45), /* Slightly stronger teal glow */
+      0 0 60px rgba(168, 85, 247, 0.25), /* Slightly stronger purple glow */
+      0 0 90px rgba(45, 212, 191, 0.20) inset, /* Slightly stronger inner glow */
+      0 20px 40px rgba(0, 0, 0, 0.3); /* Original structural shadow */
+  }
+
+  .carousel-card.active.paused .carousel-card-content:before {
+    /* Make the border gradient slightly more opaque/vibrant when paused */
+    background: linear-gradient(60deg, rgba(45, 212, 191, 0.7), rgba(168, 85, 247, 0.7), rgba(59, 130, 246, 0.7));
+    box-shadow: 0 0 40px rgba(45, 212, 191, 0.4); /* Stronger border shadow */
   }
   
   /* Card sections */
@@ -178,35 +195,39 @@ const carouselStyles = `
   }
   
   .carousel-nav-button {
-    width: 3rem;
-    height: 3rem;
+    width: 3.5rem;
+    height: 3.5rem;
     border-radius: 50%;
     display: flex;
     align-items: center;
     justify-content: center;
-    background: rgba(15, 23, 42, 0.65);
+    background: rgba(30, 41, 59, 0.75);
     color: white;
-    border: 1px solid rgba(59, 130, 246, 0.25);
+    border: 1px solid rgba(71, 85, 105, 0.4);
     cursor: pointer;
     transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-    backdrop-filter: blur(8px);
+    backdrop-filter: blur(10px);
+    box-shadow: 0 5px 20px rgba(0,0,0,0.25);
   }
   
   .carousel-nav-button:hover {
-    background: linear-gradient(135deg, rgba(56, 224, 204, 0.9), rgba(185, 105, 254, 0.9));
-    transform: translateY(-3px);
-    box-shadow: 0 10px 25px rgba(56, 224, 204, 0.4);
+    background: linear-gradient(135deg, rgba(45, 212, 191, 1), rgba(168, 85, 247, 1));
+    transform: translateY(-3px) scale(1.1);
+    box-shadow: 0 10px 30px rgba(45, 212, 191, 0.4);
     border-color: transparent;
   }
   
   .carousel-nav-button:focus {
     outline: none;
-    box-shadow: 0 0 0 3px rgba(56, 224, 204, 0.5);
+    box-shadow: 0 0 0 4px rgba(45, 212, 191, 0.6);
   }
   
   .carousel-nav-button:disabled {
-    opacity: 0.3;
+    opacity: 0.4;
     cursor: not-allowed;
+    background: rgba(55, 65, 81, 0.5);
+    box-shadow: none;
+    transform: none;
   }
   
   /* Indicators */
@@ -214,7 +235,7 @@ const carouselStyles = `
     display: flex;
     justify-content: center;
     gap: 0.5rem;
-    margin-top: 1rem;
+    margin-top: 1.5rem;
   }
   
   .carousel-indicator {
@@ -237,16 +258,17 @@ const carouselStyles = `
     position: relative;
   }
   
-  .carousel-indicator.active::after {
-    content: '';
+  /* NEW: Style for the dynamically controlled indicator fill */
+  .carousel-indicator-fill {
     position: absolute;
     top: 0;
     left: 0;
-    right: 0;
-    bottom: 0;
+    height: 100%;
     background: linear-gradient(90deg, rgb(56, 224, 204), rgb(185, 105, 254), rgb(75, 141, 250));
-    background-size: 200% 100%;
-    animation: fill-duration 7s linear infinite;
+    background-size: 200% 100%; /* Optional: keep for gradient animation within the fill */
+    width: 0%; /* Initial width */
+    border-radius: 0.125rem; /* Match parent indicator */
+    /* Transition will be set by JS */
   }
   
   @keyframes fill-duration {
@@ -262,55 +284,200 @@ const ServicesCarousel = ({ services }: ServicesCarouselProps) => {
   const autoPlayDuration = 7000; // 7 seconds per slide
   const trackRef = useRef<HTMLDivElement>(null);
 
+  // Refs for resumable timer
+  const currentSlideTimeLeftRef = useRef<number>(autoPlayDuration);
+  const lastTickTimestampRef = useRef<number | null>(null);
+  const indicatorFillRefs = useRef<(HTMLSpanElement | null)[]>([]);
+
   // Calculate the correct transform for the track
   const getTrackTransform = useCallback(() => {
     if (!trackRef.current) return 'translateX(0)';
     
-    const trackWidth = trackRef.current.offsetWidth;
-    const cardWidth = trackWidth * 0.8; // 80% of track width
+    // Assuming cards are 80% of the container width.
+    // This calculation needs to be robust.
+    // Consider getting card width directly if possible, or ensuring this matches CSS.
+    const cardScreenWidthPercentage = 0.8;
     
-    // For large screens, center the active card
+    // On large screens (lg, 1024px and up), center the active card.
+    // The card itself is 80% of its parent's width (the track).
+    // The visible area for one card is 80% of the carousel container.
+    // We want to offset the track so the active card is centered.
+    // Total track width isn't directly used here, rather the width of a single card.
+    
+    const carouselContainerWidth = trackRef.current.parentElement?.offsetWidth || 0;
+    const singleCardWidth = carouselContainerWidth * cardScreenWidthPercentage;
+
     if (window.innerWidth >= 1024) {
-      const offset = (trackWidth - cardWidth) / 2;
-      return `translateX(calc(-${activeIndex * cardWidth}px + ${offset}px))`;
+      // Offset to center the active card:
+      // (Container width - Card width) / 2
+      // This is the space on one side of the centered card.
+      const centeringOffset = (carouselContainerWidth - singleCardWidth) / 2;
+      return `translateX(calc(-${activeIndex * singleCardWidth}px + ${centeringOffset}px))`;
     }
     
-    // For smaller screens, simple translation
-    return `translateX(-${activeIndex * cardWidth}px)`;
+    // For smaller screens, align to the left.
+    return `translateX(-${activeIndex * singleCardWidth}px)`;
   }, [activeIndex]);
 
+  // Reset all indicator fills to 0 and remove transitions
+  const resetAllIndicatorFills = () => {
+    indicatorFillRefs.current.forEach(fill => {
+      if (fill) {
+        fill.style.transition = 'none';
+        fill.style.width = '0%';
+      }
+    });
+  };
+
+  const animateIndicatorFill = (index: number, duration: number, startWidthPercent: number = 0) => {
+    const fillEl = indicatorFillRefs.current[index];
+    if (fillEl) {
+      fillEl.style.transition = 'none';
+      fillEl.style.width = `${startWidthPercent}%`;
+      // Force reflow to apply start width before transition
+      void fillEl.offsetHeight;
+      fillEl.style.transition = `width ${duration / 1000}s linear`;
+      fillEl.style.width = '100%';
+    }
+  };
+
+  const freezeIndicatorFill = (index: number) => {
+    const fillEl = indicatorFillRefs.current[index];
+
+    if (fillEl) {
+      // This function is called when we need to stop the animation and set a static progress.
+      // The most crucial call is from handleCardClick when PAUSING an active slide.
+      if (index === activeIndex && lastTickTimestampRef.current) {
+        // We are pausing the currently active, playing slide.
+        // currentSlideTimeLeftRef.current (in the outer scope) has just been updated in handleCardClick
+        // to be the true total time left for this slide across all pause/resume cycles.
+        const timeTrulyLeftForSlide = currentSlideTimeLeftRef.current;
+        const timeShownSoFarForSlide = autoPlayDuration - timeTrulyLeftForSlide;
+        let currentProgressPercent = (timeShownSoFarForSlide / autoPlayDuration) * 100;
+        currentProgressPercent = Math.min(100, Math.max(0, currentProgressPercent));
+
+        fillEl.style.transition = 'none';
+        fillEl.style.width = `${currentProgressPercent}%`;
+      } else if (index === activeIndex && !isAutoPlaying && currentSlideTimeLeftRef.current === autoPlayDuration) {
+        // This handles a slide that is active, paused, and has its full duration left
+        // (e.g., a new slide was clicked, which starts paused by default).
+        fillEl.style.transition = 'none';
+        fillEl.style.width = '0%';
+      }
+      // Non-active indicators should have been reset by resetAllIndicatorFills already.
+    }
+  };
+
   const goToNext = useCallback(() => {
-    setActiveIndex((prevIndex) => 
-      prevIndex === services.length - 1 ? 0 : prevIndex + 1
-    );
-  }, [services.length]);
+    if (autoPlayInterval.current) clearTimeout(autoPlayInterval.current);
+    resetAllIndicatorFills();
+    setActiveIndex((prevIndex) => {
+      const nextIndex = prevIndex === services.length - 1 ? 0 : prevIndex + 1;
+      currentSlideTimeLeftRef.current = autoPlayDuration;
+      if (isAutoPlaying) lastTickTimestampRef.current = Date.now(); // Start tick for new slide if autoplaying
+      else lastTickTimestampRef.current = null;
+      return nextIndex;
+    });
+  }, [services.length, isAutoPlaying]);
 
   const goToPrev = useCallback(() => {
-    setActiveIndex((prevIndex) => 
-      prevIndex === 0 ? services.length - 1 : prevIndex - 1
-    );
-  }, [services.length]);
+    if (autoPlayInterval.current) clearTimeout(autoPlayInterval.current);
+    resetAllIndicatorFills();
+    setActiveIndex((prevIndex) => {
+      const nextIndex = prevIndex === 0 ? services.length - 1 : prevIndex - 1;
+      currentSlideTimeLeftRef.current = autoPlayDuration;
+      if (isAutoPlaying) lastTickTimestampRef.current = Date.now();
+      else lastTickTimestampRef.current = null;
+      return nextIndex;
+    });
+  }, [services.length, isAutoPlaying]);
 
-  const goToSlide = (index: number) => {
+  const goToSlide = useCallback((index: number) => {
+    if (autoPlayInterval.current) clearTimeout(autoPlayInterval.current);
+    resetAllIndicatorFills();
     setActiveIndex(index);
-    resetAutoPlay();
-  };
+    currentSlideTimeLeftRef.current = autoPlayDuration;
+    if (isAutoPlaying) lastTickTimestampRef.current = Date.now();
+    else lastTickTimestampRef.current = null;
+  }, [isAutoPlaying]);
 
-  const resetAutoPlay = () => {
-    if (!isAutoPlaying) return;
-    
-    if (autoPlayInterval.current) {
-      clearInterval(autoPlayInterval.current);
+  // This function will be called when a card is clicked
+  const handleCardClick = (index: number) => {
+    if (autoPlayInterval.current) clearTimeout(autoPlayInterval.current);
+
+    if (index === activeIndex) {
+      // If the active card is clicked, toggle autoplay
+      if (isAutoPlaying) {
+        // PAUSING
+        if (lastTickTimestampRef.current) {
+          const elapsedTime = Date.now() - lastTickTimestampRef.current;
+          currentSlideTimeLeftRef.current = Math.max(0, currentSlideTimeLeftRef.current - elapsedTime);
+        }
+        freezeIndicatorFill(activeIndex);
+        setIsAutoPlaying(false);
+        lastTickTimestampRef.current = null;
+      } else {
+        // RESUMING
+        lastTickTimestampRef.current = Date.now(); // Start new tick
+        setIsAutoPlaying(true);
+        // The useEffect for autoplay will handle the indicator animation
+      }
+    } else {
+      // If a different card is clicked, make it active and pause autoplay
+      resetAllIndicatorFills();
+      setActiveIndex(index);
+      currentSlideTimeLeftRef.current = autoPlayDuration;
+      setIsAutoPlaying(false); // New card starts paused
+      lastTickTimestampRef.current = null;
+      // Ensure new active indicator is reset (or will be set by effect if we were to make it play)
+      if(indicatorFillRefs.current[index]) {
+        indicatorFillRefs.current[index]!.style.transition = 'none';
+        indicatorFillRefs.current[index]!.style.width = '0%';
+      }
     }
-    
-    autoPlayInterval.current = setInterval(goToNext, autoPlayDuration);
   };
 
-  const toggleAutoPlay = () => {
-    setIsAutoPlaying(!isAutoPlaying);
-  };
+  // Effect to manage the autoplay interval and indicator animation
+  useEffect(() => {
+    if (autoPlayInterval.current) {
+      clearTimeout(autoPlayInterval.current);
+    }
 
-  // Setup auto-play
+    if (services.length === 0) return;
+
+    // Ensure indicator refs are setup for the current services
+    indicatorFillRefs.current = indicatorFillRefs.current.slice(0, services.length);
+
+    if (isAutoPlaying) {
+      if (lastTickTimestampRef.current === null) { // Check if tick needs to start
+        lastTickTimestampRef.current = Date.now();
+      }
+      // Ensure timeLeft is not negative or excessively small
+      const timeForThisSlide = Math.max(50, currentSlideTimeLeftRef.current); 
+
+      autoPlayInterval.current = setTimeout(goToNext, timeForThisSlide);
+      
+      const progressAlreadyMadePercent = ((autoPlayDuration - timeForThisSlide) / autoPlayDuration) * 100;
+      animateIndicatorFill(activeIndex, timeForThisSlide, progressAlreadyMadePercent);
+
+    } else {
+      // PAUSED state: freeze the current indicator if it was playing
+      if (lastTickTimestampRef.current !== null) { // Was playing before this render
+         // This implies we just paused. The freezing should be handled by handleCardClick.
+         // Or, if state changed causing isAutoPlaying to be false, ensure it's frozen.
+         freezeIndicatorFill(activeIndex);
+         lastTickTimestampRef.current = null; // Mark tick as ended
+      }
+    }
+
+    return () => {
+      if (autoPlayInterval.current) {
+        clearTimeout(autoPlayInterval.current);
+      }
+    };
+  }, [isAutoPlaying, activeIndex, services.length, autoPlayDuration, goToNext]);
+
+  // Setup global styles
   useEffect(() => {
     const styleEl = document.createElement('style');
     styleEl.id = 'services-carousel-styles';
@@ -319,27 +486,24 @@ const ServicesCarousel = ({ services }: ServicesCarouselProps) => {
       document.head.appendChild(styleEl);
     }
     
-    if (isAutoPlaying) {
-      autoPlayInterval.current = setInterval(goToNext, autoPlayDuration);
-    } else {
-      if (autoPlayInterval.current) {
-        clearInterval(autoPlayInterval.current);
-      }
-    }
-    
     return () => {
-      if (autoPlayInterval.current) {
-        clearInterval(autoPlayInterval.current);
-      }
       const el = document.getElementById(styleEl.id);
       if (el) document.head.removeChild(el);
     };
-  }, [isAutoPlaying, goToNext]);
+  }, []); // Empty dependency array means this runs once on mount and cleanup on unmount
 
-  // Reset auto-play when active index changes
+  // Recalculate transform on window resize for responsive centering
   useEffect(() => {
-    resetAutoPlay();
-  }, [activeIndex]);
+    const handleResize = () => {
+      if (trackRef.current) {
+        trackRef.current.style.transform = getTrackTransform();
+      }
+    };
+    window.addEventListener('resize', handleResize);
+    // Initial call to set transform
+    handleResize(); 
+    return () => window.removeEventListener('resize', handleResize);
+  }, [getTrackTransform]);
 
   return (
     <div className="carousel-container">
@@ -357,6 +521,8 @@ const ServicesCarousel = ({ services }: ServicesCarouselProps) => {
             expandedContent={service.expandedContent}
             icon={service.icon}
             isActive={index === activeIndex}
+            onCardClick={() => handleCardClick(index)}
+            isPaused={!isAutoPlaying}
           />
         ))}
       </div>
@@ -370,22 +536,6 @@ const ServicesCarousel = ({ services }: ServicesCarouselProps) => {
           <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" className="w-6 h-6">
             <path fillRule="evenodd" d="M7.72 12.53a.75.75 0 010-1.06l7.5-7.5a.75.75 0 111.06 1.06L9.31 12l6.97 6.97a.75.75 0 11-1.06 1.06l-7.5-7.5z" clipRule="evenodd" />
           </svg>
-        </button>
-        
-        <button 
-          className="carousel-nav-button"
-          onClick={toggleAutoPlay}
-          aria-label={isAutoPlaying ? "Pause autoplay" : "Start autoplay"}
-        >
-          {isAutoPlaying ? (
-            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" className="w-6 h-6">
-              <path fillRule="evenodd" d="M6.75 5.25a.75.75 0 01.75-.75H9a.75.75 0 01.75.75v13.5a.75.75 0 01-.75.75H7.5a.75.75 0 01-.75-.75V5.25zm7.5 0A.75.75 0 0115 4.5h1.5a.75.75 0 01.75.75v13.5a.75.75 0 01-.75.75H15a.75.75 0 01-.75-.75V5.25z" clipRule="evenodd" />
-            </svg>
-          ) : (
-            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" className="w-6 h-6">
-              <path fillRule="evenodd" d="M4.5 5.653c0-1.426 1.529-2.33 2.779-1.643l11.54 6.348c1.295.712 1.295 2.573 0 3.285L7.28 19.991c-1.25.687-2.779-.217-2.779-1.643V5.653z" clipRule="evenodd" />
-            </svg>
-          )}
         </button>
         
         <button 
@@ -406,7 +556,12 @@ const ServicesCarousel = ({ services }: ServicesCarouselProps) => {
             className={`carousel-indicator ${index === activeIndex ? 'active' : ''}`}
             onClick={() => goToSlide(index)}
             aria-label={`Go to slide ${index + 1}`}
-          />
+          >
+            <span 
+              className="carousel-indicator-fill"
+              ref={el => { indicatorFillRefs.current[index] = el; }}
+            ></span>
+          </button>
         ))}
       </div>
     </div>

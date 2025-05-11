@@ -123,7 +123,7 @@ export default function Mockup({
                         msg.role === 'user' 
                           ? 'bg-teal-500/20 ml-auto text-white' 
                           : 'bg-gray-800/60 text-gray-300'
-                      } ${idx >= activeChatMessage ? 'opacity-0' : 'opacity-100'} transition-opacity duration-300`}
+                      } ${idx >= activeChatMessage ? 'opacity-0' : 'opacity-100'} transition-opacity duration-300 will-change-opacity transform-gpu`}
                     >
                       {msg.content}
                     </div>
