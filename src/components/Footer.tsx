@@ -167,6 +167,13 @@ const Footer = () => {
             >
               Async Studios
             </a>
+            <br />
+            <span className="text-xs text-gray-500">
+              (Our pixels prefer more legroom; mobile is cool, but desktop is where the magic{' '}
+              <strong className="font-semibold">really</strong>
+              {' '}
+              happens)
+            </span>
           </div>
         </div>
         
