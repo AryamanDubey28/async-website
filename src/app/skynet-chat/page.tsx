@@ -74,6 +74,14 @@ Charlie
     return () => clearTimeout(timer);
   }, []);
 
+  // scrollToSection function
+  const scrollToSection = (sectionId: string) => {
+    const element = document.getElementById(sectionId);
+    if (element) {
+      element.scrollIntoView({ behavior: 'smooth' });
+    }
+  };
+
   // Typing indicator effect - Refactored again for sequential state updates
   useEffect(() => {
     let timer: NodeJS.Timeout | null = null;
@@ -403,11 +411,15 @@ Charlie
                 </p>
                 
                 <div className="flex flex-col sm:flex-row gap-5 pt-4">
-                  <button className="group relative px-8 py-4 rounded-full bg-gradient-to-r from-teal-500 to-cyan-500 text-white font-semibold transition-all duration-300 hover:shadow-lg hover:shadow-teal-500/30 hover:scale-105 focus:outline-none focus:ring-2 focus:ring-teal-400/50 overflow-hidden">
+                  <button 
+                    onClick={() => scrollToSection('skynet-cta')}
+                    className="group relative px-8 py-4 rounded-full bg-gradient-to-r from-teal-500 to-cyan-500 text-white font-semibold transition-all duration-300 hover:shadow-lg hover:shadow-teal-500/30 hover:scale-105 focus:outline-none focus:ring-2 focus:ring-teal-400/50 overflow-hidden">
                     <span className="relative z-10">Request Demo</span>
                     <span className="absolute inset-0 bg-gradient-to-r from-teal-400 to-cyan-400 opacity-0 group-hover:opacity-100 transition-opacity duration-300 blur-xl"></span>
                   </button>
-                  <button className="relative px-8 py-4 rounded-full border border-gray-700 backdrop-blur-lg text-white transition-all duration-300 hover:border-teal-400 focus:outline-none focus:ring-2 focus:ring-teal-400/30 overflow-hidden group">
+                  <button 
+                    onClick={() => scrollToSection('skynet-features')}
+                    className="relative px-8 py-4 rounded-full border border-gray-700 backdrop-blur-lg text-white transition-all duration-300 hover:border-teal-400 focus:outline-none focus:ring-2 focus:ring-teal-400/30 overflow-hidden group">
                     <span className="relative z-10">Learn More</span>
                     <span className="absolute inset-0 bg-gradient-to-r from-gray-800 to-gray-900 opacity-80"></span>
                     <span className="absolute inset-0 bg-gradient-to-r from-teal-500/20 to-cyan-500/20 opacity-0 group-hover:opacity-100 transition-opacity duration-300"></span>
@@ -462,7 +474,9 @@ Charlie
         </section>
         
         {/* Key Features Section -> Replaced with SkynetChatFeatures component */}
-        <SkynetChatFeatures features={features} />
+        <section id="skynet-features" className="py-24 bg-gray-950/50 relative">
+          <SkynetChatFeatures features={features} />
+        </section>
         
         {/* Product Overview Section (Keep as is for now) */}
         <section className="py-24 relative">
@@ -724,7 +738,9 @@ Charlie
           </div>
         </section>
         
-        <SkynetChatCallToAction />
+        <section id="skynet-cta">
+          <SkynetChatCallToAction />
+        </section>
         
       </div>
       
