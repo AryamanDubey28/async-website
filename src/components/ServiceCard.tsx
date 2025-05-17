@@ -9,6 +9,8 @@ export interface ServiceCardProps {
   expandedContent: string[];
   icon: React.ReactNode;
   isActive: boolean;
+  onCardClick?: () => void;
+  isPaused?: boolean;
 }
 
 const ServiceCard = ({
@@ -17,10 +19,15 @@ const ServiceCard = ({
   description,
   expandedContent,
   icon,
-  isActive
+  isActive,
+  onCardClick,
+  isPaused
 }: ServiceCardProps) => {
   return (
-    <div className={`carousel-card ${isActive ? 'active' : ''}`}>
+    <div 
+      className={`carousel-card ${isActive ? 'active' : ''} ${isActive && isPaused ? 'paused' : ''}`.trim()}
+      onClick={onCardClick}
+    >
       <div className="carousel-card-content">
         {/* Left side - Summary content */}
         <div className={`card-summary ${isActive ? 'active-card-section' : ''}`}>

@@ -180,7 +180,7 @@ const CallToAction = () => {
               </div>
               <div className="text-left">
                 <div className="text-sm text-gray-400">Email us</div>
-                <div className="text-white">info@asyncstudios.ai</div>
+                <div className="text-white">contact@asyncstudios.co.uk</div>
               </div>
             </div>
           </div>

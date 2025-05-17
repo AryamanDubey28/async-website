@@ -1,6 +1,64 @@
 'use client';
+import { useState } from 'react';
 
 export default function SkynetAgentsCallToAction() {
+  const [email, setEmail] = useState('');
+  const [name, setName] = useState('');
+  const [company, setCompany] = useState('');
+  const [message, setMessage] = useState('');
+  const [submitted, setSubmitted] = useState(false);
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState('');
+
+  const handleSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+    
+    if (!email) {
+      setError('Email is required.');
+      return;
+    }
+    if (!name) {
+      setError('Full Name is required.');
+      return;
+    }
+    
+    setLoading(true);
+    setError('');
+    
+    try {
+      const GOOGLE_SHEET_WEBHOOK_URL = 'https://script.google.com/macros/s/AKfycbw0jX72GcNKB23nTZAkBC6EzGfniQFOMmWvONXW707FbDAgrhITcBGQgbe9HsGCwHtvsA/exec';
+      
+      const formData = {
+        name,
+        email,
+        company,
+        message,
+        timestamp: new Date().toISOString(),
+        source: 'SkynetAgentsCallToAction',
+      };
+      
+      const response = await fetch(GOOGLE_SHEET_WEBHOOK_URL, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(formData),
+        mode: 'no-cors', 
+      });
+      
+      setSubmitted(true);
+      setName('');
+      setEmail('');
+      setCompany('');
+      setMessage('');
+    } catch (err) {
+      console.error('Error submitting form:', err);
+      setError('Failed to submit. Please try again later.');
+    } finally {
+      setLoading(false);
+    }
+  };
+
   return (
     <section className="pt-8 pb-20 relative">
       {/* Background decorations - Skynet Agents theme */}
@@ -39,83 +97,128 @@ export default function SkynetAgentsCallToAction() {
                 </p>
               </div>
               
-              <div className="flex flex-col md:flex-row gap-8 items-stretch">
-                {/* Form side */}
-                <div className="md:w-1/2">
-                  <div className="bg-gray-900/50 backdrop-blur-lg rounded-xl p-6 border border-gray-700/80 h-full shadow-xl shadow-gray-950/30">
-                    <div className="space-y-5">
-                      <div>
-                        <label htmlFor="name-agents-cta" className="block text-sm font-medium text-gray-300 mb-1.5">Full Name</label>
-                        <input id="name-agents-cta" type="text" className="w-full px-4 py-2.5 rounded-lg bg-gray-800/70 border border-gray-600/70 text-white placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-purple-500/60 focus:border-transparent transition-all duration-300" placeholder="e.g., Ada Lovelace" />
-                      </div>
-                      <div>
-                        <label htmlFor="email-agents-cta" className="block text-sm font-medium text-gray-300 mb-1.5">Work Email</label>
-                        <input id="email-agents-cta" type="email" className="w-full px-4 py-2.5 rounded-lg bg-gray-800/70 border border-gray-600/70 text-white placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-purple-500/60 focus:border-transparent transition-all duration-300" placeholder="ada@example.com" />
-                      </div>
-                      <div>
-                        <label htmlFor="company-agents-cta" className="block text-sm font-medium text-gray-300 mb-1.5">Company Name</label>
-                        <input id="company-agents-cta" type="text" className="w-full px-4 py-2.5 rounded-lg bg-gray-800/70 border border-gray-600/70 text-white placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-purple-500/60 focus:border-transparent transition-all duration-300" placeholder="Your Company Inc." />
-                      </div>
-                      <div>
-                        <label htmlFor="message-agents-cta" className="block text-sm font-medium text-gray-300 mb-1.5">How can agents help you?</label>
-                        <textarea id="message-agents-cta" className="w-full px-4 py-2.5 rounded-lg bg-gray-800/70 border border-gray-600/70 text-white placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-purple-500/60 focus:border-transparent h-28 transition-all duration-300" placeholder="Describe your automation goals..."></textarea>
-                      </div>
-                      <div className="pt-4">
-                        <button className="w-full group relative px-8 py-4 rounded-lg bg-gradient-to-r from-purple-600 via-indigo-600 to-blue-600 text-white font-semibold transition-all duration-300 hover:shadow-2xl hover:shadow-purple-500/40 hover:scale-[1.03] focus:outline-none focus:ring-2 focus:ring-indigo-400/50 overflow-hidden">
-                          <span className="relative z-10">Request a Consultation</span>
-                          <span className="absolute inset-0 bg-gradient-to-r from-purple-500 via-indigo-500 to-blue-400 opacity-0 group-hover:opacity-100 transition-opacity duration-300 blur-xl"></span>
-                        </button>
+              {!submitted ? (
+                <form onSubmit={handleSubmit} className="flex flex-col md:flex-row gap-8 items-stretch">
+                  {/* Form side */}
+                  <div className="md:w-1/2">
+                    <div className="bg-gray-900/50 backdrop-blur-lg rounded-xl p-6 border border-gray-700/80 h-full shadow-xl shadow-gray-950/30">
+                      <div className="space-y-5">
+                        <div>
+                          <label htmlFor="name-agents-cta" className="block text-sm font-medium text-gray-300 mb-1.5">Full Name</label>
+                          <input 
+                            id="name-agents-cta" 
+                            type="text" 
+                            value={name}
+                            onChange={(e) => setName(e.target.value)}
+                            className="w-full px-4 py-2.5 rounded-lg bg-gray-800/70 border border-gray-600/70 text-white placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-purple-500/60 focus:border-transparent transition-all duration-300" 
+                            placeholder="e.g., Ada Lovelace" 
+                            required
+                          />
+                        </div>
+                        <div>
+                          <label htmlFor="email-agents-cta" className="block text-sm font-medium text-gray-300 mb-1.5">Work Email</label>
+                          <input 
+                            id="email-agents-cta" 
+                            type="email" 
+                            value={email}
+                            onChange={(e) => setEmail(e.target.value)}
+                            className="w-full px-4 py-2.5 rounded-lg bg-gray-800/70 border border-gray-600/70 text-white placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-purple-500/60 focus:border-transparent transition-all duration-300" 
+                            placeholder="ada@example.com" 
+                            required
+                          />
+                        </div>
+                        <div>
+                          <label htmlFor="company-agents-cta" className="block text-sm font-medium text-gray-300 mb-1.5">Company Name</label>
+                          <input 
+                            id="company-agents-cta" 
+                            type="text" 
+                            value={company}
+                            onChange={(e) => setCompany(e.target.value)}
+                            className="w-full px-4 py-2.5 rounded-lg bg-gray-800/70 border border-gray-600/70 text-white placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-purple-500/60 focus:border-transparent transition-all duration-300" 
+                            placeholder="Your Company Inc." 
+                          />
+                        </div>
+                        <div>
+                          <label htmlFor="message-agents-cta" className="block text-sm font-medium text-gray-300 mb-1.5">How can agents help you?</label>
+                          <textarea 
+                            id="message-agents-cta" 
+                            value={message}
+                            onChange={(e) => setMessage(e.target.value)}
+                            className="w-full px-4 py-2.5 rounded-lg bg-gray-800/70 border border-gray-600/70 text-white placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-purple-500/60 focus:border-transparent h-28 transition-all duration-300" 
+                            placeholder="Describe your automation goals..."></textarea>
+                        </div>
+                        {error && <p className="text-red-400 text-sm my-2">{error}</p>}
+                        <div className="pt-4">
+                          <button 
+                            type="submit"
+                            disabled={loading}
+                            className="w-full group relative px-8 py-4 rounded-lg bg-gradient-to-r from-purple-600 via-indigo-600 to-blue-600 text-white font-semibold transition-all duration-300 hover:shadow-2xl hover:shadow-purple-500/40 hover:scale-[1.03] focus:outline-none focus:ring-2 focus:ring-indigo-400/50 overflow-hidden disabled:opacity-70 disabled:hover:scale-100"
+                          >
+                            <span className="relative z-10">
+                              {loading ? 'Sending Request...' : 'Request a Consultation'}
+                            </span>
+                            <span className="absolute inset-0 bg-gradient-to-r from-purple-500 via-indigo-500 to-blue-400 opacity-0 group-hover:opacity-100 transition-opacity duration-300 blur-xl"></span>
+                          </button>
+                        </div>
                       </div>
                     </div>
                   </div>
+                  
+                  {/* Info side - Adjusted for Skynet Agents */}
+                  <div className="md:w-1/2 space-y-6">
+                    <div className="flex items-start group transition-all duration-300 hover:bg-gray-800/40 backdrop-blur-sm p-4 rounded-xl cursor-pointer border border-transparent hover:border-purple-500/30" onClick={() => window.location.href='mailto:agents-inquiries@asyncstudios.com'}>
+                      <div className="flex-shrink-0 h-12 w-12 rounded-lg bg-purple-500/25 flex items-center justify-center text-purple-300 group-hover:scale-110 transition-transform duration-300">
+                        <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 8h2a2 2 0 012 2v6a2 2 0 01-2 2h-2v4l-4-4H9a1.994 1.994 0 01-1.414-.586m0 0L11 14h4a2 2 0 002-2V6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2v4l.586-.586z" />
+                        </svg>
+                      </div>
+                      <div className="ml-4">
+                        <p className="text-gray-100 font-semibold group-hover:text-purple-300 transition-colors duration-300 text-lg">Get in Touch</p>
+                        <p className="text-gray-400">agents-inquiries@asyncstudios.com</p>
+                      </div>
+                    </div>
+                    
+                    <div className="flex items-start group transition-all duration-300 hover:bg-gray-800/40 backdrop-blur-sm p-4 rounded-xl cursor-pointer border border-transparent hover:border-yellow-500/30" onClick={() => window.location.href = '#'}>
+                      <div className="flex-shrink-0 h-12 w-12 rounded-lg bg-yellow-500/25 flex items-center justify-center text-yellow-300 group-hover:scale-110 transition-transform duration-300">
+                        <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M11.049 2.927c.3-.921 1.603-.921 1.902 0l1.846 5.671a1 1 0 00.95.69h5.969c.969 0 1.371 1.24.588 1.81l-4.823 3.522a1 1 0 00-.364 1.118l1.846 5.671c.3.921-.755 1.688-1.54 1.118l-4.823-3.522a1 1 0 00-1.176 0l-4.823 3.522c-.784.57-1.838-.197-1.539-1.118l1.846-5.671a1 1 0 00-.364-1.118L2.487 11.1c-.783-.57-.38-1.81.588-1.81h5.969a1 1 0 00.95-.69L11.049 2.927z" />
+                        </svg>
+                      </div>
+                      <div className="ml-4">
+                        <p className="text-gray-100 font-semibold group-hover:text-yellow-300 transition-colors duration-300 text-lg">View Success Stories</p>
+                        <p className="text-gray-400">Read about our impactful client results</p>
+                      </div>
+                    </div>
+                    
+                    <div className="flex items-start group transition-all duration-300 hover:bg-gray-800/40 backdrop-blur-sm p-4 rounded-xl cursor-pointer border border-transparent hover:border-blue-500/30" onClick={() => window.location.href = '#'}>
+                      <div className="flex-shrink-0 h-12 w-12 rounded-lg bg-blue-500/25 flex items-center justify-center text-blue-300 group-hover:scale-110 transition-transform duration-300">
+                        <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 6.253v11.494m0 0A2.25 2.25 0 0014.25 20H17a2 2 0 002-2V6a2 2 0 00-2-2H7a2 2 0 00-2 2v12a2 2 0 002 2h2.75a2.25 2.25 0 002.25-2.25zM12 6.253V5M12 6.253A2.25 2.25 0 019.75 4H7M14.25 4H12a2.25 2.25 0 00-2.25 2.253" />
+                        </svg>
+                      </div>
+                      <div className="ml-4">
+                        <p className="text-gray-100 font-semibold group-hover:text-blue-300 transition-colors duration-300 text-lg">API & SDK Docs</p>
+                        <p className="text-gray-400">Integrate and extend with our developer tools</p>
+                      </div>
+                    </div>
+                    
+                    <div className="pt-4">
+                      <div className="inline-flex items-center px-5 py-2.5 rounded-full bg-gray-800/80 backdrop-blur-md border border-gray-700/80 text-gray-300 shadow-md">
+                        <span className="inline-block w-2.5 h-2.5 rounded-full bg-purple-400 mr-3 animate-pulse"></span>
+                        <span>Join the Autonomous Revolution</span>
+                      </div>
+                    </div>
+                  </div>
+                </form>
+              ) : (
+                <div className="text-center py-16">
+                  <svg className="w-16 h-16 text-purple-400 mx-auto mb-6" fill="none" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" viewBox="0 0 24 24" stroke="currentColor">
+                    <path d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+                  </svg>
+                  <h3 className="text-2xl font-semibold text-white mb-3">Thank You for Your Interest!</h3>
+                  <p className="text-gray-300 max-w-md mx-auto">Our team has received your consultation request and will be in touch with you shortly to discuss how Skynet Agents can empower your enterprise.</p>
                 </div>
-                
-                {/* Info side - Adjusted for Skynet Agents */}
-                <div className="md:w-1/2 space-y-6">
-                  <div className="flex items-start group transition-all duration-300 hover:bg-gray-800/40 backdrop-blur-sm p-4 rounded-xl cursor-pointer border border-transparent hover:border-purple-500/30">
-                    <div className="flex-shrink-0 h-12 w-12 rounded-lg bg-purple-500/25 flex items-center justify-center text-purple-300 group-hover:scale-110 transition-transform duration-300">
-                      <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 8h2a2 2 0 012 2v6a2 2 0 01-2 2h-2v4l-4-4H9a1.994 1.994 0 01-1.414-.586m0 0L11 14h4a2 2 0 002-2V6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2v4l.586-.586z" />
-                      </svg>
-                    </div>
-                    <div className="ml-4">
-                      <p className="text-gray-100 font-semibold group-hover:text-purple-300 transition-colors duration-300 text-lg">Get in Touch</p>
-                      <p className="text-gray-400">agents-inquiries@asyncstudios.com</p>
-                    </div>
-                  </div>
-                  
-                  <div className="flex items-start group transition-all duration-300 hover:bg-gray-800/40 backdrop-blur-sm p-4 rounded-xl cursor-pointer border border-transparent hover:border-indigo-500/30">
-                    <div className="flex-shrink-0 h-12 w-12 rounded-lg bg-indigo-500/25 flex items-center justify-center text-indigo-300 group-hover:scale-110 transition-transform duration-300">
-                      <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 10l4.553-2.276A1 1 0 0121 8.618v6.764a1 1 0 01-1.447.894L15 14M5 18h8a2 2 0 002-2V8a2 2 0 00-2-2H5a2 2 0 00-2 2v8a2 2 0 002 2z" />
-                      </svg>
-                    </div>
-                    <div className="ml-4">
-                      <p className="text-gray-100 font-semibold group-hover:text-indigo-300 transition-colors duration-300 text-lg">Book a Live Demo</p>
-                      <p className="text-gray-400">See Skynet Agents in action with your use case</p>
-                    </div>
-                  </div>
-                  
-                  <div className="flex items-start group transition-all duration-300 hover:bg-gray-800/40 backdrop-blur-sm p-4 rounded-xl cursor-pointer border border-transparent hover:border-blue-500/30">
-                    <div className="flex-shrink-0 h-12 w-12 rounded-lg bg-blue-500/25 flex items-center justify-center text-blue-300 group-hover:scale-110 transition-transform duration-300">
-                      <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 6.253v11.494m0 0A2.25 2.25 0 0014.25 20H17a2 2 0 002-2V6a2 2 0 00-2-2H7a2 2 0 00-2 2v12a2 2 0 002 2h2.75a2.25 2.25 0 002.25-2.25zM12 6.253V5M12 6.253A2.25 2.25 0 019.75 4H7M14.25 4H12a2.25 2.25 0 00-2.25 2.253" />
-                      </svg>
-                    </div>
-                    <div className="ml-4">
-                      <p className="text-gray-100 font-semibold group-hover:text-blue-300 transition-colors duration-300 text-lg">API & SDK Docs</p>
-                      <p className="text-gray-400">Integrate and extend with our developer tools</p>
-                    </div>
-                  </div>
-                  
-                  <div className="pt-4">
-                    <div className="inline-flex items-center px-5 py-2.5 rounded-full bg-gray-800/80 backdrop-blur-md border border-gray-700/80 text-gray-300 shadow-md">
-                      <span className="inline-block w-2.5 h-2.5 rounded-full bg-purple-400 mr-3 animate-pulse"></span>
-                      <span>Join the Autonomous Revolution</span>
-                    </div>
-                  </div>
-                </div>
-              </div>
+              )}
             </div>
           </div>
         </div>

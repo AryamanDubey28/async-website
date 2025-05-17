@@ -84,6 +84,14 @@ export default function SkynetAgents() {
     return () => clearTimeout(timer);
   }, []);
 
+  // scrollToSection function
+  const scrollToSection = (sectionId: string) => {
+    const element = document.getElementById(sectionId);
+    if (element) {
+      element.scrollIntoView({ behavior: 'smooth' });
+    }
+  };
+
   // Typing indicator effect
   useEffect(() => {
     if (activeChatMessage === 1) {
@@ -320,11 +328,15 @@ export default function SkynetAgents() {
                 </p>
                 
                 <div className="flex flex-col sm:flex-row gap-5 pt-4">
-                  <button className="group relative px-8 py-4 rounded-full bg-gradient-to-r from-purple-500 to-indigo-500 text-white font-semibold transition-all duration-300 hover:shadow-xl hover:shadow-purple-500/40 hover:scale-105 focus:outline-none focus:ring-2 focus:ring-purple-400/50 overflow-hidden">
+                  <button 
+                    onClick={() => scrollToSection('skynet-agents-cta')}
+                    className="group relative px-8 py-4 rounded-full bg-gradient-to-r from-purple-500 to-indigo-500 text-white font-semibold transition-all duration-300 hover:shadow-xl hover:shadow-purple-500/40 hover:scale-105 focus:outline-none focus:ring-2 focus:ring-purple-400/50 overflow-hidden">
                     <span className="relative z-10">Request Demo</span>
                     <span className="absolute inset-0 bg-gradient-to-r from-purple-400 to-indigo-400 opacity-0 group-hover:opacity-100 transition-opacity duration-300 blur-xl"></span>
                   </button>
-                  <button className="relative px-8 py-4 rounded-full border border-gray-700 backdrop-blur-lg text-white transition-all duration-300 hover:border-purple-500/50 focus:outline-none focus:ring-2 focus:ring-purple-400/30 overflow-hidden group">
+                  <button 
+                    onClick={() => scrollToSection('skynet-agents-features')}
+                    className="relative px-8 py-4 rounded-full border border-gray-700 backdrop-blur-lg text-white transition-all duration-300 hover:border-purple-500/50 focus:outline-none focus:ring-2 focus:ring-purple-400/30 overflow-hidden group">
                     <span className="relative z-10">Learn More</span>
                     <span className="absolute inset-0 bg-gradient-to-r from-gray-800 to-gray-900 opacity-80"></span>
                     <span className="absolute inset-0 bg-gradient-to-r from-purple-500/20 to-indigo-500/20 opacity-0 group-hover:opacity-100 transition-opacity duration-300"></span>
@@ -377,7 +389,7 @@ export default function SkynetAgents() {
         </section>
 
         {/* Features Section */}
-        <section className="py-20 relative">
+        <section id="skynet-agents-features" className="py-20 relative">
           {/* Background effects */}
           <div className="absolute inset-0 overflow-hidden">
             <div className="absolute top-1/4 left-1/5 w-96 h-96 bg-gradient-to-br from-purple-500/10 via-teal-500/8 to-blue-600/10 rounded-full blur-3xl animate-pulse-slow"></div>
@@ -599,7 +611,9 @@ export default function SkynetAgents() {
         {/* API Integrations Section */}
         <ApiIntegrations />
         <UseCaseTabs />
-        <SkynetAgentsCallToAction />
+        <section id="skynet-agents-cta">
+          <SkynetAgentsCallToAction />
+        </section>
 
       </div>
       
