@@ -168,7 +168,7 @@ const CallToAction = () => {
               </div>
               <div className="text-left">
                 <div className="text-sm text-gray-400">Call us</div>
-                <div className="text-white">+1 (555) 123-4567</div>
+                <div className="text-white">020 3576 1250</div>
               </div>
             </div>
             
