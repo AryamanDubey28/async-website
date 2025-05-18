@@ -1,6 +1,10 @@
 import React from 'react';
 
-const ApiIntegrations = () => {
+type ApiIntegrationsProps = {
+  onScrollToCta: () => void;
+};
+
+const ApiIntegrations: React.FC<ApiIntegrationsProps> = ({ onScrollToCta }) => {
   const servicesRow1 = [
     { name: "Wordpress", logo: "/logos/wordpress-icon.svg", bg: "bg-gray-800", border: "border-gray-700" },
     { name: "X Social Media", logo: "/logos/x-social-media-black-icon.svg", bg: "bg-gray-800", border: "border-gray-700" },
@@ -110,7 +114,10 @@ const ApiIntegrations = () => {
           <div className="inline-block rounded-xl bg-gradient-to-r from-purple-500/10 via-teal-500/10 to-blue-500/10 backdrop-blur-sm border border-purple-500/30 p-0.5">
             <div className="bg-gray-900/50 backdrop-blur-sm rounded-lg py-4 px-8">
               <p className="text-gray-300 mb-3">Don't see the integration you need?</p>
-              <button className="px-6 py-2 rounded-full bg-gradient-to-r from-purple-500 to-teal-500 text-white font-medium transition-all duration-300 hover:shadow-lg hover:shadow-purple-500/30 hover:scale-105">
+              <button 
+                onClick={onScrollToCta}
+                className="px-6 py-2 rounded-full bg-gradient-to-r from-purple-500 to-teal-500 text-white font-medium transition-all duration-300 hover:shadow-lg hover:shadow-purple-500/30 hover:scale-105"
+              >
                 Request Custom Integration
               </button>
             </div>

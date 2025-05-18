@@ -265,41 +265,35 @@ export default function UseCaseTabs() {
                     </div>
                   </div>
 
-                  {/* Right side - Content */}
-                  <div className="space-y-10">
-                    <h3 className="text-3xl font-bold text-white">
-                      {tabData.heading}
-                    </h3>
-
-                    <p className="text-gray-300 text-lg leading-relaxed">
-                      {tabData.description}
-                    </p>
-
-                    <div className="space-y-5">
+                  {/* Right side - Details */}
+                  <div className="lg:pt-8">
+                    <h3 className="text-2xl font-bold mb-6 text-white">{tabData.heading}</h3>
+                    <p className="text-gray-300 mb-8 text-lg leading-relaxed">{tabData.description}</p>
+                    
+                    <ul className="space-y-5 mb-10">
                       {tabData.points.map((point, pointIdx) => (
-                        <div key={pointIdx} className="flex items-start">
-                          <div className="flex-shrink-0 w-6 h-6 rounded-full bg-purple-500/20 flex items-center justify-center mt-1 mr-4">
-                            <svg xmlns="http://www.w3.org/2000/svg" className="h-3.5 w-3.5 text-purple-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={3} d="M5 13l4 4L19 7" />
+                        <li key={pointIdx} className="flex items-start">
+                          <div className="flex-shrink-0 w-6 h-6 rounded-full bg-purple-500/25 flex items-center justify-center mt-1 mr-3 shadow-md shadow-purple-500/10">
+                            <svg xmlns="http://www.w3.org/2000/svg" className="h-3.5 w-3.5 text-purple-300" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
                             </svg>
                           </div>
                           <div>
-                            <h4 className="text-white font-medium text-lg">{point.title}</h4>
-                            <p className="text-base text-gray-400">{point.detail}</p>
+                            <p className="text-gray-100 font-medium">{point.title}</p>
+                            <p className="text-gray-400 text-sm">{point.detail}</p>
                           </div>
-                        </div>
+                        </li>
                       ))}
-                    </div>
+                    </ul>
 
-                    <div className="pt-6">
-                      <div className="flex flex-col sm:flex-row gap-5">
-                        <button className="px-8 py-4 rounded-full bg-gradient-to-r from-purple-500 to-teal-500 text-white font-semibold transition-all duration-300 hover:shadow-lg hover:shadow-purple-500/30 hover:scale-105">
-                          See Detailed Case Study
-                        </button>
-                        <button className="px-8 py-4 rounded-full border border-gray-700 text-white font-semibold transition-all duration-300 hover:border-purple-500/30">
-                          Request Demo
-                        </button>
-                      </div>
+                    <div className="mt-10 pt-8 border-t border-gray-700/50">
+                      <button 
+                        disabled
+                        className="w-full sm:w-auto group relative px-7 py-3.5 rounded-lg bg-gradient-to-r from-purple-600 via-indigo-600 to-blue-600 text-white font-semibold transition-all duration-300 focus:outline-none focus:ring-2 focus:ring-indigo-400/50 overflow-hidden disabled:opacity-60 disabled:cursor-not-allowed disabled:hover:scale-100 disabled:hover:shadow-none hover:shadow-xl hover:shadow-purple-500/30 hover:scale-[1.03]"
+                      >
+                        <span className="relative z-10">Case Study: Coming Soon</span>
+                        <span className="absolute inset-0 bg-gradient-to-r from-purple-500 via-indigo-500 to-blue-400 opacity-0 group-hover:opacity-100 transition-opacity duration-300 blur-xl group-disabled:opacity-0"></span>
+                      </button>
                     </div>
                   </div>
                 </div>

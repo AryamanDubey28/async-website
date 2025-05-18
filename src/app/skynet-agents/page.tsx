@@ -609,7 +609,7 @@ export default function SkynetAgents() {
         </section>
 
         {/* API Integrations Section */}
-        <ApiIntegrations />
+        <ApiIntegrations onScrollToCta={() => scrollToSection('skynet-cta')} />
         <UseCaseTabs />
         <section id="skynet-agents-cta">
           <SkynetAgentsCallToAction />
