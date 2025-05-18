@@ -1,6 +1,6 @@
 'use client';
 
-import { useState, useEffect, Fragment } from 'react';
+import { useState, useEffect, Fragment, useRef } from 'react';
 import Link from 'next/link';
 import Image from 'next/image';
 import { useRouter, usePathname } from 'next/navigation';
@@ -8,8 +8,10 @@ import { useRouter, usePathname } from 'next/navigation';
 const Navbar = () => {
   const [scrolled, setScrolled] = useState(false);
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
+  const [isProductsDropdownOpen, setIsProductsDropdownOpen] = useState(false);
   const router = useRouter();
   const pathname = usePathname();
+  const productsDropdownRef = useRef<HTMLDivElement>(null);
   
   useEffect(() => {
     const handleScroll = () => {
@@ -21,7 +23,20 @@ const Navbar = () => {
     };
 
     window.addEventListener('scroll', handleScroll);
-    return () => window.removeEventListener('scroll', handleScroll);
+    
+    // Click outside handler for products dropdown
+    const handleClickOutside = (event: MouseEvent) => {
+      if (productsDropdownRef.current && !productsDropdownRef.current.contains(event.target as Node)) {
+        setIsProductsDropdownOpen(false);
+      }
+    };
+
+    document.addEventListener('mousedown', handleClickOutside);
+    
+    return () => {
+      window.removeEventListener('scroll', handleScroll);
+      document.removeEventListener('mousedown', handleClickOutside);
+    }
   }, []);
 
   // Add body scroll locking effect
@@ -58,12 +73,18 @@ const Navbar = () => {
   const handleMobileLinkClick = (action: () => void) => {
     action();
     closeMobileMenu();
+    setIsProductsDropdownOpen(false);
   };
 
   const handleMobileNavClick = (path: string) => {
     router.push(path);
     closeMobileMenu();
+    setIsProductsDropdownOpen(false);
   }
+
+  const handleProductsToggle = () => {
+    setIsProductsDropdownOpen(prev => !prev);
+  };
 
   const navItems = [
     { name: 'Home', path: '/' },
@@ -71,6 +92,7 @@ const Navbar = () => {
       name: 'Products', 
       path: '#',
       isDropdown: true,
+      onClick: handleProductsToggle,
       dropdownItems: [
         { name: 'Skynet Chat', path: '/skynet-chat' },
         { name: 'Skynet Agents', path: '/skynet-agents' }
@@ -101,16 +123,17 @@ const Navbar = () => {
 
           <div className="hidden md:flex space-x-8">
             {navItems.map((item) => (
-              <div key={item.name} className="relative group">
+              <div key={item.name} className="relative group" ref={item.isDropdown ? productsDropdownRef : null}>
                 {item.isDropdown ? (
                   <>
                     <button
-                      className="relative text-gray-300 hover:text-white transition-colors duration-200 flex items-center pointer-events-none"
+                      onClick={item.onClick}
+                      className="relative text-gray-300 hover:text-white transition-colors duration-200 flex items-center"
                     >
                       {item.name}
                       <svg 
                         xmlns="http://www.w3.org/2000/svg" 
-                        className={`h-4 w-4 ml-1 transition-transform duration-200 group-hover:rotate-180`}
+                        className={`h-4 w-4 ml-1 transition-transform duration-200 ${isProductsDropdownOpen ? 'rotate-180' : 'group-hover:rotate-180'}`}
                         fill="none" 
                         viewBox="0 0 24 24" 
                         stroke="currentColor"
@@ -122,7 +145,7 @@ const Navbar = () => {
                     
                     {/* Dropdown menu */}
                     <div
-                      className={`absolute top-full left-0 bg-gray-950/95 backdrop-blur-sm border border-gray-800 rounded-lg shadow-xl transition-all duration-200 ease-out origin-top-left w-64 opacity-0 scale-95 pointer-events-none group-hover:opacity-100 group-hover:scale-100 group-hover:pointer-events-auto`}
+                      className={`absolute top-full left-0 bg-gray-950/95 backdrop-blur-sm border border-gray-800 rounded-lg shadow-xl transition-all duration-200 ease-out origin-top-left w-64 ${isProductsDropdownOpen ? 'opacity-100 scale-100 pointer-events-auto' : 'opacity-0 scale-95 pointer-events-none group-hover:opacity-100 group-hover:scale-100 group-hover:pointer-events-auto'}`}
                     >
                       <div className="py-3">
                         {item.dropdownItems?.map((dropdownItem) => {
@@ -208,7 +231,11 @@ const Navbar = () => {
 
           <div className="flex items-center gap-4">
             <button 
-              onClick={() => scrollToSection('contact')}
+              onClick={() => {
+                closeMobileMenu();
+                setIsProductsDropdownOpen(false);
+                handleMobileLinkClick(() => scrollToSection('contact'));
+              }}
               className="hidden md:block px-6 py-2 rounded-full bg-gradient-to-r from-teal-500 to-teal-400 text-gray-900 font-medium transition-all duration-300 hover:shadow-lg hover:shadow-teal-500/20 hover:scale-105">
               Get Started
             </button>
@@ -272,7 +299,11 @@ const Navbar = () => {
               )
             ))}
             <button 
-              onClick={() => handleMobileLinkClick(() => scrollToSection('contact'))}
+              onClick={() => {
+                closeMobileMenu();
+                setIsProductsDropdownOpen(false);
+                handleMobileLinkClick(() => scrollToSection('contact'));
+              }}
               className="mt-6 px-8 py-3 rounded-full bg-gradient-to-r from-teal-500 to-teal-400 text-gray-900 font-semibold transition-all duration-300 hover:shadow-lg hover:shadow-teal-500/20 hover:scale-105">
               Get Started
             </button>
