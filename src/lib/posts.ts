@@ -24,6 +24,10 @@ export interface PostData {
 }
 
 export function getSortedPostsData(): PostData[] {
+  // Check if the posts directory exists
+  if (!fs.existsSync(postsDirectory)) {
+    return [];
+  }
   // Get file names under /content/blogs
   const fileNames = fs.readdirSync(postsDirectory);
   const allPostsData = fileNames
@@ -66,6 +70,10 @@ export function getSortedPostsData(): PostData[] {
 }
 
 export function getAllPostSlugs() {
+  // Check if the posts directory exists
+  if (!fs.existsSync(postsDirectory)) {
+    return [];
+  }
   const fileNames = fs.readdirSync(postsDirectory);
   
   // Returns an array of objects with the slug params
@@ -92,6 +100,11 @@ export function getAllPostSlugs() {
 
 export async function getPostData(slug: string): Promise<PostData> {
   // First, try to find the post by its frontmatter slug if it exists
+  // Check if the posts directory exists before trying to read from it
+  if (!fs.existsSync(postsDirectory)) {
+    console.error(`Posts directory not found: ${postsDirectory}`);
+    notFound(); // Trigger 404 if directory doesn't exist
+  }
   const fileNames = fs.readdirSync(postsDirectory);
   let targetFileName = `${slug}.md`;
   
