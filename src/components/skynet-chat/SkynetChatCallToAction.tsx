@@ -66,7 +66,7 @@ export default function SkynetChatCallToAction() {
   };
 
   return (
-    <section className="py-20 relative">
+    <section id="skynet-cta-section" className="py-20 relative">
       {/* Background decorations - Enhanced with more vibrancy */}
       <div className="absolute inset-0 overflow-hidden">
         <div className="absolute top-1/4 right-1/4 w-96 h-96 bg-gradient-to-br from-teal-500/10 via-purple-500/8 to-blue-600/10 rounded-full blur-3xl animate-pulse-slow"></div>
