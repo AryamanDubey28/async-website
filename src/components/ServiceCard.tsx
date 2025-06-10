@@ -31,13 +31,13 @@ const ServiceCard = ({
       <div className="carousel-card-content">
         {/* Left side - Summary content */}
         <div className={`card-summary ${isActive ? 'active-card-section' : ''}`}>
-          <div className={`service-icon mb-4 text-cyan-300 w-14 h-14 rounded-xl p-2.5 bg-cyan-500/15 backdrop-blur-md border ${isActive ? 'border-cyan-400/50' : 'border-cyan-500/30'} flex items-center justify-center`}>
+          <div className={`service-icon mb-4 text-cyan-300 w-12 h-12 md:w-14 md:h-14 rounded-xl p-2.5 bg-cyan-500/15 backdrop-blur-md border ${isActive ? 'border-cyan-400/50' : 'border-cyan-500/30'} flex items-center justify-center`}>
             {icon}
           </div>
           
-          <h3 className="service-title text-2xl md:text-3xl font-bold mb-4 bg-gradient-to-r from-cyan-200 to-purple-300 text-transparent bg-clip-text tracking-tight leading-tight">{title}</h3>
+          <h3 className="service-title text-xl md:text-3xl font-bold mb-4 bg-gradient-to-r from-cyan-200 to-purple-300 text-transparent bg-clip-text tracking-tight leading-tight">{title}</h3>
           
-          <p className="service-description text-white leading-relaxed text-base md:text-lg font-light tracking-wide" style={{textShadow: '0 1px 1px rgba(0,0,0,0.3)'}}>{description}</p>
+          <p className="service-description text-white leading-relaxed text-sm md:text-lg font-light tracking-wide" style={{textShadow: '0 1px 1px rgba(0,0,0,0.3)'}}>{description}</p>
         </div>
         
         {/* Right side - Expanded content */}
