@@ -1,8 +1,14 @@
 'use client';
 import Link from 'next/link';
+import { useState } from 'react';
 
 const Footer = () => {
   const currentYear = new Date().getFullYear();
+  const [openAccordion, setOpenAccordion] = useState<string | null>(null);
+
+  const handleAccordionToggle = (title: string) => {
+    setOpenAccordion(openAccordion === title ? null : title);
+  };
   
   return (
     <footer className="relative">
@@ -92,38 +98,59 @@ const Footer = () => {
                 { name: 'Terms of Service', href: '/terms-of-service' }
               ]
             }
-          ].map((section, idx) => (
-            <div key={idx}>
-              <h3 className="text-white font-semibold mb-5 relative inline-block group">
-                {section.title}
-                <div className="absolute -bottom-1 left-0 w-10 h-0.5 bg-gradient-to-r from-teal-400 to-transparent"></div>
-                <div className="absolute -bottom-1 left-0 w-0 h-0.5 bg-teal-400 transition-all duration-300 group-hover:w-full"></div>
-              </h3>
-              <ul className="space-y-3">
-                {section.links.map((item) => (
-                  <li key={item.name}>
-                    {item.href === '#' ? (
-                      <a href="#" className="text-gray-300 hover:text-teal-400 transition-colors duration-200 group flex items-center">
-                        <span className="inline-block mr-2 text-teal-500 opacity-0 transform -translate-x-2 group-hover:opacity-100 group-hover:translate-x-0 transition-all duration-300">›</span>
-                        <span className="relative">
-                          {item.name}
-                          <span className="absolute -bottom-1 left-0 w-0 h-px bg-teal-400 transition-all duration-300 group-hover:w-full"></span>
-                        </span>
-                      </a>
-                    ) : (
-                      <Link href={item.href} className="text-gray-300 hover:text-teal-400 transition-colors duration-200 group flex items-center">
-                        <span className="inline-block mr-2 text-teal-500 opacity-0 transform -translate-x-2 group-hover:opacity-100 group-hover:translate-x-0 transition-all duration-300">›</span>
-                        <span className="relative">
-                          {item.name}
-                          <span className="absolute -bottom-1 left-0 w-0 h-px bg-teal-400 transition-all duration-300 group-hover:w-full"></span>
-                        </span>
-                      </Link>
-                    )}
-                  </li>
-                ))}
-              </ul>
-            </div>
-          ))}
+          ].map((section, idx) => {
+            const isOpen = openAccordion === section.title;
+            return (
+              <div key={idx}>
+                <div
+                  className="flex justify-between items-center mb-5 cursor-pointer md:cursor-auto md:mb-0"
+                  onClick={() => handleAccordionToggle(section.title)}
+                  role="button"
+                  aria-expanded={isOpen}
+                  tabIndex={0}
+                  onKeyPress={(e) => e.key === 'Enter' && handleAccordionToggle(section.title)}
+                >
+                  <h3 className="text-white font-semibold relative inline-block group md:mb-5">
+                    {section.title}
+                    <div className="absolute -bottom-1 left-0 w-10 h-0.5 bg-gradient-to-r from-teal-400 to-transparent"></div>
+                    <div className="absolute -bottom-1 left-0 w-0 h-0.5 bg-teal-400 transition-all duration-300 group-hover:w-full"></div>
+                  </h3>
+                  <svg
+                    className={`w-5 h-5 text-gray-400 transition-transform duration-300 md:hidden ${isOpen ? 'rotate-180' : 'rotate-0'}`}
+                    xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor"
+                  >
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
+                  </svg>
+                </div>
+
+                <div className={`overflow-hidden transition-[max-height] duration-500 ease-in-out md:max-h-full ${isOpen ? 'max-h-96' : 'max-h-0'}`}>
+                  <ul className="space-y-3 pt-2 md:pt-0">
+                    {section.links.map((item) => (
+                      <li key={item.name}>
+                        {item.href === '#' ? (
+                          <a href="#" className="text-gray-300 hover:text-teal-400 transition-colors duration-200 group flex items-center">
+                            <span className="inline-block mr-2 text-teal-500 opacity-0 transform -translate-x-2 group-hover:opacity-100 group-hover:translate-x-0 transition-all duration-300">›</span>
+                            <span className="relative">
+                              {item.name}
+                              <span className="absolute -bottom-1 left-0 w-0 h-px bg-teal-400 transition-all duration-300 group-hover:w-full"></span>
+                            </span>
+                          </a>
+                        ) : (
+                          <Link href={item.href} className="text-gray-300 hover:text-teal-400 transition-colors duration-200 group flex items-center">
+                            <span className="inline-block mr-2 text-teal-500 opacity-0 transform -translate-x-2 group-hover:opacity-100 group-hover:translate-x-0 transition-all duration-300">›</span>
+                            <span className="relative">
+                              {item.name}
+                              <span className="absolute -bottom-1 left-0 w-0 h-px bg-teal-400 transition-all duration-300 group-hover:w-full"></span>
+                            </span>
+                          </Link>
+                        )}
+                      </li>
+                    ))}
+                  </ul>
+                </div>
+              </div>
+            )
+          })}
         </div>
         
         {/* Newsletter section - REMOVED */}
