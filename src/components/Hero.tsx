@@ -353,13 +353,13 @@ const Hero = () => {
 
   // Rest of your component remains the same
   return (
-    <div className="relative h-screen w-full overflow-hidden bg-gray-950">
+    <div className="relative min-h-screen w-full overflow-hidden bg-gray-950">
       <canvas ref={canvasRef} className="absolute inset-0 z-0" />
       
       {/* Subtle radial gradient overlay for depth */}
       <div className="absolute inset-0 bg-gradient-radial from-transparent to-gray-950/80 z-0"></div>
       
-      <div className={`relative z-10 h-full flex items-center justify-center transition-opacity duration-1000 ${isLoaded ? 'opacity-100' : 'opacity-0'}`}>
+      <div className={`relative z-10 flex min-h-screen items-center justify-center transition-opacity duration-1000 ${isLoaded ? 'opacity-100' : 'opacity-0'}`}>
         <div className="container mx-auto px-4 lg:px-8 pt-16 pb-16">
           <div className="flex flex-col lg:flex-row items-center justify-between gap-16">
             {/* Left content column */}
@@ -370,7 +370,7 @@ const Hero = () => {
                 </p>
               </div>
               
-              <h1 className="text-5xl sm:text-6xl lg:text-7xl font-bold leading-none tracking-tight">
+              <h1 className="text-4xl sm:text-5xl md:text-6xl lg:text-7xl font-bold leading-none tracking-tight">
                 <div className="overflow-hidden">
                   <span className="block mb-3 transform translate-y-0 transition-transform duration-700 delay-100 ease-out">AI Agents.</span>
                 </div>
@@ -384,7 +384,7 @@ const Hero = () => {
                 </div>
               </h1>
               
-              <p className="text-xl text-gray-300 max-w-xl leading-relaxed">
+              <p className="text-lg sm:text-xl text-gray-300 max-w-xl leading-relaxed">
                 Ditch generic AI. Get private, custom agents built for your challenges, delivering results that actually matter.
               </p>
               
@@ -493,7 +493,7 @@ const Hero = () => {
                   <div className="absolute inset-0">
                     {isLoaded && (
                       <>
-                        <div className="absolute top-[15%] -left-32 max-w-[120px] rounded-md bg-gray-950/80 backdrop-blur-sm border border-gray-800 p-2 transform rotate-12 float-2 hidden lg:block">
+                        <div className="absolute top-[15%] lg:-left-16 xl:-left-32 max-w-[120px] rounded-md bg-gray-950/80 backdrop-blur-sm border border-gray-800 p-2 transform rotate-12 float-2 hidden lg:block">
                           <div className="text-[8px] font-mono">
                             <span className="text-purple-400">async</span> <span className="text-teal-300">function</span> <span className="text-amber-300">processData</span>() {'{'}
                             <br/>
@@ -503,7 +503,7 @@ const Hero = () => {
                           </div>
                         </div>
                         
-                        <div className="absolute bottom-[20%] -right-36 max-w-[130px] rounded-md bg-gray-950/80 backdrop-blur-sm border border-gray-800 p-2 transform -rotate-6 float-3 hidden lg:block">
+                        <div className="absolute bottom-[20%] lg:-right-20 xl:-right-36 max-w-[130px] rounded-md bg-gray-950/80 backdrop-blur-sm border border-gray-800 p-2 transform -rotate-6 float-3 hidden lg:block">
                           <div className="text-[8px] font-mono">
                             <span className="text-purple-400">class</span> <span className="text-teal-300">AsyncAgent</span> {'{'}
                             <br/>
@@ -540,7 +540,7 @@ const Hero = () => {
                 
                 {/* Floating Elements with improved animations and tech look - using memoized FloatingElement component */}
                 <FloatingElement 
-                  position="-top-8 -right-8" 
+                  position="lg:-top-4 lg:-right-4 xl:-top-8 xl:-right-8" 
                   size="w-28 h-28" 
                   gradient="bg-gradient-to-br from-teal-400/80 to-blue-500/80" 
                   className="rounded-xl float-1 opacity-70 shadow-lg shadow-teal-500/30 backdrop-blur-sm border border-teal-400/30 overflow-hidden"
@@ -558,7 +558,7 @@ const Hero = () => {
                 </FloatingElement>
                 
                 <FloatingElement 
-                  position="bottom-4 -left-12" 
+                  position="lg:bottom-2 lg:-left-6 xl:bottom-4 xl:-left-12" 
                   size="w-20 h-20" 
                   gradient="bg-gradient-to-br from-purple-500/80 to-teal-400/80" 
                   className="rounded-lg float-2 opacity-70 shadow-lg shadow-purple-500/20 backdrop-blur-sm border border-purple-400/30"
@@ -567,7 +567,7 @@ const Hero = () => {
                 </FloatingElement>
                 
                 <FloatingElement 
-                  position="top-1/3 -right-16" 
+                  position="lg:top-1/3 lg:-right-8 xl:-right-16" 
                   size="w-16 h-16" 
                   gradient="bg-gradient-to-r from-teal-500/70 to-blue-500/70" 
                   className="rounded-full float-3 opacity-70 shadow-lg shadow-blue-500/20 backdrop-blur-sm border border-blue-400/30"
@@ -576,7 +576,7 @@ const Hero = () => {
                 </FloatingElement>
                 
                 <FloatingElement 
-                  position="-bottom-10 right-20" 
+                  position="lg:-bottom-5 lg:right-10 xl:-bottom-10 xl:right-20" 
                   size="w-14 h-14" 
                   gradient="bg-gradient-to-r from-purple-500/70 to-pink-500/70" 
                   className="rounded-md float-4 opacity-70 shadow-lg shadow-purple-500/20 backdrop-blur-sm border border-purple-400/30"
