@@ -190,27 +190,15 @@ export default function SkynetAgentsCallToAction() {
                       </div>
                     </div>
                     
-                    <div className="flex items-start group transition-all duration-300 hover:bg-gray-800/40 backdrop-blur-sm p-4 rounded-xl cursor-pointer border border-transparent hover:border-yellow-500/30" onClick={() => window.location.href = '#'}>
-                      <div className="flex-shrink-0 h-12 w-12 rounded-lg bg-yellow-500/25 flex items-center justify-center text-yellow-300 group-hover:scale-110 transition-transform duration-300">
+                    <div className="flex items-start p-4 rounded-xl border border-transparent opacity-60 cursor-default">
+                      <div className="flex-shrink-0 h-12 w-12 rounded-lg bg-yellow-500/25 flex items-center justify-center text-yellow-300">
                         <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                           <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M11.049 2.927c.3-.921 1.603-.921 1.902 0l1.846 5.671a1 1 0 00.95.69h5.969c.969 0 1.371 1.24.588 1.81l-4.823 3.522a1 1 0 00-.364 1.118l1.846 5.671c.3.921-.755 1.688-1.54 1.118l-4.823-3.522a1 1 0 00-1.176 0l-4.823 3.522c-.784.57-1.838-.197-1.539-1.118l1.846-5.671a1 1 0 00-.364-1.118L2.487 11.1c-.783-.57-.38-1.81.588-1.81h5.969a1 1 0 00.95-.69L11.049 2.927z" />
                         </svg>
                       </div>
                       <div className="ml-4">
-                        <p className="text-gray-100 font-semibold group-hover:text-yellow-300 transition-colors duration-300 text-lg">View Success Stories</p>
-                        <p className="text-gray-400">Read about our impactful client results</p>
-                      </div>
-                    </div>
-                    
-                    <div className="flex items-start group transition-all duration-300 hover:bg-gray-800/40 backdrop-blur-sm p-4 rounded-xl cursor-pointer border border-transparent hover:border-blue-500/30" onClick={() => window.location.href = '#'}>
-                      <div className="flex-shrink-0 h-12 w-12 rounded-lg bg-blue-500/25 flex items-center justify-center text-blue-300 group-hover:scale-110 transition-transform duration-300">
-                        <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 6.253v11.494m0 0A2.25 2.25 0 0014.25 20H17a2 2 0 002-2V6a2 2 0 00-2-2H7a2 2 0 00-2 2v12a2 2 0 002 2h2.75a2.25 2.25 0 002.25-2.25zM12 6.253V5M12 6.253A2.25 2.25 0 019.75 4H7M14.25 4H12a2.25 2.25 0 00-2.25 2.253" />
-                        </svg>
-                      </div>
-                      <div className="ml-4">
-                        <p className="text-gray-100 font-semibold group-hover:text-blue-300 transition-colors duration-300 text-lg">API & SDK Docs</p>
-                        <p className="text-gray-400">Integrate and extend with our developer tools</p>
+                        <p className="text-gray-100 font-semibold text-lg">Success Stories</p>
+                        <p className="text-gray-400">Explore our impactful case studies. Coming soon!</p>
                       </div>
                     </div>
                     
