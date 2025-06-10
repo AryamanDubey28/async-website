@@ -9,6 +9,7 @@ const Navbar = () => {
   const [scrolled, setScrolled] = useState(false);
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const [isProductsDropdownOpen, setIsProductsDropdownOpen] = useState(false);
+  const [isMobileProductsOpen, setIsMobileProductsOpen] = useState(false);
   const router = useRouter();
   const pathname = usePathname();
   const productsDropdownRef = useRef<HTMLDivElement>(null);
@@ -68,18 +69,22 @@ const Navbar = () => {
     }
   };
 
-  const closeMobileMenu = () => setIsMobileMenuOpen(false);
+  const closeMobileMenu = () => {
+    setIsMobileMenuOpen(false);
+    // After a short delay to allow for the closing animation, reset the mobile products dropdown.
+    setTimeout(() => {
+      setIsMobileProductsOpen(false);
+    }, 300);
+  };
 
   const handleMobileLinkClick = (action: () => void) => {
     action();
     closeMobileMenu();
-    setIsProductsDropdownOpen(false);
   };
 
   const handleMobileNavClick = (path: string) => {
     router.push(path);
     closeMobileMenu();
-    setIsProductsDropdownOpen(false);
   }
 
   const handleProductsToggle = () => {
@@ -243,73 +248,87 @@ const Navbar = () => {
         </div>
       </nav>
 
+      {/* Hamburger Menu Button */}
       <button 
-        className="block md:hidden text-white fixed top-5 right-4 z-[60] p-2"
+        className="block md:hidden text-white fixed top-5 right-4 z-[60] p-2 transition-all duration-300 ease-in-out hover:scale-110 active:scale-95"
         onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
         aria-label="Toggle menu"
       >
-        {isMobileMenuOpen ? (
-          <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="w-6 h-6">
-            <path strokeLinecap="round" strokeLinejoin="round" d="M6 18L18 6M6 6l12 12" />
-          </svg>
-        ) : (
-          <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" className="w-6 h-6">
-            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 6h16M4 12h16M4 18h16" />
-          </svg>
-        )}
+        <div className={`w-6 h-6 relative transition-transform duration-500 ease-in-out ${isMobileMenuOpen ? 'transform rotate-180' : ''}`}>
+          <span className={`block absolute h-0.5 w-full bg-current transform transition duration-300 ease-in-out ${isMobileMenuOpen ? 'rotate-45' : '-translate-y-2'}`}></span>
+          <span className={`block absolute h-0.5 w-full bg-current transform transition duration-300 ease-in-out ${isMobileMenuOpen ? 'opacity-0' : ''}`}></span>
+          <span className={`block absolute h-0.5 w-full bg-current transform transition duration-300 ease-in-out ${isMobileMenuOpen ? '-rotate-45' : 'translate-y-2'}`}></span>
+        </div>
       </button>
 
-      {isMobileMenuOpen && (
-        <div className="md:hidden fixed inset-0 bg-gray-950 z-[55]">
-          <div className="flex flex-col items-center space-y-6 p-8 pt-24 h-full">
-            {navItems.map((item) => (
-              item.isDropdown ? (
-                <div key={item.name} className="text-center">
-                  <span className="text-lg font-medium text-gray-300 mb-2 block">{item.name}</span>
-                  <div className="flex flex-col space-y-3">
-                    {item.dropdownItems?.map((dropdownItem) => (
-                      <Link
-                        key={dropdownItem.name}
-                        href={dropdownItem.path}
-                        onClick={closeMobileMenu}
-                        className="text-gray-400 hover:text-teal-300 transition-colors duration-200"
-                      >
-                        {dropdownItem.name}
-                      </Link>
-                    ))}
+      {/* Mobile Menu Overlay */}
+      <div className={`md:hidden fixed inset-0 bg-gray-950/95 backdrop-blur-xl z-[55] transition-all duration-300 ease-in-out ${isMobileMenuOpen ? 'opacity-100 pointer-events-auto' : 'opacity-0 pointer-events-none'}`}>
+        <div className="flex flex-col items-center justify-center space-y-6 h-full text-center">
+          {navItems.map((item, i) => (
+            <div 
+              key={item.name} 
+              className={`transition-all duration-500 ease-in-out ${isMobileMenuOpen ? 'opacity-100 translate-y-0' : 'opacity-0 -translate-y-4'}`}
+              style={{ transitionDelay: `${100 + i * 50}ms`}}
+            >
+              {item.isDropdown ? (
+                <div className="text-center">
+                  <button
+                    onClick={() => setIsMobileProductsOpen(prev => !prev)}
+                    className="text-2xl font-medium text-white hover:text-teal-300 transition-colors duration-200 flex items-center mx-auto"
+                  >
+                    {item.name}
+                    <svg
+                      className={`w-5 h-5 ml-2 transition-transform duration-300 ${isMobileProductsOpen ? 'rotate-180' : 'rotate-0'}`}
+                      xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor"
+                    >
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
+                    </svg>
+                  </button>
+                  <div className={`overflow-hidden transition-all duration-500 ease-in-out ${isMobileProductsOpen ? 'max-h-40 mt-3' : 'max-h-0'}`}>
+                    <div className="flex flex-col space-y-3 pt-2">
+                      {item.dropdownItems?.map((dropdownItem) => (
+                        <Link
+                          key={dropdownItem.name}
+                          href={dropdownItem.path}
+                          onClick={closeMobileMenu}
+                          className="text-lg text-gray-400 hover:text-teal-300 transition-colors duration-200"
+                        >
+                          {dropdownItem.name}
+                        </Link>
+                      ))}
+                    </div>
                   </div>
                 </div>
               ) : item.onClick ? (
                 <button 
-                  key={item.name}
                   onClick={() => handleMobileLinkClick(item.onClick!)}
-                  className="text-lg font-medium text-gray-300 hover:text-teal-300 transition-colors duration-200"
+                  className="text-2xl font-medium text-white hover:text-teal-300 transition-colors duration-200"
                 >
                   {item.name}
                 </button>
               ) : (
                 <Link 
-                  key={item.name}
                   href={item.path}
                   onClick={closeMobileMenu}
-                  className="text-lg font-medium text-gray-300 hover:text-teal-300 transition-colors duration-200"
+                  className="text-2xl font-medium text-white hover:text-teal-300 transition-colors duration-200"
                 >
                   {item.name}
                 </Link>
-              )
-            ))}
+              )}
+            </div>
+          ))}
+          <div 
+            className={`pt-8 transition-all duration-500 ease-in-out ${isMobileMenuOpen ? 'opacity-100 translate-y-0' : 'opacity-0 -translate-y-4'}`}
+            style={{ transitionDelay: `${100 + navItems.length * 50}ms`}}
+          >
             <button 
-              onClick={() => {
-                closeMobileMenu();
-                setIsProductsDropdownOpen(false);
-                handleMobileLinkClick(() => scrollToSection('contact'));
-              }}
-              className="mt-6 px-8 py-3 rounded-full bg-gradient-to-r from-teal-500 to-teal-400 text-gray-900 font-semibold transition-all duration-300 hover:shadow-lg hover:shadow-teal-500/20 hover:scale-105">
+              onClick={() => handleMobileLinkClick(() => scrollToSection('contact'))}
+              className="px-10 py-3 rounded-full bg-gradient-to-r from-teal-500 to-teal-400 text-white font-semibold transition-all duration-300 hover:shadow-lg hover:shadow-teal-500/20 hover:scale-105 active:scale-95">
               Get Started
             </button>
           </div>
         </div>
-      )}
+      </div>
     </Fragment>
   );
 };
