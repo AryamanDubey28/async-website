@@ -371,7 +371,7 @@ Charlie
       {/* Content wrapper */}
       <div className="flex-grow">
         {/* Hero Section */}
-        <section className="relative pt-32 pb-20">
+        <section className="relative flex min-h-screen items-center pt-28 md:pt-32 pb-16 md:pb-20">
           {/* Background decorations - Adjusted for more depth */}
           <div className="absolute inset-0 overflow-hidden">
             <div className="absolute -top-20 -left-20 w-96 h-96 bg-gradient-to-br from-teal-500/10 via-cyan-500/10 to-blue-600/10 rounded-full blur-3xl animate-pulse-slow"></div>
@@ -380,9 +380,9 @@ Charlie
           </div>
           
           <div className="container mx-auto px-4 relative z-10">
-            <div className="flex flex-col lg:flex-row items-center justify-between gap-16">
+            <div className="flex flex-col lg:flex-row items-center justify-between gap-12 lg:gap-16 xl:gap-24">
               {/* Left content column */}
-              <div className="lg:w-2/5 space-y-8">
+              <div className="lg:w-2/5 space-y-8 text-center lg:text-left">
                 <div 
                   className="inline-block px-4 py-1.5 rounded-full bg-gray-800/70 backdrop-blur-lg border border-teal-500/30 mb-3 transform hover:scale-105 transition-all duration-300 shadow-lg shadow-teal-500/10"
                 >
@@ -392,7 +392,7 @@ Charlie
                   </p>
                 </div>
                 
-                <h1 className="text-5xl sm:text-6xl lg:text-7xl font-bold leading-none tracking-tight">
+                <h1 className="text-4xl sm:text-6xl lg:text-7xl xl:text-8xl font-bold leading-none tracking-tight">
                   {/* CSS Transition applied directly */}
                   <div className="overflow-hidden">
                     <span className={`block mb-3 transform ${isLoaded ? 'translate-y-0' : 'translate-y-full'} transition-transform duration-700 delay-[100ms] ease-out`}>
@@ -406,20 +406,20 @@ Charlie
                   </div>
                 </h1>
                 
-                <p className="text-xl text-gray-300 max-w-xl leading-relaxed">
+                <p className="text-lg sm:text-xl xl:text-2xl text-gray-300 max-w-xl leading-relaxed mx-auto lg:mx-0">
                 Your intelligent assistant with fast answers for internal queries, instant access to company knowledge, and absolute data confidentiality.
                 </p>
                 
-                <div className="flex flex-col sm:flex-row gap-5 pt-4">
+                <div className="flex flex-col sm:flex-row items-center justify-center lg:justify-start gap-5 pt-4">
                   <button 
                     onClick={() => scrollToSection('skynet-cta')}
-                    className="group relative px-8 py-4 rounded-full bg-gradient-to-r from-teal-500 to-cyan-500 text-white font-semibold transition-all duration-300 hover:shadow-lg hover:shadow-teal-500/30 hover:scale-105 focus:outline-none focus:ring-2 focus:ring-teal-400/50 overflow-hidden">
+                    className="group relative w-full sm:w-auto px-8 py-4 rounded-full bg-gradient-to-r from-teal-500 to-cyan-500 text-white font-semibold transition-all duration-300 hover:shadow-lg hover:shadow-teal-500/30 hover:scale-105 focus:outline-none focus:ring-2 focus:ring-teal-400/50 overflow-hidden">
                     <span className="relative z-10">Request Demo</span>
                     <span className="absolute inset-0 bg-gradient-to-r from-teal-400 to-cyan-400 opacity-0 group-hover:opacity-100 transition-opacity duration-300 blur-xl"></span>
                   </button>
                   <button 
                     onClick={() => scrollToSection('skynet-features')}
-                    className="relative px-8 py-4 rounded-full border border-gray-700 backdrop-blur-lg text-white transition-all duration-300 hover:border-teal-400 focus:outline-none focus:ring-2 focus:ring-teal-400/30 overflow-hidden group">
+                    className="relative w-full sm:w-auto px-8 py-4 rounded-full border border-gray-700 backdrop-blur-lg text-white transition-all duration-300 hover:border-teal-400 focus:outline-none focus:ring-2 focus:ring-teal-400/30 overflow-hidden group">
                     <span className="relative z-10">Learn More</span>
                     <span className="absolute inset-0 bg-gradient-to-r from-gray-800 to-gray-900 opacity-80"></span>
                     <span className="absolute inset-0 bg-gradient-to-r from-teal-500/20 to-cyan-500/20 opacity-0 group-hover:opacity-100 transition-opacity duration-300"></span>
@@ -427,7 +427,7 @@ Charlie
                 </div>
                 
                 {/* New Feature Highlights */}
-                <div className={`flex items-center gap-3 pt-8 transition-opacity duration-1000 ${isLoaded ? 'opacity-100' : 'opacity-0'}`}>
+                <div className={`flex flex-wrap items-center justify-center lg:justify-start gap-x-6 gap-y-4 pt-8 transition-opacity duration-1000 ${isLoaded ? 'opacity-100' : 'opacity-0'}`}>
                   {/* Security Highlight */}
                   <div className="flex items-center gap-2">
                     <div className="w-10 h-10 rounded-full border-2 border-teal-400/70 flex items-center justify-center transition-transform duration-300 hover:scale-110">
@@ -467,7 +467,7 @@ Charlie
                 activeChatMessage={activeChatMessage}
                 showTypingIndicator={showTypingIndicator}
                 setActiveChatMessage={setActiveChatMessage}
-                className="hidden lg:block lg:w-3/5 relative max-w-2xl mx-auto"
+                className="hidden lg:block lg:w-3/5 relative max-w-2xl xl:max-w-4xl 2xl:max-w-5xl mx-auto"
               />
             </div>
           </div>
@@ -489,7 +489,7 @@ Charlie
           <div className="container mx-auto px-4 relative z-10">
             <div className="flex flex-col lg:flex-row items-center gap-16">
               {/* Left side - Interactive Illustration */}
-              <div className="lg:w-1/2 relative">
+              <div className="hidden lg:block lg:w-1/2 relative">
                 <div className="relative max-w-lg mx-auto">
                   {/* Main illustration area */}
                   <div className="relative rounded-2xl overflow-hidden border border-teal-500/30 shadow-xl shadow-teal-500/10 backdrop-blur-sm bg-gray-900/80 min-h-[580px] lg:min-h-[620px]">
@@ -629,7 +629,7 @@ Charlie
               </div>
               
               {/* Right side - Content */}
-              <div className="lg:w-1/2 space-y-8">
+              <div className="lg:w-1/2 space-y-8 text-center lg:text-left">
                 <h2 className="text-3xl md:text-4xl font-bold">
                   <span className="bg-clip-text text-transparent bg-gradient-to-r from-teal-400 via-purple-400 to-blue-500">
                     What Skynet Chat Does
@@ -650,7 +650,7 @@ Charlie
                         </svg>
                       </div>
                     </div>
-                    <div>
+                    <div className="text-left">
                       <h3 className="text-lg font-semibold text-white mb-1 group-hover:text-teal-400 transition-colors duration-300">
                         <i className="font-semibold">Fortress Privacy: Your Data, Locked Down.</i>
                       </h3>
@@ -667,7 +667,7 @@ Charlie
                         </svg>
                       </div>
                     </div>
-                    <div>
+                    <div className="text-left">
                       <h3 className="text-lg font-semibold text-white mb-1 group-hover:text-purple-400 transition-colors duration-300">
                         <i className="font-semibold">Content Command Center: AI Embedded In Your Workflow.</i>
                       </h3>
@@ -684,7 +684,7 @@ Charlie
                         </svg>
                       </div>
                     </div>
-                    <div>
+                    <div className="text-left">
                       <h3 className="text-lg font-semibold text-white mb-1 group-hover:text-blue-400 transition-colors duration-300">
                         <i className="font-semibold">Hyper-Context AI: Your Business Knowledge, Activated.</i>
                       </h3>
@@ -701,7 +701,7 @@ Charlie
                         </svg>
                       </div>
                     </div>
-                    <div>
+                    <div className="text-left">
                       <h3 className="text-lg font-semibold text-white mb-1 group-hover:text-indigo-400 transition-colors duration-300">
                         <i className="font-semibold">Adaptive Intelligence: AI That Evolves With You.</i>
                       </h3>
@@ -718,7 +718,7 @@ Charlie
                         </svg>
                       </div>
                     </div>
-                    <div>
+                    <div className="text-left">
                       <h3 className="text-lg font-semibold text-white mb-1 group-hover:text-green-400 transition-colors duration-300">
                         <i className="font-semibold">Voice-To-Insight Engine: Decode Recordings Instantly.</i>
                       </h3>
