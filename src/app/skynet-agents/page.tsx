@@ -289,7 +289,7 @@ export default function SkynetAgents() {
       {/* Content wrapper */}
       <div className="flex-grow">
         {/* Hero Section */}
-        <section className="relative pt-32 pb-20">
+        <section className="relative flex min-h-screen items-center pt-28 md:pt-32 pb-16 md:pb-20">
           {/* Background decorations */}
           <div className="absolute inset-0 overflow-hidden">
             <div className="absolute -top-20 -left-20 w-96 h-96 bg-gradient-to-br from-purple-600/15 via-indigo-500/10 to-blue-600/10 rounded-full blur-3xl animate-pulse"></div>
@@ -298,9 +298,9 @@ export default function SkynetAgents() {
           </div>
           
           <div className="container mx-auto px-4 relative z-10">
-            <div className="flex flex-col lg:flex-row items-center justify-between gap-16">
+            <div className="flex flex-col lg:flex-row items-center justify-between gap-12 lg:gap-8 xl:gap-16">
               {/* Left content column */}
-              <div className="lg:w-2/5 space-y-8">
+              <div className="lg:w-2/5 space-y-8 text-center lg:text-left">
                 <div 
                   className="inline-block px-4 py-1.5 rounded-full bg-gray-800/70 backdrop-blur-lg border border-purple-500/30 mb-3 transform hover:scale-105 transition-all duration-300 shadow-lg shadow-purple-500/10"
                 >
@@ -310,7 +310,7 @@ export default function SkynetAgents() {
                   </p>
                 </div>
                 
-                <h1 className="text-5xl sm:text-6xl lg:text-7xl font-bold leading-none tracking-tight">
+                <h1 className="text-4xl sm:text-6xl lg:text-7xl xl:text-8xl font-bold leading-none tracking-tight">
                   <div className="overflow-hidden">
                     <span className={`block mb-3 transform ${isLoaded ? 'translate-y-0' : 'translate-y-full'} transition-transform duration-700 delay-100 ease-out`}>
                       Skynet Agents
@@ -323,20 +323,20 @@ export default function SkynetAgents() {
                   </div>
                 </h1>
                 
-                <p className="text-xl text-gray-300 max-w-xl leading-relaxed">
+                <p className="text-lg sm:text-xl xl:text-2xl text-gray-300 max-w-xl leading-relaxed mx-auto lg:mx-0">
                   Beyond chat: Custom AI agents that automate complex tasks by connecting and working across your existing business software.
                 </p>
                 
-                <div className="flex flex-col sm:flex-row gap-5 pt-4">
+                <div className="flex flex-col sm:flex-row items-center justify-center lg:justify-start gap-5 pt-4">
                   <button 
                     onClick={() => scrollToSection('skynet-agents-cta')}
-                    className="group relative px-8 py-4 rounded-full bg-gradient-to-r from-purple-500 to-indigo-500 text-white font-semibold transition-all duration-300 hover:shadow-xl hover:shadow-purple-500/40 hover:scale-105 focus:outline-none focus:ring-2 focus:ring-purple-400/50 overflow-hidden">
+                    className="group relative w-full sm:w-auto px-8 py-4 rounded-full bg-gradient-to-r from-purple-500 to-indigo-500 text-white font-semibold transition-all duration-300 hover:shadow-xl hover:shadow-purple-500/40 hover:scale-105 focus:outline-none focus:ring-2 focus:ring-purple-400/50 overflow-hidden">
                     <span className="relative z-10">Request Demo</span>
                     <span className="absolute inset-0 bg-gradient-to-r from-purple-400 to-indigo-400 opacity-0 group-hover:opacity-100 transition-opacity duration-300 blur-xl"></span>
                   </button>
                   <button 
                     onClick={() => scrollToSection('skynet-agents-features')}
-                    className="relative px-8 py-4 rounded-full border border-gray-700 backdrop-blur-lg text-white transition-all duration-300 hover:border-purple-500/50 focus:outline-none focus:ring-2 focus:ring-purple-400/30 overflow-hidden group">
+                    className="relative w-full sm:w-auto px-8 py-4 rounded-full border border-gray-700 backdrop-blur-lg text-white transition-all duration-300 hover:border-purple-500/50 focus:outline-none focus:ring-2 focus:ring-purple-400/30 overflow-hidden group">
                     <span className="relative z-10">Learn More</span>
                     <span className="absolute inset-0 bg-gradient-to-r from-gray-800 to-gray-900 opacity-80"></span>
                     <span className="absolute inset-0 bg-gradient-to-r from-purple-500/20 to-indigo-500/20 opacity-0 group-hover:opacity-100 transition-opacity duration-300"></span>
@@ -344,7 +344,7 @@ export default function SkynetAgents() {
                 </div>
                 
                 {/* New Feature Highlights */}
-                <div className={`flex flex-col sm:flex-row items-center sm:items-start gap-6 pt-8 pb-16 transition-opacity duration-1000 ${isLoaded ? 'opacity-100' : 'opacity-0'}`}>
+                <div className={`flex flex-wrap items-center justify-center lg:justify-start gap-x-6 gap-y-4 pt-8 transition-opacity duration-1000 ${isLoaded ? 'opacity-100' : 'opacity-0'}`}>
                   {/* Secure Execution Highlight */}
                   <div className="flex items-center gap-2">
                     <div className="w-10 h-10 rounded-full border-2 border-purple-400/70 flex items-center justify-center transition-transform duration-300 hover:scale-110">
@@ -382,7 +382,7 @@ export default function SkynetAgents() {
               <Mockup 
                 activeAgent={activeAgent} 
                 setActiveAgent={setActiveAgent} 
-                className="hidden lg:block"
+                className="hidden lg:block lg:w-3/5 relative max-w-3xl xl:max-w-5xl 2xl:max-w-6xl mx-auto"
               />
             </div>
           </div>
@@ -417,19 +417,19 @@ export default function SkynetAgents() {
               <div className="bg-gray-800/30 backdrop-blur-md border border-gray-700 rounded-xl overflow-hidden shadow-2xl shadow-purple-500/5 transform hover:shadow-purple-500/10 transition-all duration-500">
                 <div className="grid grid-cols-1 md:grid-cols-2">
                   {/* Left column - Skynet Chat */}
-                  <div className="p-8 border-b md:border-b-0 md:border-r border-gray-700">
-                    <div className="flex items-center mb-8">
-                      <div className="w-12 h-12 rounded-full bg-gradient-to-r from-teal-400 to-teal-500 flex items-center justify-center text-white text-sm font-bold mr-4 shadow-md shadow-teal-500/20">SC</div>
-                      <h3 className="text-2xl font-bold text-white">Skynet Chat</h3>
+                  <div className="p-6 md:p-8 border-b md:border-b-0 md:border-r border-gray-700">
+                    <div className="flex items-center mb-6">
+                      <div className="w-10 h-10 md:w-12 md:h-12 rounded-full bg-gradient-to-r from-teal-400 to-teal-500 flex items-center justify-center text-white text-sm font-bold mr-4 shadow-md shadow-teal-500/20">SC</div>
+                      <h3 className="text-xl md:text-2xl font-bold text-white">Skynet Chat</h3>
                     </div>
-                    <ul className="space-y-4">
+                    <ul className="space-y-3 md:space-y-4">
                       <li className="flex items-start">
                         <div className="flex-shrink-0 w-6 h-6 rounded-full bg-teal-400/20 flex items-center justify-center mt-0.5 mr-3">
                           <svg xmlns="http://www.w3.org/2000/svg" className="h-3.5 w-3.5 text-teal-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
                           </svg>
                         </div>
-                        <span className="text-gray-300 text-base">Integrated Content Creation</span>
+                        <span className="text-gray-300 text-sm md:text-base">Integrated Content Creation</span>
                       </li>
                       <li className="flex items-start">
                         <div className="flex-shrink-0 w-6 h-6 rounded-full bg-teal-400/20 flex items-center justify-center mt-0.5 mr-3">
@@ -437,7 +437,7 @@ export default function SkynetAgents() {
                             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
                           </svg>
                         </div>
-                        <span className="text-gray-300 text-base">Deep Context Understanding</span>
+                        <span className="text-gray-300 text-sm md:text-base">Deep Context Understanding</span>
                       </li>
                       <li className="flex items-start">
                         <div className="flex-shrink-0 w-6 h-6 rounded-full bg-teal-400/20 flex items-center justify-center mt-0.5 mr-3">
@@ -445,7 +445,7 @@ export default function SkynetAgents() {
                             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
                           </svg>
                         </div>
-                        <span className="text-gray-300 text-base">Persistent AI Personalisation</span>
+                        <span className="text-gray-300 text-sm md:text-base">Persistent AI Personalisation</span>
                       </li>
                       <li className="flex items-start">
                         <div className="flex-shrink-0 w-6 h-6 rounded-full bg-teal-400/20 flex items-center justify-center mt-0.5 mr-3">
@@ -453,7 +453,7 @@ export default function SkynetAgents() {
                             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
                           </svg>
                         </div>
-                        <span className="text-gray-300 text-base">Accelerated Workflow Actions</span>
+                        <span className="text-gray-300 text-sm md:text-base">Accelerated Workflow Actions</span>
                       </li>
                       <li className="flex items-start">
                         <div className="flex-shrink-0 w-6 h-6 rounded-full bg-gray-700 flex items-center justify-center mt-0.5 mr-3">
@@ -461,7 +461,7 @@ export default function SkynetAgents() {
                             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
                           </svg>
                         </div>
-                        <span className="text-gray-500 text-base">Workspace-Bound Operation</span>
+                        <span className="text-gray-500 text-sm md:text-base">Workspace-Bound Operation</span>
                       </li>
                       <li className="flex items-start">
                         <div className="flex-shrink-0 w-6 h-6 rounded-full bg-gray-700 flex items-center justify-center mt-0.5 mr-3">
@@ -469,25 +469,25 @@ export default function SkynetAgents() {
                             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
                           </svg>
                         </div>
-                        <span className="text-gray-500 text-base">Manual Task Execution</span>
+                        <span className="text-gray-500 text-sm md:text-base">Manual Task Execution</span>
                       </li>
                     </ul>
                   </div>
                   
                   {/* Right column - Skynet Agents */}
-                  <div className="p-8 bg-gradient-to-br from-purple-900/20 to-transparent">
-                    <div className="flex items-center mb-8">
-                      <div className="w-12 h-12 rounded-full bg-gradient-to-r from-purple-400 to-teal-500 flex items-center justify-center text-white text-sm font-bold mr-4 shadow-md shadow-purple-500/20 animate-pulse-slow">SA</div>
-                      <h3 className="text-2xl font-bold bg-clip-text text-transparent bg-gradient-to-r from-purple-400 to-teal-400">Skynet Agents</h3>
+                  <div className="p-6 md:p-8 bg-gradient-to-br from-purple-900/20 to-transparent">
+                    <div className="flex items-center mb-6">
+                      <div className="w-10 h-10 md:w-12 md:h-12 rounded-full bg-gradient-to-r from-purple-400 to-teal-500 flex items-center justify-center text-white text-sm font-bold mr-4 shadow-md shadow-purple-500/20 animate-pulse-slow">SA</div>
+                      <h3 className="text-xl md:text-2xl font-bold bg-clip-text text-transparent bg-gradient-to-r from-purple-400 to-teal-400">Skynet Agents</h3>
                     </div>
-                    <ul className="space-y-4">
+                    <ul className="space-y-3 md:space-y-4">
                       <li className="flex items-start">
                         <div className="flex-shrink-0 w-6 h-6 rounded-full bg-purple-400/20 flex items-center justify-center mt-0.5 mr-3">
                           <svg xmlns="http://www.w3.org/2000/svg" className="h-3.5 w-3.5 text-purple-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
                           </svg>
                         </div>
-                        <span className="text-gray-300 text-base">All Skynet Chat Capabilities, <strong className="font-extrabold text-purple-300">PLUS</strong></span>
+                        <span className="text-gray-300 text-sm md:text-base">All Skynet Chat Capabilities, <strong className="font-extrabold text-purple-300">PLUS</strong></span>
                       </li>
                       <li className="flex items-start">
                         <div className="flex-shrink-0 w-6 h-6 rounded-full bg-purple-400/20 flex items-center justify-center mt-0.5 mr-3 animate-pulse-slow">
@@ -495,7 +495,7 @@ export default function SkynetAgents() {
                             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
                           </svg>
                         </div>
-                        <span className="text-white text-base font-medium">Hands-Off Task Execution</span>
+                        <span className="text-white text-sm md:text-base font-medium">Hands-Off Task Execution</span>
                       </li>
                       <li className="flex items-start">
                         <div className="flex-shrink-0 w-6 h-6 rounded-full bg-purple-400/20 flex items-center justify-center mt-0.5 mr-3 animate-pulse-slow">
@@ -503,7 +503,7 @@ export default function SkynetAgents() {
                             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
                           </svg>
                         </div>
-                        <span className="text-white text-base font-medium">Limitless App Integration</span>
+                        <span className="text-white text-sm md:text-base font-medium">Limitless App Integration</span>
                       </li>
                       <li className="flex items-start">
                         <div className="flex-shrink-0 w-6 h-6 rounded-full bg-purple-400/20 flex items-center justify-center mt-0.5 mr-3 animate-pulse-slow">
@@ -511,7 +511,7 @@ export default function SkynetAgents() {
                             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
                           </svg>
                         </div>
-                        <span className="text-white text-base font-medium">Precision-Engineered Logic</span>
+                        <span className="text-white text-sm md:text-base font-medium">Precision-Engineered Logic</span>
                       </li>
                       <li className="flex items-start">
                         <div className="flex-shrink-0 w-6 h-6 rounded-full bg-purple-400/20 flex items-center justify-center mt-0.5 mr-3 animate-pulse-slow">
@@ -519,7 +519,7 @@ export default function SkynetAgents() {
                             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
                           </svg>
                         </div>
-                        <span className="text-white text-base font-medium">Orchestrated Agent Teams</span>
+                        <span className="text-white text-sm md:text-base font-medium">Orchestrated Agent Teams</span>
                       </li>
                       <li className="flex items-start">
                         <div className="flex-shrink-0 w-6 h-6 rounded-full bg-purple-400/20 flex items-center justify-center mt-0.5 mr-3 animate-pulse-slow">
@@ -527,7 +527,7 @@ export default function SkynetAgents() {
                             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
                           </svg>
                         </div>
-                        <span className="text-white text-base font-medium">Total Workflow Automation</span>
+                        <span className="text-white text-sm md:text-base font-medium">Total Workflow Automation</span>
                       </li>
                     </ul>
                   </div>
