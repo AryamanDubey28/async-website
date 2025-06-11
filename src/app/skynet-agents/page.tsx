@@ -310,13 +310,13 @@ export default function SkynetAgents() {
                   </p>
                 </div>
                 
-                <h1 className="text-4xl sm:text-6xl lg:text-7xl xl:text-8xl font-bold leading-none tracking-tight">
+                <h1 className="text-4xl sm:text-6xl lg:text-6xl xl:text-7xl font-bold leading-none tracking-tight">
                   <div className="overflow-hidden">
                     <span className={`block mb-3 transform ${isLoaded ? 'translate-y-0' : 'translate-y-full'} transition-transform duration-700 delay-100 ease-out`}>
                       Skynet Agents
                     </span>
                   </div>
-                  <div className="overflow-hidden">
+                  <div className="overflow-hidden pb-1">
                     <span className={`block bg-clip-text text-transparent bg-gradient-to-r from-purple-400 via-indigo-400 to-blue-500 transform ${isLoaded ? 'translate-y-0' : 'translate-y-full'} transition-transform duration-700 delay-300 ease-out`}>
                       Autonomous Intelligence
                     </span>
