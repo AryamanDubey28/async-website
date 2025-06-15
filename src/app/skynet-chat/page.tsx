@@ -184,9 +184,15 @@ Charlie
 
     const createParticles = () => {
       particles.length = 0; // Clear existing particles first
-      const heroParticleCount = 80; // More particles in the hero area
-      const otherParticleCount = 40; // Fewer particles below
+      
       const heroHeight = window.innerHeight; // Approximate hero section height
+      const particleDensity = 0.00004; // Adjust density for performance
+      
+      // Calculate particles based on area
+      const heroParticleCount = Math.floor(canvas.width * heroHeight * particleDensity);
+      const otherParticleCount = canvas.height > heroHeight 
+        ? Math.floor(canvas.width * (canvas.height - heroHeight) * particleDensity * 0.5) // Less dense below
+        : 0;
 
       // Generate particles for the hero section
       for (let i = 0; i < heroParticleCount; i++) {
@@ -205,7 +211,7 @@ Charlie
 
       // Generate particles for the section below hero
       // Check if canvas is taller than the hero section before adding more particles
-      if (canvas.height > heroHeight) {
+      if (otherParticleCount > 0) {
         for (let i = 0; i < otherParticleCount; i++) {
           particles.push({
             x: Math.random() * canvas.width,
@@ -371,18 +377,18 @@ Charlie
       {/* Content wrapper */}
       <div className="flex-grow">
         {/* Hero Section */}
-        <section className="relative flex min-h-screen items-center pt-28 md:pt-32 pb-16 md:pb-20">
+        <section className="relative flex min-h-[100svh] items-center justify-center overflow-hidden py-20 md:py-28">
           {/* Background decorations - Adjusted for more depth */}
-          <div className="absolute inset-0 overflow-hidden">
+          <div className="absolute inset-0">
             <div className="absolute -top-20 -left-20 w-96 h-96 bg-gradient-to-br from-teal-500/10 via-cyan-500/10 to-blue-600/10 rounded-full blur-3xl animate-pulse-slow"></div>
             <div className="absolute top-1/3 -right-20 w-80 h-80 bg-gradient-to-tr from-cyan-600/10 via-blue-500/10 to-teal-500/10 rounded-full blur-3xl animate-pulse-slower"></div>
             <div className="absolute bottom-0 left-1/3 w-96 h-96 bg-gradient-to-br from-teal-400/10 via-cyan-400/10 to-blue-500/10 rounded-full blur-3xl"></div>
           </div>
           
-          <div className="container mx-auto px-4 relative z-10">
-            <div className="flex flex-col lg:flex-row items-center justify-between gap-12 lg:gap-16 xl:gap-24">
+          <div className="container mx-auto px-4 relative z-10 w-full">
+            <div className="flex flex-col lg:flex-row items-center justify-center gap-12 lg:gap-16">
               {/* Left content column */}
-              <div className="lg:w-2/5 space-y-8 text-center lg:text-left">
+              <div className="lg:w-1/2 xl:w-2/5 space-y-8 text-center lg:text-left">
                 <div 
                   className="inline-block px-4 py-1.5 rounded-full bg-gray-800/70 backdrop-blur-lg border border-teal-500/30 mb-3 transform hover:scale-105 transition-all duration-300 shadow-lg shadow-teal-500/10"
                 >
@@ -392,7 +398,7 @@ Charlie
                   </p>
                 </div>
                 
-                <h1 className="text-4xl sm:text-6xl lg:text-7xl xl:text-8xl font-bold leading-none tracking-tight">
+                <h1 className="font-bold leading-none tracking-tight text-4xl sm:text-6xl lg:text-7xl">
                   {/* CSS Transition applied directly */}
                   <div className="overflow-hidden">
                     <span className={`block mb-3 transform ${isLoaded ? 'translate-y-0' : 'translate-y-full'} transition-transform duration-700 delay-[100ms] ease-out`}>
@@ -427,10 +433,10 @@ Charlie
                 </div>
                 
                 {/* New Feature Highlights */}
-                <div className={`flex flex-wrap items-center justify-center lg:justify-start gap-x-6 gap-y-4 pt-8 transition-opacity duration-1000 ${isLoaded ? 'opacity-100' : 'opacity-0'}`}>
+                <div className={`grid grid-cols-1 sm:grid-cols-3 gap-y-4 sm:gap-x-4 md:gap-x-6 pt-8 transition-opacity duration-1000 ${isLoaded ? 'opacity-100' : 'opacity-0'}`}>
                   {/* Security Highlight */}
-                  <div className="flex items-center gap-2">
-                    <div className="w-10 h-10 rounded-full border-2 border-teal-400/70 flex items-center justify-center transition-transform duration-300 hover:scale-110">
+                  <div className="flex items-center gap-2 justify-center sm:justify-start">
+                    <div className="w-10 h-10 rounded-full border-2 border-teal-400/70 flex items-center justify-center transition-transform duration-300 hover:scale-110 flex-shrink-0">
                       <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5 text-teal-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                         <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z" />
                       </svg>
@@ -439,8 +445,8 @@ Charlie
                   </div>
                   
                   {/* Collaboration Highlight */}
-                  <div className="flex items-center gap-2">
-                    <div className="w-10 h-10 rounded-full border-2 border-purple-400/70 flex items-center justify-center transition-transform duration-300 hover:scale-110">
+                  <div className="flex items-center gap-2 justify-center sm:justify-start">
+                    <div className="w-10 h-10 rounded-full border-2 border-purple-400/70 flex items-center justify-center transition-transform duration-300 hover:scale-110 flex-shrink-0">
                       <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5 text-purple-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M17 8h2a2 2 0 012 2v6a2 2 0 01-2 2h-2v4l-4-4H9a1.994 1.994 0 01-1.414-.586m0 0L11 14h4a2 2 0 002-2V6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2v4l.586-.586z" />
                       </svg>
@@ -449,8 +455,8 @@ Charlie
                   </div>
                   
                   {/* Efficiency Highlight */}
-                  <div className="flex items-center gap-2">
-                    <div className="w-10 h-10 rounded-full border-2 border-blue-400/70 flex items-center justify-center transition-transform duration-300 hover:scale-110">
+                  <div className="flex items-center gap-2 justify-center sm:justify-start">
+                    <div className="w-10 h-10 rounded-full border-2 border-blue-400/70 flex items-center justify-center transition-transform duration-300 hover:scale-110 flex-shrink-0">
                       <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5 text-blue-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                         <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M13 10V3L4 14h7v7l9-11h-7z" />
                       </svg>
@@ -461,14 +467,16 @@ Charlie
               </div>
               
               {/* Right content column - Interactive UI mockup -> Replaced with Mockup component */}
-              <Mockup 
-                artefactContent={currentArtefactContent}
-                chatMessages={chatMessages}
-                activeChatMessage={activeChatMessage}
-                showTypingIndicator={showTypingIndicator}
-                setActiveChatMessage={setActiveChatMessage}
-                className="hidden lg:block lg:w-3/5 relative max-w-2xl xl:max-w-4xl 2xl:max-w-5xl mx-auto"
-              />
+              <div className="lg:w-1/2 xl:w-3/5 flex justify-center items-center">
+                <Mockup 
+                  artefactContent={currentArtefactContent}
+                  chatMessages={chatMessages}
+                  activeChatMessage={activeChatMessage}
+                  showTypingIndicator={showTypingIndicator}
+                  setActiveChatMessage={setActiveChatMessage}
+                  className="w-full hidden lg:block"
+                />
+              </div>
             </div>
           </div>
         </section>
