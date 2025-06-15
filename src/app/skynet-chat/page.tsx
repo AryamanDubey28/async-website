@@ -1,6 +1,6 @@
 'use client';
 
-import { useState, useRef, useEffect } from 'react';
+import { useState, useRef, useEffect, useMemo, useCallback } from 'react';
 import Navbar from '@/components/Navbar';
 import Footer from '@/components/Footer';
 import Mockup from '@/components/skynet-chat/Mockup';
@@ -20,7 +20,24 @@ export default function SkynetChat() {
   const [showTypingIndicator, setShowTypingIndicator] = useState(false);
   const canvasRef = useRef<HTMLCanvasElement>(null);
   const mainRef = useRef<HTMLElement>(null); // Add ref for the main element
+  const [deviceInfo, setDeviceInfo] = useState({ isMobile: false, isLowPower: false });
   
+  // Memoize the colors array to prevent recreation on each render
+  const particleColors = useMemo(() => [
+    '#4FD1C5', // Brighter teal
+    '#38B2AC', 
+    '#00FFFF', // Cyan
+    '#38B2FF', // Bright blue
+  ], []);
+
+  // Memoize the particle density based on device capabilities
+  const particleDensity = useMemo(() => {
+    if (deviceInfo.isMobile || deviceInfo.isLowPower) {
+      return 0.00006; // Lower density for mobile/low-power devices
+    }
+    return 0.00009; // Full density for powerful devices
+  }, [deviceInfo]);
+
   // Initial Artefact content (example email in Markdown) - Restored mark
   const initialArtefactContent = `
 # Follow-up Email: Project Skynet Sync
@@ -72,6 +89,15 @@ Charlie
     }, 300);
     
     return () => clearTimeout(timer);
+  }, []);
+
+  // Detect device capabilities
+  useEffect(() => {
+    if (typeof window !== 'undefined') {
+      const isMobile = window.innerWidth < 768;
+      const isLowPower = navigator.hardwareConcurrency <= 4;
+      setDeviceInfo({ isMobile, isLowPower });
+    }
   }, []);
 
   // scrollToSection function
@@ -127,11 +153,13 @@ Charlie
 
   // Canvas particle effect
   useEffect(() => {
-    // Removed isCanvasReady check, only check for canvasRef
-    if (!canvasRef.current) return;
-
+    // Skip canvas setup during SSR
+    if (typeof window === 'undefined') return;
+    
     const canvas = canvasRef.current;
-    const ctx = canvas.getContext('2d');
+    if (!canvas) return;
+
+    const ctx = canvas.getContext('2d', { alpha: true });
     if (!ctx) return;
 
     // Set canvas dimensions based on the main container
@@ -145,7 +173,7 @@ Charlie
         canvas.height = window.innerHeight;
       }
     };
-
+    
     setCanvasDimensions();
 
     type Particle = {
@@ -162,21 +190,21 @@ Charlie
 
     let particles: Particle[] = [];
     let animationFrameId: number;
+    let isTabVisible = true;
 
-    // Enhanced color palette for a more futuristic tech look
-    const colors = ['#4fd1c5', '#38b2ac', '#805AD5', '#6B46C1', '#00FFFF', '#2D3748'];
-
-    // Cache for particle gradients
-    const particleGradientCache = new Map<number, CanvasGradient>();
+    // Cache for particle gradients - improved with color in cache key
+    const particleGradientCache = new Map<string, CanvasGradient>();
 
     const createParticleGradient = (size: number, color: string) => {
-      const cacheKey = size;
+      // Include color in the cache key for more precise caching
+      const cacheKey = `${size.toFixed(2)}_${color}`;
       if (particleGradientCache.has(cacheKey)) {
         return particleGradientCache.get(cacheKey)!;
       }
 
-      const gradient = ctx.createRadialGradient(0, 0, 0, 0, 0, size * 2);
+      const gradient = ctx.createRadialGradient(0, 0, 0, 0, 0, size * 2.5);
       gradient.addColorStop(0, color + 'ff');
+      gradient.addColorStop(0.6, color + 'aa');
       gradient.addColorStop(1, color + '00');
       particleGradientCache.set(cacheKey, gradient);
       return gradient;
@@ -186,12 +214,11 @@ Charlie
       particles.length = 0; // Clear existing particles first
       
       const heroHeight = window.innerHeight; // Approximate hero section height
-      const particleDensity = 0.00004; // Adjust density for performance
       
       // Calculate particles based on area
       const heroParticleCount = Math.floor(canvas.width * heroHeight * particleDensity);
       const otherParticleCount = canvas.height > heroHeight 
-        ? Math.floor(canvas.width * (canvas.height - heroHeight) * particleDensity * 0.5) // Less dense below
+        ? Math.floor(canvas.width * (canvas.height - heroHeight) * particleDensity * 0.5) // Half density below hero
         : 0;
 
       // Generate particles for the hero section
@@ -202,7 +229,7 @@ Charlie
           size: Math.random() * 3.5 + 0.5,
           speedX: (Math.random() - 0.5) * 0.4,
           speedY: (Math.random() - 0.5) * 0.4,
-          color: colors[Math.floor(Math.random() * colors.length)],
+          color: particleColors[Math.floor(Math.random() * particleColors.length)],
           opacity: Math.random() * 0.6 + 0.2,
           pulse: Math.random() * Math.PI * 2, // Start pulse randomly
           pulseSpeed: Math.random() * 0.02 + 0.01
@@ -210,7 +237,6 @@ Charlie
       }
 
       // Generate particles for the section below hero
-      // Check if canvas is taller than the hero section before adding more particles
       if (otherParticleCount > 0) {
         for (let i = 0; i < otherParticleCount; i++) {
           particles.push({
@@ -219,7 +245,7 @@ Charlie
             size: Math.random() * 3.5 + 0.5,
             speedX: (Math.random() - 0.5) * 0.4,
             speedY: (Math.random() - 0.5) * 0.4,
-            color: colors[Math.floor(Math.random() * colors.length)],
+            color: particleColors[Math.floor(Math.random() * particleColors.length)],
             opacity: Math.random() * 0.6 + 0.2,
             pulse: Math.random() * Math.PI * 2, // Start pulse randomly
             pulseSpeed: Math.random() * 0.02 + 0.01
@@ -227,6 +253,13 @@ Charlie
         }
       }
     };
+
+    // Visibility API for throttling animations when tab is not visible
+    const handleVisibilityChange = () => {
+      isTabVisible = document.visibilityState === 'visible';
+    };
+    
+    document.addEventListener('visibilitychange', handleVisibilityChange);
 
     const animate = () => {
       if (!ctx || !canvas) return;
@@ -253,28 +286,34 @@ Charlie
         ctx.beginPath();
         ctx.arc(0, 0, currentSize, 0, Math.PI * 2);
         
-        // Use cached gradient
+        // Use cached gradient with improved key
         const gradient = createParticleGradient(currentSize, particle.color);
         ctx.fillStyle = gradient;
         ctx.fill();
         
         ctx.restore();
 
-        // Create more dynamic, high-tech looking connections
-        const connectionDistance = Math.min(canvas.width, canvas.height) * 0.12;
-        for (let j = index + 1; j < Math.min(particles.length, index + 5); j++) {
+        // Create connections - optimized for device capabilities
+        const baseConnectionDistance = Math.min(canvas.width, canvas.height) * 0.12;
+        const connectionDistance = deviceInfo.isMobile || deviceInfo.isLowPower 
+          ? baseConnectionDistance * 0.7 
+          : baseConnectionDistance;
+          
+        const maxConnections = deviceInfo.isMobile || deviceInfo.isLowPower ? 3 : 5;
+        
+        for (let j = index + 1; j < Math.min(particles.length, index + maxConnections); j++) {
           const dx = particles[j].x - particle.x;
           const dy = particles[j].y - particle.y;
-          const distance = Math.sqrt(dx * dx + dy * dy);
-
-          if (distance < connectionDistance) {
-            // Dynamic line width based on distance
+          const distSquared = dx * dx + dy * dy;
+          const connectionDistSquared = connectionDistance * connectionDistance;
+          
+          if (distSquared < connectionDistSquared) {
+            const distance = Math.sqrt(distSquared);
             const lineWidth = 0.5 * (1 - distance / connectionDistance);
             
             ctx.beginPath();
             const opacity = Math.floor((1 - distance / connectionDistance) * 60).toString(16).padStart(2, '0');
             
-            // Use solid color instead of gradient for better performance
             ctx.strokeStyle = particle.color + opacity;
             ctx.lineWidth = lineWidth;
             ctx.moveTo(particle.x, particle.y);
@@ -284,24 +323,39 @@ Charlie
         }
       });
 
-      animationFrameId = requestAnimationFrame(animate);
+      // Throttle animation when tab not visible
+      if (isTabVisible) {
+        animationFrameId = requestAnimationFrame(animate);
+      } else {
+        setTimeout(() => {
+          animationFrameId = requestAnimationFrame(animate);
+        }, 100);
+      }
     };
 
     createParticles();
     animate();
 
-    // Responsive canvas
-    window.addEventListener('resize', () => {
-      setCanvasDimensions();
-      particles.length = 0; // Clear particles
-      createParticles(); // Recreate particles for new dimensions
-    });
+    // Responsive canvas - debounced resize handler
+    let resizeTimeout: ReturnType<typeof setTimeout>;
+    const handleResize = () => {
+      clearTimeout(resizeTimeout);
+      resizeTimeout = setTimeout(() => {
+        setCanvasDimensions();
+        particles.length = 0; // Clear particles
+        createParticles(); // Recreate particles for new dimensions
+      }, 200); // Debounce resize events
+    };
+    
+    window.addEventListener('resize', handleResize);
 
     return () => {
-      window.removeEventListener('resize', setCanvasDimensions);
+      document.removeEventListener('visibilitychange', handleVisibilityChange);
+      window.removeEventListener('resize', handleResize);
+      clearTimeout(resizeTimeout);
       cancelAnimationFrame(animationFrameId);
     };
-  }, []); // Changed dependency to empty array []
+  }, [particleColors, particleDensity, deviceInfo]);
 
   // Features list for the product
   const features = [
