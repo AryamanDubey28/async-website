@@ -1,6 +1,6 @@
 'use client';
 
-import { useState, useRef, useEffect } from 'react';
+import { useState, useRef, useEffect, useMemo, useCallback } from 'react';
 import Image from 'next/image';
 import Navbar from '@/components/Navbar';
 import Footer from '@/components/Footer';
@@ -18,6 +18,24 @@ export default function SkynetAgents() {
   const [showTypingIndicator, setShowTypingIndicator] = useState(false);
   const canvasRef = useRef<HTMLCanvasElement>(null);
   const mainRef = useRef<HTMLElement>(null); // Add ref for the main element
+  const [deviceInfo, setDeviceInfo] = useState({ isMobile: false, isLowPower: false });
+  
+  // Memoize the colors array for a purple theme
+  const particleColors = useMemo(() => [
+    '#9F7AEA', // Brighter purple
+    '#805AD5',
+    '#6B46C1', // Darker purple
+    '#4299E1', // Blue
+    '#38B2FF'  // Bright blue
+  ], []);
+
+  // Memoize the particle density based on device capabilities
+  const particleDensity = useMemo(() => {
+    if (deviceInfo.isMobile || deviceInfo.isLowPower) {
+      return 0.00006; // Lower density for mobile/low-power devices
+    }
+    return 0.00009; // Full density for powerful devices
+  }, [deviceInfo]);
   
   // Features list for the product
   const features = [
@@ -84,6 +102,15 @@ export default function SkynetAgents() {
     return () => clearTimeout(timer);
   }, []);
 
+  // Detect device capabilities
+  useEffect(() => {
+    if (typeof window !== 'undefined') {
+      const isMobile = window.innerWidth < 768;
+      const isLowPower = navigator.hardwareConcurrency <= 4;
+      setDeviceInfo({ isMobile, isLowPower });
+    }
+  }, []);
+
   // scrollToSection function
   const scrollToSection = (sectionId: string) => {
     const element = document.getElementById(sectionId);
@@ -106,11 +133,13 @@ export default function SkynetAgents() {
 
   // Canvas particle effect
   useEffect(() => {
-    // Removed isCanvasReady check, only check for canvasRef
-    if (!canvasRef.current) return;
-
+    // Skip canvas setup during SSR
+    if (typeof window === 'undefined') return;
+    
     const canvas = canvasRef.current;
-    const ctx = canvas.getContext('2d');
+    if (!canvas) return;
+
+    const ctx = canvas.getContext('2d', { alpha: true });
     if (!ctx) return;
 
     // Set canvas dimensions based on the main container
@@ -124,9 +153,8 @@ export default function SkynetAgents() {
         canvas.height = window.innerHeight;
       }
     };
-
+    
     setCanvasDimensions();
-    // Removed setIsCanvasReady call
 
     type Particle = {
       x: number;
@@ -142,21 +170,21 @@ export default function SkynetAgents() {
 
     let particles: Particle[] = [];
     let animationFrameId: number;
+    let isTabVisible = true;
 
-    // Enhanced color palette for a more futuristic tech look
-    const colors = ['#4fd1c5', '#38b2ac', '#805AD5', '#6B46C1', '#00FFFF', '#2D3748'];
-
-    // Cache for particle gradients
-    const particleGradientCache = new Map<number, CanvasGradient>();
+    // Cache for particle gradients - improved with color in cache key
+    const particleGradientCache = new Map<string, CanvasGradient>();
 
     const createParticleGradient = (size: number, color: string) => {
-      const cacheKey = size;
+      // Include color in the cache key for more precise caching
+      const cacheKey = `${size.toFixed(2)}_${color}`;
       if (particleGradientCache.has(cacheKey)) {
         return particleGradientCache.get(cacheKey)!;
       }
 
-      const gradient = ctx.createRadialGradient(0, 0, 0, 0, 0, size * 2);
+      const gradient = ctx.createRadialGradient(0, 0, 0, 0, 0, size * 2.5);
       gradient.addColorStop(0, color + 'ff');
+      gradient.addColorStop(0.6, color + 'aa');
       gradient.addColorStop(1, color + '00');
       particleGradientCache.set(cacheKey, gradient);
       return gradient;
@@ -164,9 +192,14 @@ export default function SkynetAgents() {
 
     const createParticles = () => {
       particles.length = 0; // Clear existing particles first
-      const heroParticleCount = 80; // More particles in the hero area
-      const otherParticleCount = 40; // Fewer particles below
+      
       const heroHeight = window.innerHeight; // Approximate hero section height
+      
+      // Calculate particles based on area
+      const heroParticleCount = Math.floor(canvas.width * heroHeight * particleDensity);
+      const otherParticleCount = canvas.height > heroHeight 
+        ? Math.floor(canvas.width * (canvas.height - heroHeight) * particleDensity * 0.5) // Half density below hero
+        : 0;
 
       // Generate particles for the hero section
       for (let i = 0; i < heroParticleCount; i++) {
@@ -176,7 +209,7 @@ export default function SkynetAgents() {
           size: Math.random() * 3.5 + 0.5,
           speedX: (Math.random() - 0.5) * 0.4,
           speedY: (Math.random() - 0.5) * 0.4,
-          color: colors[Math.floor(Math.random() * colors.length)],
+          color: particleColors[Math.floor(Math.random() * particleColors.length)],
           opacity: Math.random() * 0.6 + 0.2,
           pulse: Math.random() * Math.PI * 2, // Start pulse randomly
           pulseSpeed: Math.random() * 0.02 + 0.01
@@ -184,8 +217,7 @@ export default function SkynetAgents() {
       }
 
       // Generate particles for the section below hero
-      // Check if canvas is taller than the hero section before adding more particles
-      if (canvas.height > heroHeight) {
+      if (otherParticleCount > 0) {
         for (let i = 0; i < otherParticleCount; i++) {
           particles.push({
             x: Math.random() * canvas.width,
@@ -193,7 +225,7 @@ export default function SkynetAgents() {
             size: Math.random() * 3.5 + 0.5,
             speedX: (Math.random() - 0.5) * 0.4,
             speedY: (Math.random() - 0.5) * 0.4,
-            color: colors[Math.floor(Math.random() * colors.length)],
+            color: particleColors[Math.floor(Math.random() * particleColors.length)],
             opacity: Math.random() * 0.6 + 0.2,
             pulse: Math.random() * Math.PI * 2, // Start pulse randomly
             pulseSpeed: Math.random() * 0.02 + 0.01
@@ -202,7 +234,15 @@ export default function SkynetAgents() {
       }
     };
 
+    // Visibility API for throttling animations when tab is not visible
+    const handleVisibilityChange = () => {
+      isTabVisible = document.visibilityState === 'visible';
+    };
+    
+    document.addEventListener('visibilitychange', handleVisibilityChange);
+
     const animate = () => {
+      if (!ctx || !canvas) return;
       ctx.clearRect(0, 0, canvas.width, canvas.height);
       
       particles.forEach((particle, index) => {
@@ -226,28 +266,34 @@ export default function SkynetAgents() {
         ctx.beginPath();
         ctx.arc(0, 0, currentSize, 0, Math.PI * 2);
         
-        // Use cached gradient
+        // Use cached gradient with improved key
         const gradient = createParticleGradient(currentSize, particle.color);
         ctx.fillStyle = gradient;
         ctx.fill();
         
         ctx.restore();
 
-        // Create more dynamic, high-tech looking connections
-        const connectionDistance = Math.min(canvas.width, canvas.height) * 0.12;
-        for (let j = index + 1; j < Math.min(particles.length, index + 5); j++) {
+        // Create connections - optimized for device capabilities
+        const baseConnectionDistance = Math.min(canvas.width, canvas.height) * 0.12;
+        const connectionDistance = deviceInfo.isMobile || deviceInfo.isLowPower 
+          ? baseConnectionDistance * 0.7 
+          : baseConnectionDistance;
+          
+        const maxConnections = deviceInfo.isMobile || deviceInfo.isLowPower ? 3 : 5;
+        
+        for (let j = index + 1; j < Math.min(particles.length, index + maxConnections); j++) {
           const dx = particles[j].x - particle.x;
           const dy = particles[j].y - particle.y;
-          const distance = Math.sqrt(dx * dx + dy * dy);
-
-          if (distance < connectionDistance) {
-            // Dynamic line width based on distance
+          const distSquared = dx * dx + dy * dy;
+          const connectionDistSquared = connectionDistance * connectionDistance;
+          
+          if (distSquared < connectionDistSquared) {
+            const distance = Math.sqrt(distSquared);
             const lineWidth = 0.5 * (1 - distance / connectionDistance);
             
             ctx.beginPath();
             const opacity = Math.floor((1 - distance / connectionDistance) * 60).toString(16).padStart(2, '0');
             
-            // Use solid color instead of gradient for better performance
             ctx.strokeStyle = particle.color + opacity;
             ctx.lineWidth = lineWidth;
             ctx.moveTo(particle.x, particle.y);
@@ -257,24 +303,39 @@ export default function SkynetAgents() {
         }
       });
 
-      animationFrameId = requestAnimationFrame(animate);
+      // Throttle animation when tab not visible
+      if (isTabVisible) {
+        animationFrameId = requestAnimationFrame(animate);
+      } else {
+        setTimeout(() => {
+          animationFrameId = requestAnimationFrame(animate);
+        }, 100);
+      }
     };
 
     createParticles();
     animate();
 
-    // Responsive canvas
-    window.addEventListener('resize', () => {
-      setCanvasDimensions();
-      particles.length = 0; // Clear particles
-      createParticles(); // Recreate particles for new dimensions
-    });
+    // Responsive canvas - debounced resize handler
+    let resizeTimeout: ReturnType<typeof setTimeout>;
+    const handleResize = () => {
+      clearTimeout(resizeTimeout);
+      resizeTimeout = setTimeout(() => {
+        setCanvasDimensions();
+        particles.length = 0; // Clear particles
+        createParticles(); // Recreate particles for new dimensions
+      }, 200); // Debounce resize events
+    };
+    
+    window.addEventListener('resize', handleResize);
 
     return () => {
-      window.removeEventListener('resize', setCanvasDimensions);
+      document.removeEventListener('visibilitychange', handleVisibilityChange);
+      window.removeEventListener('resize', handleResize);
+      clearTimeout(resizeTimeout);
       cancelAnimationFrame(animationFrameId);
     };
-  }, []); // Changed dependency to empty array []
+  }, [particleColors, particleDensity, deviceInfo]);
 
   return (
     <main ref={mainRef} className="relative min-h-screen bg-gray-950 text-white overflow-hidden flex flex-col">
@@ -289,7 +350,7 @@ export default function SkynetAgents() {
       {/* Content wrapper */}
       <div className="flex-grow">
         {/* Hero Section */}
-        <section className="relative pt-32 pb-20">
+        <section className="relative flex min-h-screen items-center pt-28 md:pt-32 pb-16 md:pb-20">
           {/* Background decorations */}
           <div className="absolute inset-0 overflow-hidden">
             <div className="absolute -top-20 -left-20 w-96 h-96 bg-gradient-to-br from-purple-600/15 via-indigo-500/10 to-blue-600/10 rounded-full blur-3xl animate-pulse"></div>
@@ -298,9 +359,9 @@ export default function SkynetAgents() {
           </div>
           
           <div className="container mx-auto px-4 relative z-10">
-            <div className="flex flex-col lg:flex-row items-center justify-between gap-16">
+            <div className="flex flex-col lg:flex-row items-center justify-between gap-12 lg:gap-8 xl:gap-16">
               {/* Left content column */}
-              <div className="lg:w-2/5 space-y-8">
+              <div className="lg:w-2/5 space-y-8 text-center lg:text-left">
                 <div 
                   className="inline-block px-4 py-1.5 rounded-full bg-gray-800/70 backdrop-blur-lg border border-purple-500/30 mb-3 transform hover:scale-105 transition-all duration-300 shadow-lg shadow-purple-500/10"
                 >
@@ -310,33 +371,33 @@ export default function SkynetAgents() {
                   </p>
                 </div>
                 
-                <h1 className="text-5xl sm:text-6xl lg:text-7xl font-bold leading-none tracking-tight">
+                <h1 className="text-4xl sm:text-6xl lg:text-6xl xl:text-7xl font-bold leading-none tracking-tight">
                   <div className="overflow-hidden">
                     <span className={`block mb-3 transform ${isLoaded ? 'translate-y-0' : 'translate-y-full'} transition-transform duration-700 delay-100 ease-out`}>
                       Skynet Agents
                     </span>
                   </div>
-                  <div className="overflow-hidden">
+                  <div className="overflow-hidden pb-1">
                     <span className={`block bg-clip-text text-transparent bg-gradient-to-r from-purple-400 via-indigo-400 to-blue-500 transform ${isLoaded ? 'translate-y-0' : 'translate-y-full'} transition-transform duration-700 delay-300 ease-out`}>
                       Autonomous Intelligence
                     </span>
                   </div>
                 </h1>
                 
-                <p className="text-xl text-gray-300 max-w-xl leading-relaxed">
+                <p className="text-lg sm:text-xl xl:text-2xl text-gray-300 max-w-xl leading-relaxed mx-auto lg:mx-0">
                   Beyond chat: Custom AI agents that automate complex tasks by connecting and working across your existing business software.
                 </p>
                 
-                <div className="flex flex-col sm:flex-row gap-5 pt-4">
+                <div className="flex flex-col sm:flex-row items-center justify-center lg:justify-start gap-5 pt-4">
                   <button 
                     onClick={() => scrollToSection('skynet-agents-cta')}
-                    className="group relative px-8 py-4 rounded-full bg-gradient-to-r from-purple-500 to-indigo-500 text-white font-semibold transition-all duration-300 hover:shadow-xl hover:shadow-purple-500/40 hover:scale-105 focus:outline-none focus:ring-2 focus:ring-purple-400/50 overflow-hidden">
+                    className="group relative w-full sm:w-auto px-8 py-4 rounded-full bg-gradient-to-r from-purple-500 to-indigo-500 text-white font-semibold transition-all duration-300 hover:shadow-xl hover:shadow-purple-500/40 hover:scale-105 focus:outline-none focus:ring-2 focus:ring-purple-400/50 overflow-hidden">
                     <span className="relative z-10">Request Demo</span>
                     <span className="absolute inset-0 bg-gradient-to-r from-purple-400 to-indigo-400 opacity-0 group-hover:opacity-100 transition-opacity duration-300 blur-xl"></span>
                   </button>
                   <button 
                     onClick={() => scrollToSection('skynet-agents-features')}
-                    className="relative px-8 py-4 rounded-full border border-gray-700 backdrop-blur-lg text-white transition-all duration-300 hover:border-purple-500/50 focus:outline-none focus:ring-2 focus:ring-purple-400/30 overflow-hidden group">
+                    className="relative w-full sm:w-auto px-8 py-4 rounded-full border border-gray-700 backdrop-blur-lg text-white transition-all duration-300 hover:border-purple-500/50 focus:outline-none focus:ring-2 focus:ring-purple-400/30 overflow-hidden group">
                     <span className="relative z-10">Learn More</span>
                     <span className="absolute inset-0 bg-gradient-to-r from-gray-800 to-gray-900 opacity-80"></span>
                     <span className="absolute inset-0 bg-gradient-to-r from-purple-500/20 to-indigo-500/20 opacity-0 group-hover:opacity-100 transition-opacity duration-300"></span>
@@ -344,10 +405,10 @@ export default function SkynetAgents() {
                 </div>
                 
                 {/* New Feature Highlights */}
-                <div className={`flex flex-col sm:flex-row items-center sm:items-start gap-6 pt-8 pb-16 transition-opacity duration-1000 ${isLoaded ? 'opacity-100' : 'opacity-0'}`}>
+                <div className={`grid grid-cols-1 sm:grid-cols-3 gap-y-4 sm:gap-x-4 md:gap-x-6 pt-8 transition-opacity duration-1000 ${isLoaded ? 'opacity-100' : 'opacity-0'}`}>
                   {/* Secure Execution Highlight */}
-                  <div className="flex items-center gap-2">
-                    <div className="w-10 h-10 rounded-full border-2 border-purple-400/70 flex items-center justify-center transition-transform duration-300 hover:scale-110">
+                  <div className="flex items-center gap-2 justify-center sm:justify-start">
+                    <div className="w-10 h-10 rounded-full border-2 border-purple-400/70 flex items-center justify-center transition-transform duration-300 hover:scale-110 flex-shrink-0">
                       <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5 text-purple-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                         <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z" />
                       </svg>
@@ -356,8 +417,8 @@ export default function SkynetAgents() {
                   </div>
 
                   {/* Autonomous Tasks Highlight */}
-                  <div className="flex items-center gap-2">
-                    <div className="w-10 h-10 rounded-full border-2 border-indigo-400/70 flex items-center justify-center transition-transform duration-300 hover:scale-110">
+                  <div className="flex items-center gap-2 justify-center sm:justify-start">
+                    <div className="w-10 h-10 rounded-full border-2 border-indigo-400/70 flex items-center justify-center transition-transform duration-300 hover:scale-110 flex-shrink-0">
                       <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5 text-indigo-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                         <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M13 10V3L4 14h7v7l9-11h-7z" />
                       </svg>
@@ -366,8 +427,8 @@ export default function SkynetAgents() {
                   </div>
 
                   {/* Enterprise Control Highlight */}
-                  <div className="flex items-center gap-2">
-                    <div className="w-10 h-10 rounded-full border-2 border-blue-400/70 flex items-center justify-center transition-transform duration-300 hover:scale-110">
+                  <div className="flex items-center gap-2 justify-center sm:justify-start">
+                    <div className="w-10 h-10 rounded-full border-2 border-blue-400/70 flex items-center justify-center transition-transform duration-300 hover:scale-110 flex-shrink-0">
                       <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5 text-blue-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z" />
                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
@@ -382,7 +443,7 @@ export default function SkynetAgents() {
               <Mockup 
                 activeAgent={activeAgent} 
                 setActiveAgent={setActiveAgent} 
-                className="hidden lg:block"
+                className="hidden lg:block lg:w-3/5 relative max-w-3xl xl:max-w-5xl 2xl:max-w-6xl mx-auto"
               />
             </div>
           </div>
@@ -417,19 +478,19 @@ export default function SkynetAgents() {
               <div className="bg-gray-800/30 backdrop-blur-md border border-gray-700 rounded-xl overflow-hidden shadow-2xl shadow-purple-500/5 transform hover:shadow-purple-500/10 transition-all duration-500">
                 <div className="grid grid-cols-1 md:grid-cols-2">
                   {/* Left column - Skynet Chat */}
-                  <div className="p-8 border-b md:border-b-0 md:border-r border-gray-700">
-                    <div className="flex items-center mb-8">
-                      <div className="w-12 h-12 rounded-full bg-gradient-to-r from-teal-400 to-teal-500 flex items-center justify-center text-white text-sm font-bold mr-4 shadow-md shadow-teal-500/20">SC</div>
-                      <h3 className="text-2xl font-bold text-white">Skynet Chat</h3>
+                  <div className="p-6 md:p-8 border-b md:border-b-0 md:border-r border-gray-700">
+                    <div className="flex items-center mb-6">
+                      <div className="w-10 h-10 md:w-12 md:h-12 rounded-full bg-gradient-to-r from-teal-400 to-teal-500 flex items-center justify-center text-white text-sm font-bold mr-4 shadow-md shadow-teal-500/20">SC</div>
+                      <h3 className="text-xl md:text-2xl font-bold text-white">Skynet Chat</h3>
                     </div>
-                    <ul className="space-y-4">
+                    <ul className="space-y-3 md:space-y-4">
                       <li className="flex items-start">
                         <div className="flex-shrink-0 w-6 h-6 rounded-full bg-teal-400/20 flex items-center justify-center mt-0.5 mr-3">
                           <svg xmlns="http://www.w3.org/2000/svg" className="h-3.5 w-3.5 text-teal-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
                           </svg>
                         </div>
-                        <span className="text-gray-300 text-base">Integrated Content Creation</span>
+                        <span className="text-gray-300 text-sm md:text-base">Integrated Content Creation</span>
                       </li>
                       <li className="flex items-start">
                         <div className="flex-shrink-0 w-6 h-6 rounded-full bg-teal-400/20 flex items-center justify-center mt-0.5 mr-3">
@@ -437,7 +498,7 @@ export default function SkynetAgents() {
                             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
                           </svg>
                         </div>
-                        <span className="text-gray-300 text-base">Deep Context Understanding</span>
+                        <span className="text-gray-300 text-sm md:text-base">Deep Context Understanding</span>
                       </li>
                       <li className="flex items-start">
                         <div className="flex-shrink-0 w-6 h-6 rounded-full bg-teal-400/20 flex items-center justify-center mt-0.5 mr-3">
@@ -445,7 +506,7 @@ export default function SkynetAgents() {
                             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
                           </svg>
                         </div>
-                        <span className="text-gray-300 text-base">Persistent AI Personalisation</span>
+                        <span className="text-gray-300 text-sm md:text-base">Persistent AI Personalisation</span>
                       </li>
                       <li className="flex items-start">
                         <div className="flex-shrink-0 w-6 h-6 rounded-full bg-teal-400/20 flex items-center justify-center mt-0.5 mr-3">
@@ -453,7 +514,7 @@ export default function SkynetAgents() {
                             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
                           </svg>
                         </div>
-                        <span className="text-gray-300 text-base">Accelerated Workflow Actions</span>
+                        <span className="text-gray-300 text-sm md:text-base">Accelerated Workflow Actions</span>
                       </li>
                       <li className="flex items-start">
                         <div className="flex-shrink-0 w-6 h-6 rounded-full bg-gray-700 flex items-center justify-center mt-0.5 mr-3">
@@ -461,7 +522,7 @@ export default function SkynetAgents() {
                             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
                           </svg>
                         </div>
-                        <span className="text-gray-500 text-base">Workspace-Bound Operation</span>
+                        <span className="text-gray-500 text-sm md:text-base">Workspace-Bound Operation</span>
                       </li>
                       <li className="flex items-start">
                         <div className="flex-shrink-0 w-6 h-6 rounded-full bg-gray-700 flex items-center justify-center mt-0.5 mr-3">
@@ -469,25 +530,25 @@ export default function SkynetAgents() {
                             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
                           </svg>
                         </div>
-                        <span className="text-gray-500 text-base">Manual Task Execution</span>
+                        <span className="text-gray-500 text-sm md:text-base">Manual Task Execution</span>
                       </li>
                     </ul>
                   </div>
                   
                   {/* Right column - Skynet Agents */}
-                  <div className="p-8 bg-gradient-to-br from-purple-900/20 to-transparent">
-                    <div className="flex items-center mb-8">
-                      <div className="w-12 h-12 rounded-full bg-gradient-to-r from-purple-400 to-teal-500 flex items-center justify-center text-white text-sm font-bold mr-4 shadow-md shadow-purple-500/20 animate-pulse-slow">SA</div>
-                      <h3 className="text-2xl font-bold bg-clip-text text-transparent bg-gradient-to-r from-purple-400 to-teal-400">Skynet Agents</h3>
+                  <div className="p-6 md:p-8 bg-gradient-to-br from-purple-900/20 to-transparent">
+                    <div className="flex items-center mb-6">
+                      <div className="w-10 h-10 md:w-12 md:h-12 rounded-full bg-gradient-to-r from-purple-400 to-teal-500 flex items-center justify-center text-white text-sm font-bold mr-4 shadow-md shadow-purple-500/20 animate-pulse-slow">SA</div>
+                      <h3 className="text-xl md:text-2xl font-bold bg-clip-text text-transparent bg-gradient-to-r from-purple-400 to-teal-400">Skynet Agents</h3>
                     </div>
-                    <ul className="space-y-4">
+                    <ul className="space-y-3 md:space-y-4">
                       <li className="flex items-start">
                         <div className="flex-shrink-0 w-6 h-6 rounded-full bg-purple-400/20 flex items-center justify-center mt-0.5 mr-3">
                           <svg xmlns="http://www.w3.org/2000/svg" className="h-3.5 w-3.5 text-purple-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
                           </svg>
                         </div>
-                        <span className="text-gray-300 text-base">All Skynet Chat Capabilities, <strong className="font-extrabold text-purple-300">PLUS</strong></span>
+                        <span className="text-gray-300 text-sm md:text-base">All Skynet Chat Capabilities, <strong className="font-extrabold text-purple-300">PLUS</strong></span>
                       </li>
                       <li className="flex items-start">
                         <div className="flex-shrink-0 w-6 h-6 rounded-full bg-purple-400/20 flex items-center justify-center mt-0.5 mr-3 animate-pulse-slow">
@@ -495,7 +556,7 @@ export default function SkynetAgents() {
                             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
                           </svg>
                         </div>
-                        <span className="text-white text-base font-medium">Hands-Off Task Execution</span>
+                        <span className="text-white text-sm md:text-base font-medium">Hands-Off Task Execution</span>
                       </li>
                       <li className="flex items-start">
                         <div className="flex-shrink-0 w-6 h-6 rounded-full bg-purple-400/20 flex items-center justify-center mt-0.5 mr-3 animate-pulse-slow">
@@ -503,7 +564,7 @@ export default function SkynetAgents() {
                             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
                           </svg>
                         </div>
-                        <span className="text-white text-base font-medium">Limitless App Integration</span>
+                        <span className="text-white text-sm md:text-base font-medium">Limitless App Integration</span>
                       </li>
                       <li className="flex items-start">
                         <div className="flex-shrink-0 w-6 h-6 rounded-full bg-purple-400/20 flex items-center justify-center mt-0.5 mr-3 animate-pulse-slow">
@@ -511,7 +572,7 @@ export default function SkynetAgents() {
                             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
                           </svg>
                         </div>
-                        <span className="text-white text-base font-medium">Precision-Engineered Logic</span>
+                        <span className="text-white text-sm md:text-base font-medium">Precision-Engineered Logic</span>
                       </li>
                       <li className="flex items-start">
                         <div className="flex-shrink-0 w-6 h-6 rounded-full bg-purple-400/20 flex items-center justify-center mt-0.5 mr-3 animate-pulse-slow">
@@ -519,7 +580,7 @@ export default function SkynetAgents() {
                             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
                           </svg>
                         </div>
-                        <span className="text-white text-base font-medium">Orchestrated Agent Teams</span>
+                        <span className="text-white text-sm md:text-base font-medium">Orchestrated Agent Teams</span>
                       </li>
                       <li className="flex items-start">
                         <div className="flex-shrink-0 w-6 h-6 rounded-full bg-purple-400/20 flex items-center justify-center mt-0.5 mr-3 animate-pulse-slow">
@@ -527,7 +588,7 @@ export default function SkynetAgents() {
                             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
                           </svg>
                         </div>
-                        <span className="text-white text-base font-medium">Total Workflow Automation</span>
+                        <span className="text-white text-sm md:text-base font-medium">Total Workflow Automation</span>
                       </li>
                     </ul>
                   </div>

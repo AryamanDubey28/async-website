@@ -127,24 +127,27 @@ const carouselStyles = `
   
   /* Card sections */
   .card-summary {
-    padding: 1.5rem;
+    padding: 1.25rem; /* Smaller padding on mobile */
     display: flex;
     flex-direction: column;
     background-color: rgba(15, 23, 42, 0.35);
     transition: background-color 0.5s ease;
     
     @media (min-width: 768px) {
+      padding: 1.5rem; /* Restore padding for desktop */
       width: 40%;
       border-right: 1px solid rgba(59, 130, 246, 0.2);
     }
   }
   
   .card-expanded {
+    display: none; /* Hide on mobile by default */
     padding: 1.5rem;
     background-color: rgba(15, 23, 42, 0.15);
     transition: background-color 0.5s ease;
     
     @media (min-width: 768px) {
+      display: block; /* Show on desktop */
       width: 60%;
     }
   }

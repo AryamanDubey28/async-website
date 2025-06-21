@@ -31,8 +31,8 @@ export default function Mockup({
   const [activePersonality, setActivePersonality] = useState(0);
 
   return (
-    <div className={`lg:w-3/5 relative max-w-2xl mx-auto ${className || ''}`}>
-      <div className="relative rounded-xl overflow-hidden border border-teal-500/30 shadow-xl shadow-teal-500/10 backdrop-blur-sm bg-gray-900/80 aspect-[16/10] flex flex-col">
+    <div className={`relative ${className || ''}`}>
+      <div className="relative rounded-xl overflow-hidden border border-teal-500/30 shadow-xl shadow-teal-500/10 backdrop-blur-sm bg-gray-900/80 aspect-[16/10] flex flex-col w-full">
         <div className="absolute inset-0 bg-gradient-to-br from-teal-500/10 via-cyan-500/10 to-blue-600/10"></div>
         <div className="absolute inset-0 bg-[radial-gradient(#4fd1c520_1px,transparent_1px)] [background-size:16px_16px] opacity-30"></div>
         

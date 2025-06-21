@@ -159,7 +159,7 @@ const CallToAction = () => {
             </div>
           </div>
           
-          <div className={`flex flex-wrap justify-center gap-6 items-center transition-all duration-700 delay-400 ease-out ${visible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-8'}`}>
+          <div className={`inline-flex flex-col sm:flex-row sm:flex-wrap justify-center gap-x-12 gap-y-8 items-start sm:items-center transition-all duration-700 delay-400 ease-out ${visible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-8'}`}>
             <div className="flex items-center">
               <div className="w-12 h-12 rounded-full bg-gray-800/70 backdrop-blur-sm flex items-center justify-center mr-3 border border-teal-400/30 shadow-lg shadow-teal-500/10"> 
                 <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6 text-teal-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
@@ -180,7 +180,7 @@ const CallToAction = () => {
               </div>
               <div className="text-left">
                 <div className="text-sm text-gray-400">Email us</div>
-                <div className="text-white">contact@asyncstudios.co.uk</div>
+                <div className="text-white">admin@asyncstudios.co.uk</div>
               </div>
             </div>
           </div>
