@@ -166,7 +166,7 @@ export default function SkynetAgentsCallToAction() {
                   
                   {/* Info side - Adjusted for Skynet Agents */}
                   <div className="md:w-1/2 space-y-6">
-                    <div className="flex items-start group transition-all duration-300 hover:bg-gray-800/40 backdrop-blur-sm p-4 rounded-xl cursor-pointer border border-transparent hover:border-purple-500/30" onClick={() => window.location.href='mailto:contact@asyncstudios.co.uk'}>
+                    <div className="flex items-start group transition-all duration-300 hover:bg-gray-800/40 backdrop-blur-sm p-4 rounded-xl cursor-pointer border border-transparent hover:border-purple-500/30" onClick={() => window.location.href='mailto:admin@asyncstudios.co.uk'}>
                       <div className="flex-shrink-0 h-12 w-12 rounded-lg bg-purple-500/25 flex items-center justify-center text-purple-300 group-hover:scale-110 transition-transform duration-300">
                         <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" />
@@ -174,7 +174,7 @@ export default function SkynetAgentsCallToAction() {
                       </div>
                       <div className="ml-4">
                         <p className="text-gray-100 font-semibold group-hover:text-purple-300 transition-colors duration-300 text-lg">Email Us</p>
-                        <p className="text-gray-400">contact@asyncstudios.co.uk</p>
+                        <p className="text-gray-400">admin@asyncstudios.co.uk</p>
                       </div>
                     </div>
 
