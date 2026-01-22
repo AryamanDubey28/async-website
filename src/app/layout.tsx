@@ -14,7 +14,7 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata: Metadata = {
-  metadataBase: new URL('https://your-domain.com'), // Add your actual domain here
+  metadataBase: new URL('https://asyncstudios.co.uk'),
   title: {
     default: "Async Studios | AI Agents. Private. Built for you", // Default title for the site
     template: "%s | Async Studios", // Template for page-specific titles
@@ -29,7 +29,7 @@ export const metadata: Metadata = {
   openGraph: {
     title: "Async Studios | AI Agents. Private. Built for you",
     description: "AI Consultancy helping businesses integrate AI. We build custom AI applications and provide expert consultancy services.",
-    url: 'https://your-domain.com', // Add your actual domain here
+    url: 'https://asyncstudios.co.uk',
     siteName: 'Async Studios',
     images: [
       {
@@ -63,7 +63,7 @@ export const metadata: Metadata = {
     },
   },
   alternates: {
-    canonical: 'https://your-domain.com', // Add your actual domain here
+    canonical: 'https://asyncstudios.co.uk',
     // languages: { // If you have multiple languages
     //   'en-US': 'https://your-domain.com/en-US',
     //   'es-ES': 'https://your-domain.com/es-ES',
