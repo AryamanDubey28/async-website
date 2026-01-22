@@ -19,6 +19,7 @@ export interface PostData {
   date: string;
   summary: string;
   author: string;
+  readingTime: number;
   contentHtml?: string;
   [key: string]: any; // Allow other properties
 }
@@ -43,6 +44,10 @@ export function getSortedPostsData(): PostData[] {
       // Use gray-matter to parse the post metadata section
       const matterResult = matter(fileContents);
 
+      // Calculate reading time
+      const wordCount = matterResult.content.split(/\s+/g).filter(Boolean).length;
+      const readingTime = Math.ceil(wordCount / 200);
+
       // Use the slug from frontmatter if provided, otherwise use the filename
       const slug = matterResult.data.slug || fileSlug;
 
@@ -54,6 +59,7 @@ export function getSortedPostsData(): PostData[] {
         date: matterResult.data.date || 'No date',
         summary: matterResult.data.summary || '',
         author: matterResult.data.author || 'Unknown Author',
+        readingTime,
         ...matterResult.data, // Spread the rest of the data
       };
       return postData;
@@ -143,6 +149,10 @@ export async function getPostData(slug: string): Promise<PostData> {
   // Use gray-matter to parse the post metadata section
   const matterResult = matter(fileContents);
 
+  // Calculate reading time
+  const wordCount = matterResult.content.split(/\s+/g).filter(Boolean).length;
+  const readingTime = Math.ceil(wordCount / 200);
+
   // Use unified with rehype-prism-plus for better code highlighting
   const processedContent = await unified()
     .use(remarkParse)
@@ -164,6 +174,7 @@ export async function getPostData(slug: string): Promise<PostData> {
     date: matterResult.data.date || 'No date',
     summary: matterResult.data.summary || '',
     author: matterResult.data.author || 'Unknown Author',
+    readingTime,
     ...matterResult.data, // Spread the rest of the front matter data
   };
 }

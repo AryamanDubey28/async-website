@@ -6,6 +6,10 @@ const nextConfig: NextConfig = {
     // Disables ESLint during build
     ignoreDuringBuilds: true,
   },
+  serverExternalPackages: ["tailwindcss"],
+  experimental: {
+    // Remove invalid css option and use correct serverExternalPackages location
+  }
 };
 
 export default nextConfig;

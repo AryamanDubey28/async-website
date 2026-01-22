@@ -1,37 +1,63 @@
 import { MetadataRoute } from 'next';
-
-// You would typically fetch your dynamic routes (e.g., blog posts, products)
-// from a database or CMS here.
-// For example:
-// const posts = await fetch('https://.../posts').then((res) => res.json())
+import { getSortedPostsData } from '@/lib/posts';
 
 export default function sitemap(): MetadataRoute.Sitemap {
-  const staticRoutes: MetadataRoute.Sitemap = [
+  const baseUrl = 'https://asyncstudios.co.uk';
+
+  // Static pages
+  const staticPages: MetadataRoute.Sitemap = [
     {
-      url: 'https://your-domain.com', // Replace with your actual domain
+      url: baseUrl,
       lastModified: new Date(),
-      changeFrequency: 'yearly',
+      changeFrequency: 'weekly',
       priority: 1,
     },
     {
-      url: 'https://your-domain.com/about', // Example static route
+      url: `${baseUrl}/skynet-chat`,
+      lastModified: new Date(),
+      changeFrequency: 'weekly',
+      priority: 0.9,
+    },
+    {
+      url: `${baseUrl}/skynet-agents`,
+      lastModified: new Date(),
+      changeFrequency: 'weekly',
+      priority: 0.9,
+    },
+    {
+      url: `${baseUrl}/about`,
       lastModified: new Date(),
       changeFrequency: 'monthly',
+      priority: 0.7,
+    },
+    {
+      url: `${baseUrl}/blogs`,
+      lastModified: new Date(),
+      changeFrequency: 'weekly',
       priority: 0.8,
     },
-    // Add more static routes here
+    {
+      url: `${baseUrl}/privacy-policy`,
+      lastModified: new Date(),
+      changeFrequency: 'yearly',
+      priority: 0.3,
+    },
+    {
+      url: `${baseUrl}/terms-of-service`,
+      lastModified: new Date(),
+      changeFrequency: 'yearly',
+      priority: 0.3,
+    },
   ];
 
-  // Example for dynamic routes (e.g., blog posts)
-  // const dynamicPostRoutes = posts.map((post) => ({
-  //   url: `https://your-domain.com/blog/${post.slug}`,
-  //   lastModified: new Date(post.updatedAt),
-  //   changeFrequency: 'weekly',
-  //   priority: 0.5,
-  // }));
+  // Dynamic blog post pages
+  const posts = getSortedPostsData();
+  const blogPages: MetadataRoute.Sitemap = posts.map((post) => ({
+    url: `${baseUrl}/blogs/${post.slug}`,
+    lastModified: new Date(post.date),
+    changeFrequency: 'monthly',
+    priority: 0.6,
+  }));
 
-  return [
-    ...staticRoutes,
-    // ...dynamicPostRoutes,
-  ];
-} 
+  return [...staticPages, ...blogPages];
+}
