@@ -77,8 +77,6 @@ const Footer = () => {
             {
               title: "Solutions",
               links: [
-                { name: 'Skynet Chat', href: '/skynet-chat' },
-                { name: 'Skynet Agents', href: '/skynet-agents' },
                 { name: 'Custom Development', href: '/#services' },
                 { name: 'Enterprise AI', href: '/#services' }
               ]
@@ -87,7 +85,6 @@ const Footer = () => {
               title: "Company",
               links: [
                 { name: 'About', href: '/about' },
-                { name: 'Blog', href: '/blogs' },
                 { name: 'Contact', href: '/#contact' }
               ]
             },

@@ -20,7 +20,7 @@ export const metadata: Metadata = {
     template: "%s | Async Studios", // Template for page-specific titles
   },
   description: "AI Consultancy helping businesses integrate AI. We build custom AI applications and provide expert consultancy services.",
-  keywords: ["AI", "Artificial Intelligence", "AI Agents", "AI Consultancy", "AI Development", "Skynet Chat", "Skynet Agents"],
+  keywords: ["AI", "Artificial Intelligence", "AI Agents", "AI Consultancy", "AI Development"],
   icons: {
     icon: [
       { url: './favicon.ico?v=' + Date.now() }
