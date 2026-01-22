@@ -8,7 +8,7 @@ import ScrollProgress from '@/components/ScrollProgress';
 
 export default function Home() {
   return (
-    <main className="min-h-screen bg-gray-900 text-white">
+    <main className="min-h-screen bg-background text-white">
       <ScrollProgress />
       <Navbar />
       <Hero />
