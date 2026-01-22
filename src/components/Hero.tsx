@@ -1,9 +1,13 @@
 'use client';
 
-import { useEffect, useState, useCallback } from 'react';
+import { useEffect, useState, useCallback, useRef } from 'react';
 
 const Hero = () => {
   const [isLoaded, setIsLoaded] = useState(false);
+  const primaryBtnRef = useRef<HTMLButtonElement>(null);
+  const secondaryBtnRef = useRef<HTMLButtonElement>(null);
+  const [primaryOffset, setPrimaryOffset] = useState({ x: 0, y: 0 });
+  const [secondaryOffset, setSecondaryOffset] = useState({ x: 0, y: 0 });
 
   useEffect(() => {
     const timer = setTimeout(() => setIsLoaded(true), 100);
@@ -16,6 +20,31 @@ const Hero = () => {
 
   const handleLearnMore = useCallback(() => {
     document.getElementById('services')?.scrollIntoView({ behavior: 'smooth' });
+  }, []);
+
+  // Magnetic button handlers
+  const handlePrimaryMouseMove = useCallback((e: React.MouseEvent<HTMLButtonElement>) => {
+    if (!primaryBtnRef.current) return;
+    const rect = primaryBtnRef.current.getBoundingClientRect();
+    const x = e.clientX - rect.left - rect.width / 2;
+    const y = e.clientY - rect.top - rect.height / 2;
+    setPrimaryOffset({ x: x * 0.15, y: y * 0.15 });
+  }, []);
+
+  const handlePrimaryMouseLeave = useCallback(() => {
+    setPrimaryOffset({ x: 0, y: 0 });
+  }, []);
+
+  const handleSecondaryMouseMove = useCallback((e: React.MouseEvent<HTMLButtonElement>) => {
+    if (!secondaryBtnRef.current) return;
+    const rect = secondaryBtnRef.current.getBoundingClientRect();
+    const x = e.clientX - rect.left - rect.width / 2;
+    const y = e.clientY - rect.top - rect.height / 2;
+    setSecondaryOffset({ x: x * 0.15, y: y * 0.15 });
+  }, []);
+
+  const handleSecondaryMouseLeave = useCallback(() => {
+    setSecondaryOffset({ x: 0, y: 0 });
   }, []);
 
   return (
@@ -109,14 +138,25 @@ const Hero = () => {
                 isLoaded ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-4'
               }`}
             >
-              {/* Primary CTA */}
+              {/* Primary CTA with magnetic effect */}
               <button
+                ref={primaryBtnRef}
                 onClick={handleGetStarted}
-                className="group relative px-8 py-4 rounded-full text-white font-semibold overflow-hidden transition-all duration-300 hover:scale-105 hover:shadow-glow-lg"
+                onMouseMove={handlePrimaryMouseMove}
+                onMouseLeave={handlePrimaryMouseLeave}
+                className="group relative px-8 py-4 rounded-full text-white font-semibold overflow-hidden hover:shadow-glow-lg"
+                style={{
+                  transform: `translate(${primaryOffset.x}px, ${primaryOffset.y}px)`,
+                  transition: primaryOffset.x === 0 ? 'transform 0.3s ease-out' : 'transform 0.1s ease-out',
+                }}
               >
                 <span className="absolute inset-0 bg-gradient-to-r from-violet-600 to-indigo-600" />
                 <span className="absolute inset-0 bg-gradient-to-r from-violet-500 to-cyan-500 opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
                 <span className="absolute inset-0 btn-shimmer" />
+                {/* Ripple effect */}
+                <span className="absolute inset-0 overflow-hidden rounded-full">
+                  <span className="absolute inset-0 scale-0 group-hover:scale-150 bg-white/10 rounded-full transition-transform duration-700 origin-center" />
+                </span>
                 <span className="relative z-10 flex items-center justify-center gap-2">
                   Get Started
                   <svg
@@ -130,13 +170,22 @@ const Hero = () => {
                 </span>
               </button>
 
-              {/* Secondary CTA */}
+              {/* Secondary CTA with magnetic effect */}
               <button
+                ref={secondaryBtnRef}
                 onClick={handleLearnMore}
-                className="group relative px-8 py-4 rounded-full font-semibold overflow-hidden transition-all duration-300 hover:scale-105"
+                onMouseMove={handleSecondaryMouseMove}
+                onMouseLeave={handleSecondaryMouseLeave}
+                className="group relative px-8 py-4 rounded-full font-semibold overflow-hidden"
+                style={{
+                  transform: `translate(${secondaryOffset.x}px, ${secondaryOffset.y}px)`,
+                  transition: secondaryOffset.x === 0 ? 'transform 0.3s ease-out' : 'transform 0.1s ease-out',
+                }}
               >
                 <span className="absolute inset-0 glass rounded-full" />
                 <span className="absolute inset-0 bg-white/5 opacity-0 group-hover:opacity-100 transition-opacity duration-300 rounded-full" />
+                {/* Border glow on hover */}
+                <span className="absolute inset-0 rounded-full opacity-0 group-hover:opacity-100 transition-opacity duration-300" style={{ boxShadow: 'inset 0 0 20px rgba(139, 92, 246, 0.3)' }} />
                 <span className="relative z-10 text-white">Learn More</span>
               </button>
             </div>
@@ -166,12 +215,16 @@ const Hero = () => {
               ].map((item, i) => (
                 <div
                   key={i}
-                  className="group flex items-center gap-2 px-4 py-2.5 rounded-full glass-violet text-sm text-gray-300 hover:text-white transition-all duration-300 hover:scale-105"
+                  className="group relative flex items-center gap-2 px-4 py-2.5 rounded-full glass-violet text-sm text-gray-300 hover:text-white transition-all duration-300 hover:scale-105 cursor-default overflow-hidden"
                 >
-                  <span className="text-violet-400 group-hover:text-violet-300 transition-colors duration-300">
+                  {/* Shimmer effect on hover */}
+                  <span className="absolute inset-0 -translate-x-full group-hover:translate-x-full transition-transform duration-700 bg-gradient-to-r from-transparent via-white/10 to-transparent" />
+                  {/* Glow effect */}
+                  <span className="absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity duration-300 rounded-full" style={{ boxShadow: 'inset 0 0 15px rgba(139, 92, 246, 0.3)' }} />
+                  <span className="relative text-violet-400 group-hover:text-violet-300 transition-all duration-300 group-hover:scale-110">
                     {item.icon}
                   </span>
-                  <span>{item.label}</span>
+                  <span className="relative">{item.label}</span>
                 </div>
               ))}
             </div>

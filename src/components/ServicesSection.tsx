@@ -1,6 +1,7 @@
 'use client';
 
 import { useEffect, useState, useRef } from 'react';
+import { useRelativeMousePosition, useTilt } from '@/hooks/useMousePosition';
 
 interface Service {
   id: string;
@@ -105,6 +106,9 @@ const services: Service[] = [
 const ServiceCard = ({ service, index, isVisible }: { service: Service; index: number; isVisible: boolean }) => {
   const isFeatured = service.featured;
   const isWide = service.wide;
+  const cardRef = useRef<HTMLDivElement>(null);
+  const mousePosition = useRelativeMousePosition(cardRef);
+  const tiltStyle = useTilt(cardRef, { max: 8, scale: 1.02 });
 
   const getGridClasses = () => {
     if (isFeatured) return 'lg:col-span-4 lg:row-span-2 md:col-span-2';
@@ -114,9 +118,23 @@ const ServiceCard = ({ service, index, isVisible }: { service: Service; index: n
 
   return (
     <div
-      className={`group relative rounded-2xl transition-all duration-500 ${getGridClasses()} ${isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-8'}`}
-      style={{ transitionDelay: `${index * 100}ms` }}
+      ref={cardRef}
+      className={`group relative rounded-2xl transition-opacity duration-500 ${getGridClasses()} ${isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-8'}`}
+      style={{
+        transitionDelay: `${index * 100}ms`,
+        ...tiltStyle,
+      }}
     >
+      {/* Mouse-tracking spotlight effect */}
+      <div
+        className="pointer-events-none absolute -inset-px rounded-2xl opacity-0 group-hover:opacity-100 transition-opacity duration-500"
+        style={{
+          background: mousePosition.isInside
+            ? `radial-gradient(600px circle at ${mousePosition.x}px ${mousePosition.y}px, rgba(139, 92, 246, 0.15), transparent 40%)`
+            : 'none',
+        }}
+      />
+
       {/* Gradient border effect */}
       <div className="absolute inset-0 rounded-2xl gradient-border opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
 
@@ -126,6 +144,16 @@ const ServiceCard = ({ service, index, isVisible }: { service: Service; index: n
           isFeatured ? 'p-8 md:p-10' : 'p-6'
         }`}
       >
+        {/* Mouse-tracking inner glow */}
+        <div
+          className="pointer-events-none absolute inset-0 rounded-2xl opacity-0 group-hover:opacity-100 transition-opacity duration-300"
+          style={{
+            background: mousePosition.isInside
+              ? `radial-gradient(400px circle at ${mousePosition.x}px ${mousePosition.y}px, rgba(6, 182, 212, 0.08), transparent 40%)`
+              : 'none',
+          }}
+        />
+
         {/* Background glow on hover */}
         <div className="absolute -inset-px rounded-2xl bg-gradient-to-br from-violet-500/10 via-transparent to-cyan-500/10 opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
 

@@ -1,6 +1,7 @@
 'use client';
 
-import { useState, useEffect, useRef } from 'react';
+import { useState, useEffect, useRef, useCallback } from 'react';
+import { useRelativeMousePosition } from '@/hooks/useMousePosition';
 
 const CallToAction = () => {
   const [email, setEmail] = useState('');
@@ -11,6 +12,23 @@ const CallToAction = () => {
   const [error, setError] = useState('');
   const [isVisible, setIsVisible] = useState(false);
   const sectionRef = useRef<HTMLDivElement>(null);
+  const formCardRef = useRef<HTMLDivElement>(null);
+  const buttonRef = useRef<HTMLButtonElement>(null);
+  const formMousePosition = useRelativeMousePosition(formCardRef);
+  const [buttonOffset, setButtonOffset] = useState({ x: 0, y: 0 });
+
+  // Magnetic button effect
+  const handleButtonMouseMove = useCallback((e: React.MouseEvent<HTMLButtonElement>) => {
+    if (!buttonRef.current) return;
+    const rect = buttonRef.current.getBoundingClientRect();
+    const x = e.clientX - rect.left - rect.width / 2;
+    const y = e.clientY - rect.top - rect.height / 2;
+    setButtonOffset({ x: x * 0.2, y: y * 0.2 });
+  }, []);
+
+  const handleButtonMouseLeave = useCallback(() => {
+    setButtonOffset({ x: 0, y: 0 });
+  }, []);
 
   useEffect(() => {
     const observer = new IntersectionObserver(
@@ -113,12 +131,31 @@ const CallToAction = () => {
               isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-8'
             }`}
           >
-            <div className="relative">
+            <div ref={formCardRef} className="relative group">
+              {/* Mouse-tracking spotlight effect */}
+              <div
+                className="pointer-events-none absolute -inset-px rounded-3xl opacity-0 group-hover:opacity-100 transition-opacity duration-500 z-0"
+                style={{
+                  background: formMousePosition.isInside
+                    ? `radial-gradient(800px circle at ${formMousePosition.x}px ${formMousePosition.y}px, rgba(139, 92, 246, 0.12), transparent 40%)`
+                    : 'none',
+                }}
+              />
+
               {/* Gradient border */}
               <div className="absolute inset-0 rounded-3xl gradient-border" />
 
               {/* Form container */}
               <div className="relative glass-strong rounded-3xl p-8 md:p-12">
+                {/* Inner glow following mouse */}
+                <div
+                  className="pointer-events-none absolute inset-0 rounded-3xl opacity-0 group-hover:opacity-100 transition-opacity duration-300"
+                  style={{
+                    background: formMousePosition.isInside
+                      ? `radial-gradient(500px circle at ${formMousePosition.x}px ${formMousePosition.y}px, rgba(6, 182, 212, 0.06), transparent 40%)`
+                      : 'none',
+                  }}
+                />
                 {!submitted ? (
                   <form onSubmit={handleSubmit} className="space-y-6">
                     {/* Email field */}
@@ -172,15 +209,26 @@ const CallToAction = () => {
                       <p className="text-red-400 text-sm">{error}</p>
                     )}
 
-                    {/* Submit button */}
+                    {/* Submit button with magnetic effect */}
                     <button
+                      ref={buttonRef}
                       type="submit"
                       disabled={loading}
-                      className="group relative w-full py-4 rounded-xl text-white font-semibold overflow-hidden transition-all duration-300 hover:shadow-glow disabled:opacity-70 disabled:cursor-not-allowed"
+                      onMouseMove={handleButtonMouseMove}
+                      onMouseLeave={handleButtonMouseLeave}
+                      className="group/btn relative w-full py-4 rounded-xl text-white font-semibold overflow-hidden transition-all duration-300 hover:shadow-glow disabled:opacity-70 disabled:cursor-not-allowed"
+                      style={{
+                        transform: `translate(${buttonOffset.x}px, ${buttonOffset.y}px)`,
+                        transition: buttonOffset.x === 0 ? 'transform 0.3s ease-out' : 'transform 0.1s ease-out',
+                      }}
                     >
                       <span className="absolute inset-0 bg-gradient-to-r from-violet-600 to-indigo-600" />
-                      <span className="absolute inset-0 bg-gradient-to-r from-violet-500 to-cyan-500 opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
+                      <span className="absolute inset-0 bg-gradient-to-r from-violet-500 to-cyan-500 opacity-0 group-hover/btn:opacity-100 transition-opacity duration-300" />
                       <span className="absolute inset-0 btn-shimmer" />
+                      {/* Ripple effect on hover */}
+                      <span className="absolute inset-0 overflow-hidden rounded-xl">
+                        <span className="absolute inset-0 scale-0 group-hover/btn:scale-100 bg-white/10 rounded-full transition-transform duration-500 origin-center" />
+                      </span>
                       <span className="relative z-10 flex items-center justify-center gap-2">
                         {loading ? (
                           <>
@@ -193,7 +241,7 @@ const CallToAction = () => {
                         ) : (
                           <>
                             Request a Demo
-                            <svg className="w-4 h-4 transition-transform duration-300 group-hover:translate-x-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <svg className="w-4 h-4 transition-transform duration-300 group-hover/btn:translate-x-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 8l4 4m0 0l-4 4m4-4H3" />
                             </svg>
                           </>
