@@ -51,6 +51,7 @@ const Navbar = () => {
   const navItems = [
     { name: 'Home', path: '/' },
     { name: 'Services', path: '#', onClick: () => scrollToSection('services') },
+    { name: 'Work', path: '/work' },
     { name: 'Contact', path: '#', onClick: () => scrollToSection('contact') },
     { name: 'About', path: '/about' }
   ];

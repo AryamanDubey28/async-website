@@ -39,6 +39,21 @@ import Navbar from '@/components/Navbar';
 - Gradient text using `bg-clip-text text-transparent bg-gradient-to-r`
 - Framer Motion for scroll animations and transitions
 
+### Custom Hooks
+- `src/hooks/useMousePosition.ts` - Mouse tracking utilities:
+  - `useMousePosition()` - Global mouse position
+  - `useRelativeMousePosition(ref)` - Mouse position relative to element (0-1 range)
+  - `useTilt(ref, options)` - 3D tilt effect following cursor
+
+### Hover Effect Utilities (globals.css)
+- `.shadow-glow`, `.shadow-glow-lg`, `.shadow-glow-sm` - Violet glow effects
+- `.hover-lift` - Lift with shadow on hover
+- `.border-glow-pulse` - Animated gradient border glow
+- `.icon-bounce` - Bouncing icon animation
+- `.pulse-ring` - Expanding ring effect
+- `.gradient-shift` - Animated gradient position
+- `.underline-reveal` - Animated underline
+
 ### Key Configuration
 - ESLint is disabled during builds (`next.config.ts`)
 - Vercel Analytics integration enabled

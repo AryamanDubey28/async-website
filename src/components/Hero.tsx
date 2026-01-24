@@ -127,9 +127,9 @@ const Hero = () => {
                 isLoaded ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-4'
               }`}
             >
-              Ditch generic AI. Get private, custom agents built for{' '}
+              Get private, custom agents built for{' '}
               <span className="text-white font-medium">your</span> challenges,
-              saving <span className="text-white font-medium">you</span> time & delivering results that actually matter.
+              saving <span className="text-white font-medium">you</span> time and delivering results that actually matter.
             </p>
 
             {/* CTA Buttons */}

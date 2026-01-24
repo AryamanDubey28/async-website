@@ -1,0 +1,61 @@
+export interface WorkItem {
+  id: string;
+  title: string;
+  shortDescription: string;
+  fullDescription: string;
+  thumbnail: string;
+  tags: string[];
+  featured?: boolean;
+}
+
+export const workItems: WorkItem[] = [
+  {
+    id: 'ai-analytics-platform',
+    title: 'AI Analytics Platform',
+    shortDescription: 'Built a comprehensive analytics dashboard powered by machine learning for real-time business insights.',
+    fullDescription: 'We developed a cutting-edge analytics platform that leverages machine learning algorithms to provide real-time business insights. The platform processes millions of data points daily, offering predictive analytics, anomaly detection, and automated reporting. Our client saw a 40% improvement in decision-making speed and a 25% increase in operational efficiency within the first quarter of deployment.',
+    thumbnail: '/work/analytics-platform.jpg',
+    tags: ['Machine Learning', 'Analytics', 'Dashboard'],
+    featured: true,
+  },
+  {
+    id: 'conversational-ai-assistant',
+    title: 'Conversational AI Assistant',
+    shortDescription: 'Developed an intelligent customer service chatbot with natural language understanding.',
+    fullDescription: 'We created a sophisticated conversational AI assistant that handles customer inquiries with human-like understanding. The system uses advanced NLP techniques to understand context, sentiment, and intent, providing accurate responses across multiple languages. The assistant reduced customer service costs by 60% while improving customer satisfaction scores by 35%.',
+    thumbnail: '/work/chatbot-assistant.jpg',
+    tags: ['NLP', 'Chatbot', 'Customer Service'],
+  },
+  {
+    id: 'predictive-maintenance',
+    title: 'Predictive Maintenance System',
+    shortDescription: 'AI-powered system that predicts equipment failures before they happen.',
+    fullDescription: 'Our team engineered a predictive maintenance solution that uses IoT sensors and machine learning to forecast equipment failures with 95% accuracy. The system continuously monitors operational parameters, identifies patterns, and alerts maintenance teams before critical failures occur. This proactive approach saved our client over $2M in preventable downtime and extended equipment lifespan by 30%.',
+    thumbnail: '/work/predictive-maintenance.jpg',
+    tags: ['IoT', 'Predictive Analytics', 'Manufacturing'],
+  },
+  {
+    id: 'document-intelligence',
+    title: 'Document Intelligence Platform',
+    shortDescription: 'Automated document processing and extraction using computer vision and NLP.',
+    fullDescription: 'We built an intelligent document processing platform that automatically extracts, classifies, and validates information from various document types. Using a combination of computer vision and natural language processing, the system handles invoices, contracts, and forms with 99% accuracy. Processing time was reduced from hours to seconds, freeing up teams for higher-value work.',
+    thumbnail: '/work/document-intelligence.jpg',
+    tags: ['Computer Vision', 'NLP', 'Automation'],
+  },
+  {
+    id: 'recommendation-engine',
+    title: 'Personalised Recommendation Engine',
+    shortDescription: 'Built a sophisticated recommendation system that increased user engagement by 45%.',
+    fullDescription: 'We developed a state-of-the-art recommendation engine that delivers highly personalised content and product suggestions. The system uses collaborative filtering, content-based analysis, and deep learning to understand user preferences and behaviour patterns. Our client experienced a 45% increase in user engagement and a 28% boost in conversion rates.',
+    thumbnail: '/work/recommendation-engine.jpg',
+    tags: ['Deep Learning', 'Personalisation', 'E-commerce'],
+  },
+  {
+    id: 'fraud-detection',
+    title: 'Real-time Fraud Detection',
+    shortDescription: 'Machine learning system that identifies fraudulent transactions in milliseconds.',
+    fullDescription: 'Our fraud detection solution uses ensemble machine learning models to identify suspicious transactions in real-time. The system analyses hundreds of features per transaction, learning from new fraud patterns continuously. Since deployment, our client has blocked over $10M in fraudulent transactions while maintaining a false positive rate below 0.1%, ensuring legitimate customers are not inconvenienced.',
+    thumbnail: '/work/fraud-detection.jpg',
+    tags: ['Security', 'Real-time ML', 'Finance'],
+  },
+];
