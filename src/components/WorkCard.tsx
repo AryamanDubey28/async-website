@@ -1,7 +1,8 @@
 'use client';
 
-import { useRef } from 'react';
-import { WorkItem } from '@/data/workItems';
+import { useRef, useState } from 'react';
+import Image from 'next/image';
+import { WorkItem, PLACEHOLDER_IMAGE } from '@/data/workItems';
 import { useRelativeMousePosition, useTilt } from '@/hooks/useMousePosition';
 
 interface WorkCardProps {
@@ -16,6 +17,10 @@ const WorkCard = ({ item, index, isVisible, onClick, featured = false }: WorkCar
   const cardRef = useRef<HTMLDivElement>(null);
   const mousePosition = useRelativeMousePosition(cardRef);
   const tiltStyle = useTilt(cardRef, { max: 8, scale: 1.02 });
+  const [imgError, setImgError] = useState(false);
+
+  const imageSrc = item.thumbnail && !imgError ? item.thumbnail : PLACEHOLDER_IMAGE;
+  const isPlaceholder = !item.thumbnail || imgError;
 
   return (
     <div
@@ -67,29 +72,41 @@ const WorkCard = ({ item, index, isVisible, onClick, featured = false }: WorkCar
             featured ? 'h-48' : 'h-32'
           }`}
         >
-          <div className="absolute inset-0 mesh-gradient opacity-30" />
-          <div className="absolute inset-0 flex items-center justify-center">
-            <div
-              className={`rounded-xl bg-violet-500/20 flex items-center justify-center transition-all duration-300 group-hover:scale-110 group-hover:shadow-glow-sm ${
-                featured ? 'w-16 h-16' : 'w-12 h-12'
-              }`}
-            >
-              <svg
-                xmlns="http://www.w3.org/2000/svg"
-                className={`text-violet-400 ${featured ? 'h-8 w-8' : 'h-6 w-6'}`}
-                fill="none"
-                viewBox="0 0 24 24"
-                stroke="currentColor"
-                strokeWidth={1.5}
-              >
-                <path
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                  d="M9.75 17L9 20l-1 1h8l-1-1-.75-3M3 13h18M5 17h14a2 2 0 002-2V5a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"
-                />
-              </svg>
-            </div>
-          </div>
+          {isPlaceholder ? (
+            <>
+              <div className="absolute inset-0 mesh-gradient opacity-30" />
+              <div className="absolute inset-0 flex items-center justify-center">
+                <div
+                  className={`rounded-xl bg-violet-500/20 flex items-center justify-center transition-all duration-300 group-hover:scale-110 group-hover:shadow-glow-sm ${
+                    featured ? 'w-16 h-16' : 'w-12 h-12'
+                  }`}
+                >
+                  <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    className={`text-violet-400 ${featured ? 'h-8 w-8' : 'h-6 w-6'}`}
+                    fill="none"
+                    viewBox="0 0 24 24"
+                    stroke="currentColor"
+                    strokeWidth={1.5}
+                  >
+                    <path
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                      d="M9.75 17L9 20l-1 1h8l-1-1-.75-3M3 13h18M5 17h14a2 2 0 002-2V5a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"
+                    />
+                  </svg>
+                </div>
+              </div>
+            </>
+          ) : (
+            <Image
+              src={imageSrc}
+              alt={item.title}
+              fill
+              className="object-cover transition-transform duration-500 group-hover:scale-105"
+              onError={() => setImgError(true)}
+            />
+          )}
           {/* Gradient overlay at bottom */}
           <div className="absolute bottom-0 left-0 right-0 h-12 bg-gradient-to-t from-[rgba(5,5,8,0.8)] to-transparent" />
         </div>
