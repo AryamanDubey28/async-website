@@ -141,8 +141,8 @@ const Navbar = () => {
         }`}
       >
         {/* Background with aurora effect */}
-        <div className="absolute inset-0 bg-background aurora-bg">
-          <div className="absolute inset-0 bg-background/90 backdrop-blur-xl" />
+        <div className="absolute inset-0 bg-[#050508] aurora-bg">
+          <div className="absolute inset-0 bg-[#050508]/95 backdrop-blur-xl" />
         </div>
 
         {/* Content */}

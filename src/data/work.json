@@ -1,45 +1,35 @@
 [
   {
-    "id": "ai-analytics-platform",
-    "title": "AI Analytics Platform",
-    "shortDescription": "Built a comprehensive analytics dashboard powered by machine learning for real-time business insights.",
-    "fullDescription": "We developed a cutting-edge analytics platform that leverages machine learning algorithms to provide real-time business insights. The platform processes millions of data points daily, offering predictive analytics, anomaly detection, and automated reporting. Our client saw a 40% improvement in decision-making speed and a 25% increase in operational efficiency within the first quarter of deployment.",
-    "tags": ["Machine Learning", "Analytics", "Dashboard"],
-    "featured": true
+    "id": "whatsapp-booking-assistant",
+    "title": "Whatsapp Booking Assistant",
+    "shortDescription": "Built an AI-powered Whatsapp booking assistant for a chauffeur service company",
+    "fullDescription": "We developed an AI-powered Whatsapp booking assistant for a chauffeur service company. The assistant is able to handle bookings, cancellations, and inquiries from customers.",
+    "thumbnail": "/work/whatsapp-booking-assistant.png",
+    "tags": ["Whatsapp", "Booking", "Assistant"],
+    "featured": true  
   },
   {
-    "id": "conversational-ai-assistant",
-    "title": "Conversational AI Assistant",
-    "shortDescription": "Developed an intelligent customer service chatbot with natural language understanding.",
-    "fullDescription": "We created a sophisticated conversational AI assistant that handles customer inquiries with human-like understanding. The system uses advanced NLP techniques to understand context, sentiment, and intent, providing accurate responses across multiple languages. The assistant reduced customer service costs by 60% while improving customer satisfaction scores by 35%.",
-    "tags": ["NLP", "Chatbot", "Customer Service"]
+    "id": "call-assistant",
+    "title": "Call Assistant",
+    "shortDescription": "Built an AI-powered call assistant for a delivery company",
+    "fullDescription": "We developed an AI-powered call assistant for a delivery company. The assistant is able to handle calls, inquiries, and bookings from customers.",
+    "thumbnail": "/work/call-assistant.png",
+    "tags": ["Call", "Assistant", "Delivery"]
   },
   {
-    "id": "predictive-maintenance",
-    "title": "Predictive Maintenance System",
-    "shortDescription": "AI-powered system that predicts equipment failures before they happen.",
-    "fullDescription": "Our team engineered a predictive maintenance solution that uses IoT sensors and machine learning to forecast equipment failures with 95% accuracy. The system continuously monitors operational parameters, identifies patterns, and alerts maintenance teams before critical failures occur. This proactive approach saved our client over $2M in preventable downtime and extended equipment lifespan by 30%.",
-    "tags": ["IoT", "Predictive Analytics", "Manufacturing"]
+    "id": "logistics-assistant",
+    "title": "Logistics Assistant",
+    "shortDescription": "Built an AI-powered tool to track and manage orders for a healthcare company",
+    "fullDescription": "We developed an AI-powered tool to track and manage orders for a healthcare company. The tool is able to track and manage orders for a healthcare company.",
+    "thumbnail": "/work/logistics-assistant.png",
+    "tags": ["Logistics", "Assistant", "Healthcare"]
   },
   {
-    "id": "document-intelligence",
-    "title": "Document Intelligence Platform",
-    "shortDescription": "Automated document processing and extraction using computer vision and NLP.",
-    "fullDescription": "We built an intelligent document processing platform that automatically extracts, classifies, and validates information from various document types. Using a combination of computer vision and natural language processing, the system handles invoices, contracts, and forms with 99% accuracy. Processing time was reduced from hours to seconds, freeing up teams for higher-value work.",
-    "tags": ["Computer Vision", "NLP", "Automation"]
-  },
-  {
-    "id": "recommendation-engine",
-    "title": "Personalised Recommendation Engine",
-    "shortDescription": "Built a sophisticated recommendation system that increased user engagement by 45%.",
-    "fullDescription": "We developed a state-of-the-art recommendation engine that delivers highly personalised content and product suggestions. The system uses collaborative filtering, content-based analysis, and deep learning to understand user preferences and behaviour patterns. Our client experienced a 45% increase in user engagement and a 28% boost in conversion rates.",
-    "tags": ["Deep Learning", "Personalisation", "E-commerce"]
-  },
-  {
-    "id": "fraud-detection",
-    "title": "Real-time Fraud Detection",
-    "shortDescription": "Machine learning system that identifies fraudulent transactions in milliseconds.",
-    "fullDescription": "Our fraud detection solution uses ensemble machine learning models to identify suspicious transactions in real-time. The system analyses hundreds of features per transaction, learning from new fraud patterns continuously. Since deployment, our client has blocked over $10M in fraudulent transactions while maintaining a false positive rate below 0.1%, ensuring legitimate customers are not inconvenienced.",
-    "tags": ["Security", "Real-time ML", "Finance"]
+    "id": "customer-support-assistant",
+    "title": "Customer Support Assistant for a Car Dealership",
+    "shortDescription": "Built an AI-powered tool to handle customer support for a car dealership",
+    "fullDescription": "We developed an AI-powered tool to handle customer support for a car dealership. The tool is able to handle customer support for a car dealership by answering questions about the cars, pricing, and availability.",
+    "thumbnail": "/work/customer-support-assistant.png",
+    "tags": ["Customer Support", "Assistant", "Car Dealership"]
   }
 ]
