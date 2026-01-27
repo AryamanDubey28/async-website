@@ -1,7 +1,8 @@
 'use client';
 
-import { useEffect, useCallback } from 'react';
-import { WorkItem } from '@/data/workItems';
+import { useEffect, useCallback, useState } from 'react';
+import Image from 'next/image';
+import { WorkItem, PLACEHOLDER_IMAGE } from '@/data/workItems';
 
 interface WorkModalProps {
   item: WorkItem | null;
@@ -10,6 +11,16 @@ interface WorkModalProps {
 }
 
 const WorkModal = ({ item, isOpen, onClose }: WorkModalProps) => {
+  const [imgError, setImgError] = useState(false);
+
+  const imageSrc = item?.thumbnail && !imgError ? item.thumbnail : PLACEHOLDER_IMAGE;
+  const isPlaceholder = !item?.thumbnail || imgError;
+
+  // Reset image error state when item changes
+  useEffect(() => {
+    setImgError(false);
+  }, [item?.id]);
+
   const handleKeyDown = useCallback(
     (e: KeyboardEvent) => {
       if (e.key === 'Escape') {
@@ -77,25 +88,39 @@ const WorkModal = ({ item, isOpen, onClose }: WorkModalProps) => {
 
         {/* Thumbnail */}
         <div className="relative w-full aspect-video bg-gradient-to-br from-violet-500/20 via-indigo-500/20 to-cyan-500/20 overflow-hidden">
-          <div className="absolute inset-0 mesh-gradient opacity-50" />
-          <div className="absolute inset-0 flex items-center justify-center">
-            <div className="w-20 h-20 rounded-2xl bg-violet-500/20 flex items-center justify-center">
-              <svg
-                xmlns="http://www.w3.org/2000/svg"
-                className="h-10 w-10 text-violet-400"
-                fill="none"
-                viewBox="0 0 24 24"
-                stroke="currentColor"
-                strokeWidth={1.5}
-              >
-                <path
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                  d="M9.75 17L9 20l-1 1h8l-1-1-.75-3M3 13h18M5 17h14a2 2 0 002-2V5a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"
-                />
-              </svg>
-            </div>
-          </div>
+          {isPlaceholder ? (
+            <>
+              <div className="absolute inset-0 mesh-gradient opacity-50" />
+              <div className="absolute inset-0 flex items-center justify-center">
+                <div className="w-20 h-20 rounded-2xl bg-violet-500/20 flex items-center justify-center">
+                  <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    className="h-10 w-10 text-violet-400"
+                    fill="none"
+                    viewBox="0 0 24 24"
+                    stroke="currentColor"
+                    strokeWidth={1.5}
+                  >
+                    <path
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                      d="M9.75 17L9 20l-1 1h8l-1-1-.75-3M3 13h18M5 17h14a2 2 0 002-2V5a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"
+                    />
+                  </svg>
+                </div>
+              </div>
+            </>
+          ) : (
+            <Image
+              src={imageSrc}
+              alt={item?.title || 'Project thumbnail'}
+              fill
+              sizes="(max-width: 768px) 100vw, 768px"
+              priority
+              className="object-cover"
+              onError={() => setImgError(true)}
+            />
+          )}
           {/* Gradient overlay at bottom */}
           <div className="absolute bottom-0 left-0 right-0 h-24 bg-gradient-to-t from-[#0a0f1c] to-transparent" />
         </div>

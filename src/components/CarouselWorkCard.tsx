@@ -86,6 +86,8 @@ const CarouselWorkCard = ({
               src={imageSrc}
               alt={item.title}
               fill
+              sizes="(max-width: 640px) 85vw, 450px"
+              priority={item.featured}
               className="object-cover transition-transform duration-500 group-hover:scale-105"
               onError={() => setImgError(true)}
             />
