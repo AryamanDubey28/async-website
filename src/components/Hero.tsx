@@ -379,7 +379,7 @@ const Hero = () => {
       </div>
 
       {/* Additional floating particles/dots */}
-      <div className="hidden lg:block absolute inset-0 pointer-events-none overflow-hidden">
+      <div className="hidden lg:block absolute inset-0 pointer-events-none overflow-hidden -z-10">
         {[
           { top: '25%', left: '15%' },
           { top: '35%', left: '85%' },

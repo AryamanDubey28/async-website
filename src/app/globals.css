@@ -565,6 +565,15 @@ html {
   }
 }
 
+/* Slow spin for orbital elements */
+.animate-spin-slow {
+  animation: spin 20s linear infinite;
+}
+
+.animate-spin-reverse {
+  animation: spin 15s linear infinite reverse;
+}
+
 /* ========================================
    Enhanced Hover Effects
    ======================================== */
