@@ -136,24 +136,35 @@ const Navbar = () => {
 
       {/* Mobile Menu Overlay */}
       <div
-        className={`md:hidden fixed inset-0 z-[55] transition-all duration-500 ease-in-out ${
-          isMobileMenuOpen ? 'opacity-100 pointer-events-auto' : 'opacity-0 pointer-events-none'
+        className={`md:hidden fixed inset-0 z-[55] ${
+          isMobileMenuOpen ? 'visible' : 'invisible'
         }`}
+        style={{ transitionDelay: isMobileMenuOpen ? '0ms' : '400ms' }}
       >
-        {/* Background with aurora effect */}
-        <div className="absolute inset-0 bg-[#050508] aurora-bg">
-          <div className="absolute inset-0 bg-[#050508]/95 backdrop-blur-xl" />
-        </div>
+        {/* Solid background - must be fully opaque to cover hero content */}
+        <div
+          className={`absolute inset-0 bg-gray-950 transition-opacity duration-300 ${
+            isMobileMenuOpen ? 'opacity-100' : 'opacity-0'
+          }`}
+          style={{ transitionDelay: isMobileMenuOpen ? '0ms' : '200ms' }}
+        />
+        {/* Aurora effect on top of solid background */}
+        <div
+          className={`absolute inset-0 aurora-bg transition-opacity duration-300 ${
+            isMobileMenuOpen ? 'opacity-100' : 'opacity-0'
+          }`}
+          style={{ transitionDelay: isMobileMenuOpen ? '0ms' : '200ms' }}
+        />
 
         {/* Content */}
         <div className="relative h-full flex flex-col items-center justify-center space-y-8">
           {navItems.map((item, i) => (
             <div
               key={item.name}
-              className={`transition-all duration-500 ease-out ${
+              className={`transition-all duration-300 ease-out ${
                 isMobileMenuOpen ? 'opacity-100 translate-y-0' : 'opacity-0 -translate-y-4'
               }`}
-              style={{ transitionDelay: `${100 + i * 75}ms` }}
+              style={{ transitionDelay: isMobileMenuOpen ? `${100 + i * 75}ms` : '0ms' }}
             >
               {item.onClick ? (
                 <button
@@ -176,10 +187,10 @@ const Navbar = () => {
 
           {/* Mobile CTA */}
           <div
-            className={`pt-8 transition-all duration-500 ease-out ${
+            className={`pt-8 transition-all duration-300 ease-out ${
               isMobileMenuOpen ? 'opacity-100 translate-y-0' : 'opacity-0 -translate-y-4'
             }`}
-            style={{ transitionDelay: `${100 + navItems.length * 75}ms` }}
+            style={{ transitionDelay: isMobileMenuOpen ? `${100 + navItems.length * 75}ms` : '0ms' }}
           >
             <button
               onClick={() => handleMobileLinkClick(() => scrollToSection('contact'))}
