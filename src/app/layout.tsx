@@ -20,7 +20,7 @@ export const metadata: Metadata = {
     template: "%s | Async Studios", // Template for page-specific titles
   },
   description: "AI Consultancy helping businesses integrate AI. We build custom AI applications and provide expert consultancy services.",
-  keywords: ["AI", "Artificial Intelligence", "AI Agents", "AI Consultancy", "AI Development", "Skynet Chat", "Skynet Agents"],
+  keywords: ["AI", "Artificial Intelligence", "AI Agents", "AI Consultancy", "AI Development"],
   icons: {
     icon: [
       { url: './favicon.ico?v=' + Date.now() }
@@ -79,6 +79,81 @@ export const metadata: Metadata = {
   // },
 };
 
+const jsonLd = {
+  '@context': 'https://schema.org',
+  '@type': 'Organization',
+  name: 'Async Studios',
+  description: 'AI Consultancy helping businesses integrate AI. We build custom AI applications and provide expert consultancy services.',
+  url: 'https://asyncstudios.co.uk',
+  logo: 'https://asyncstudios.co.uk/og-image.png',
+  sameAs: [
+    'https://www.linkedin.com/company/async-studios/',
+    'https://www.instagram.com/async_official/',
+  ],
+  contactPoint: {
+    '@type': 'ContactPoint',
+    contactType: 'customer service',
+    url: 'https://asyncstudios.co.uk/#contact',
+  },
+  knowsAbout: [
+    'Artificial Intelligence',
+    'AI Agents',
+    'Machine Learning',
+    'AI Strategy',
+    'AI Implementation',
+    'Custom AI Development',
+    'AI Training',
+    'AI Consultancy',
+  ],
+  slogan: 'AI Agents. Private. Built for you.',
+  hasOfferCatalog: {
+    '@type': 'OfferCatalog',
+    name: 'AI Services',
+    itemListElement: [
+      {
+        '@type': 'Offer',
+        itemOffered: {
+          '@type': 'Service',
+          name: 'AI Strategy',
+          description: 'Define a powerful AI strategy aligned precisely with your business objectives.',
+        },
+      },
+      {
+        '@type': 'Offer',
+        itemOffered: {
+          '@type': 'Service',
+          name: 'AI Implementation',
+          description: 'Bring your AI strategy to life with seamless deployment and integration.',
+        },
+      },
+      {
+        '@type': 'Offer',
+        itemOffered: {
+          '@type': 'Service',
+          name: 'Custom AI Development',
+          description: 'Bespoke solutions engineered precisely for your unique operational needs.',
+        },
+      },
+      {
+        '@type': 'Offer',
+        itemOffered: {
+          '@type': 'Service',
+          name: 'AI Training & Workshops',
+          description: 'Upskill your workforce with focused AI training for real-world impact.',
+        },
+      },
+      {
+        '@type': 'Offer',
+        itemOffered: {
+          '@type': 'Service',
+          name: 'AI Support & Optimisation',
+          description: 'Ongoing support to ensure your AI solutions continue to deliver peak performance.',
+        },
+      },
+    ],
+  },
+};
+
 export default function RootLayout({
   children,
 }: Readonly<{
@@ -86,12 +161,19 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en" className="dark">
+      <head>
+        <script
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
+        />
+      </head>
       <body
         className={`${geistSans.variable} ${geistMono.variable} antialiased bg-gray-900 text-gray-100`}
+        suppressHydrationWarning
       >
         {children}
         <Analytics />
-     
+
       </body>
     </html>
   );

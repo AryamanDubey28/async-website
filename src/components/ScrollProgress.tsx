@@ -3,25 +3,14 @@
 import { useEffect, useState } from 'react';
 import { motion, useScroll, useSpring } from 'framer-motion';
 
-interface ScrollProgressProps {
-  color?: string;
-  height?: number;
-  zIndex?: number;
-}
-
-const ScrollProgress = ({ 
-  color = 'bg-gradient-to-r from-teal-400 to-teal-500', 
-  height = 3,
-  zIndex = 50
-}: ScrollProgressProps) => {
+const ScrollProgress = () => {
   const [isClient, setIsClient] = useState(false);
   const { scrollYProgress } = useScroll();
-  
-  // Make progress bar animation smoother
+
   const scaleX = useSpring(scrollYProgress, {
     stiffness: 100,
     damping: 30,
-    restDelta: 0.001
+    restDelta: 0.001,
   });
 
   useEffect(() => {
@@ -34,13 +23,10 @@ const ScrollProgress = ({
 
   return (
     <motion.div
-      className={`fixed top-0 left-0 right-0 ${color} origin-left z-${zIndex}`}
-      style={{ 
-        scaleX, 
-        height 
-      }}
+      className="fixed top-0 left-0 right-0 h-[2px] bg-gradient-to-r from-violet-500 via-cyan-500 to-violet-500 origin-left z-50"
+      style={{ scaleX }}
     />
   );
 };
 
-export default ScrollProgress; 
+export default ScrollProgress;

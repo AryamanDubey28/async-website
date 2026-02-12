@@ -1,0 +1,35 @@
+[
+  {
+    "id": "whatsapp-booking-assistant",
+    "title": "Whatsapp Booking Assistant",
+    "shortDescription": "Built an AI-powered Whatsapp booking assistant for a chauffeur service company",
+    "fullDescription": "We developed an AI-powered Whatsapp booking assistant for a chauffeur service company. The assistant is able to handle bookings, cancellations, and inquiries from customers.",
+    "thumbnail": "/work/whatsapp-agent.png",
+    "tags": ["Whatsapp", "Booking", "Assistant"],
+    "featured": true  
+  },
+  {
+    "id": "call-assistant",
+    "title": "Call Assistant",
+    "shortDescription": "Built an AI-powered call assistant for a delivery company",
+    "fullDescription": "We developed an AI-powered call assistant for a delivery company. The assistant is able to handle calls, inquiries, and bookings from customers.",
+    "thumbnail": "/work/call-agent.png",
+    "tags": ["Call", "Assistant", "Delivery"]
+  },
+  {
+    "id": "logistics-assistant",
+    "title": "Logistics Assistant",
+    "shortDescription": "Built an AI-powered tool to track and manage orders for a healthcare company",
+    "fullDescription": "We developed an AI-powered tool to track and manage orders for a healthcare company. The tool is able to track and manage orders for a healthcare company.",
+    "thumbnail": "/work/logistics-ge.png",
+    "tags": ["Logistics", "Assistant", "Healthcare"]
+  },
+  {
+    "id": "customer-support-assistant",
+    "title": "Customer Support Assistant for a Car Dealership",
+    "shortDescription": "Built an AI-powered tool to handle customer support for a car dealership",
+    "fullDescription": "We developed an AI-powered tool to handle customer support for a car dealership. The tool is able to handle customer support for a car dealership by answering questions about the cars, pricing, and availability.",
+    "thumbnail": "/work/car-dealership.png",
+    "tags": ["Customer Support", "Assistant", "Car Dealership"]
+  }
+]

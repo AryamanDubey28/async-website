@@ -1,6 +1,7 @@
 'use client';
 
-import { useState, useEffect, useRef } from 'react';
+import { useState, useEffect, useRef, useCallback } from 'react';
+import { useRelativeMousePosition } from '@/hooks/useMousePosition';
 
 const CallToAction = () => {
   const [email, setEmail] = useState('');
@@ -9,70 +10,72 @@ const CallToAction = () => {
   const [submitted, setSubmitted] = useState(false);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState('');
-  const [visible, setVisible] = useState(false);
+  const [isVisible, setIsVisible] = useState(false);
   const sectionRef = useRef<HTMLDivElement>(null);
+  const formCardRef = useRef<HTMLDivElement>(null);
+  const buttonRef = useRef<HTMLButtonElement>(null);
+  const formMousePosition = useRelativeMousePosition(formCardRef);
+  const [buttonOffset, setButtonOffset] = useState({ x: 0, y: 0 });
+
+  // Magnetic button effect
+  const handleButtonMouseMove = useCallback((e: React.MouseEvent<HTMLButtonElement>) => {
+    if (!buttonRef.current) return;
+    const rect = buttonRef.current.getBoundingClientRect();
+    const x = e.clientX - rect.left - rect.width / 2;
+    const y = e.clientY - rect.top - rect.height / 2;
+    setButtonOffset({ x: x * 0.2, y: y * 0.2 });
+  }, []);
+
+  const handleButtonMouseLeave = useCallback(() => {
+    setButtonOffset({ x: 0, y: 0 });
+  }, []);
 
   useEffect(() => {
-    // Set up Intersection Observer to detect when section is scrolled into view
     const observer = new IntersectionObserver(
-      (entries) => {
-        const [entry] = entries;
-        // Only trigger animation when element comes into view
+      ([entry]) => {
         if (entry.isIntersecting) {
-          setVisible(true);
-          // Once triggered, we can disconnect the observer
+          setIsVisible(true);
           observer.disconnect();
         }
       },
-      // Options: trigger when at least 20% of the element is visible
       { threshold: 0.2 }
     );
 
-    // Start observing the section
     if (sectionRef.current) {
       observer.observe(sectionRef.current);
     }
 
-    return () => {
-      // Clean up the observer when component unmounts
-      observer.disconnect();
-    };
+    return () => observer.disconnect();
   }, []);
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    
     if (!email) return;
-    
+
     setLoading(true);
     setError('');
-    
+
     try {
-      // Replace this URL with your Google Apps Script web app URL once deployed
-      const GOOGLE_SHEET_WEBHOOK_URL = 'https://script.google.com/macros/s/AKfycbw0jX72GcNKB23nTZAkBC6EzGfniQFOMmWvONXW707FbDAgrhITcBGQgbe9HsGCwHtvsA/exec';
-      
-      const formData = {
-        email,
-        name,
-        message,
-        timestamp: new Date().toISOString(),
-      };
-      
-      const response = await fetch(GOOGLE_SHEET_WEBHOOK_URL, {
+      const GOOGLE_SHEET_WEBHOOK_URL =
+        'https://script.google.com/macros/s/AKfycbw0jX72GcNKB23nTZAkBC6EzGfniQFOMmWvONXW707FbDAgrhITcBGQgbe9HsGCwHtvsA/exec';
+
+      await fetch(GOOGLE_SHEET_WEBHOOK_URL, {
         method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify(formData),
-        mode: 'no-cors', // Required for Google Apps Script
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          email,
+          name,
+          message,
+          timestamp: new Date().toISOString(),
+        }),
+        mode: 'no-cors',
       });
-      
+
       setSubmitted(true);
       setEmail('');
       setName('');
       setMessage('');
-    } catch (err) {
-      console.error('Error submitting form:', err);
+    } catch {
       setError('Failed to submit. Please try again later.');
     } finally {
       setLoading(false);
@@ -80,114 +83,229 @@ const CallToAction = () => {
   };
 
   return (
-    <div id="contact" className="relative py-24 overflow-hidden" ref={sectionRef}>
-      {/* Background elements - matching Hero */}
-      <div className="absolute inset-0 bg-gray-950"></div>
-      {/* Subtle radial gradient overlay for depth (matches Hero) */}
-      <div className="absolute inset-0 bg-gradient-radial from-transparent to-gray-950/80 z-0 pointer-events-none"></div>
+    <section
+      id="contact"
+      ref={sectionRef}
+      className="relative py-24 md:py-32 bg-background overflow-hidden"
+    >
+      {/* Aurora background */}
+      <div className="absolute inset-0 aurora-bg opacity-50" />
 
-      {/* Darker Background decoration elements */}
-      <div className="absolute -top-40 -right-40 w-80 h-80 bg-gradient-to-br from-teal-500/20 via-purple-500/15 to-blue-600/20 rounded-full blur-3xl animate-pulse-slow opacity-60"></div>
-      <div className="absolute -bottom-40 -left-40 w-80 h-80 bg-gradient-to-tr from-purple-600/20 via-blue-500/15 to-teal-500/20 rounded-full blur-3xl animate-pulse-slower opacity-60"></div>
+      {/* Mesh gradient */}
+      <div className="absolute inset-0 mesh-gradient" />
 
-      {/* Adjusted floating elements - slightly more vibrant on dark background */}
-      <div className="absolute top-1/4 left-20 w-12 h-12 bg-gradient-to-br from-teal-400/30 to-blue-500/30 rounded-xl float-1 opacity-80 shadow-lg shadow-teal-500/15 backdrop-blur-sm border border-teal-400/30"></div>
-      <div className="absolute bottom-1/4 right-20 w-10 h-10 bg-gradient-to-br from-purple-500/30 to-teal-400/30 rounded-lg float-2 opacity-80 shadow-lg shadow-purple-500/15 backdrop-blur-sm border border-purple-400/30"></div>
-      
+      {/* Floating orbs */}
+      <div className="absolute -top-32 -right-32 w-96 h-96 orb orb-violet float-slow opacity-30" />
+      <div className="absolute -bottom-32 -left-32 w-64 h-64 orb orb-cyan float opacity-30" />
+
+      {/* Noise overlay */}
+      <div className="absolute inset-0 noise pointer-events-none" />
+
       {/* Content */}
-      <div className="relative z-10 container mx-auto px-4 md:px-6 text-center">
-        <div className={`max-w-3xl mx-auto transition-all duration-700 ease-out ${visible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-8'}`}>
-          <h2 className={`text-3xl md:text-4xl font-bold mb-6 transition-all duration-700 delay-100 ease-out ${visible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-8'}`}>
-            Ready to transform your business with{' '}
-            <span className="bg-clip-text text-transparent bg-gradient-to-r from-teal-400 via-purple-400 to-blue-500">
-              intelligent AI?
-            </span>
-          </h2>
-          
-          <p className={`text-gray-300 text-lg mb-8 transition-all duration-700 delay-200 ease-out ${visible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-8'}`}>
-            Get in touch with our team of AI experts to discuss how we can help your business leverage the power of artificial intelligence.
-          </p>
-          
-          <div className={`mb-8 transition-all duration-700 delay-300 ease-out ${visible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-8'}`}>
-            <div className="bg-gray-900/70 backdrop-blur-xl p-8 rounded-2xl border border-teal-500/30 shadow-xl shadow-teal-500/10 transition-all duration-300">              
-              {!submitted ? (
-                <form onSubmit={handleSubmit} className="relative z-10 flex flex-col gap-4">
-                  <input
-                    type="email"
-                    value={email}
-                    onChange={(e) => setEmail(e.target.value)}
-                    placeholder="Enter your email"
-                    className="flex-grow px-4 py-3 rounded-lg bg-gray-800/70 backdrop-blur-sm border border-gray-700 text-white focus:border-teal-400 focus:outline-none focus:ring-2 focus:ring-teal-400/20 transition-all duration-300"
-                    required
-                  />
-                  <input
-                    type="text"
-                    value={name}
-                    onChange={(e) => setName(e.target.value)}
-                    placeholder="Your name (optional)"
-                    className="flex-grow px-4 py-3 rounded-lg bg-gray-800/70 backdrop-blur-sm border border-gray-700 text-white focus:border-teal-400 focus:outline-none focus:ring-2 focus:ring-teal-400/20 transition-all duration-300"
-                  />
-                  <textarea
-                    value={message}
-                    onChange={(e) => setMessage(e.target.value)}
-                    placeholder="Your message (optional)"
-                    rows={3}
-                    className="flex-grow px-4 py-3 rounded-lg bg-gray-800/70 backdrop-blur-sm border border-gray-700 text-white focus:border-teal-400 focus:outline-none focus:ring-2 focus:ring-teal-400/20 transition-all duration-300"
-                  />
-                  
-                  {error && <p className="text-red-400 text-sm">{error}</p>}
-                  
-                  <button
-                    type="submit"
-                    disabled={loading}
-                    className="group relative px-6 py-3 rounded-lg bg-gradient-to-r from-teal-500 to-purple-500 text-white font-medium transition-all duration-300 hover:shadow-lg hover:shadow-teal-500/20 hover:scale-105 focus:outline-none focus:ring-2 focus:ring-teal-400/30 overflow-hidden disabled:opacity-70 disabled:hover:scale-100"
-                  >
-                    <span className="relative z-10">
-                      {loading ? 'Sending...' : 'Request a Demo'}
-                    </span>
-                    <span className="absolute inset-0 bg-gradient-to-r from-teal-400 to-purple-400 opacity-0 group-hover:opacity-100 transition-opacity duration-300 blur-xl"></span>
-                  </button>
-                </form>
-              ) : (
-                <div className="flex items-center justify-center py-3 relative z-10">
-                  <svg className="w-6 h-6 text-teal-400 mr-2" fill="none" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" viewBox="0 0 24 24" stroke="currentColor">
-                    <path d="M5 13l4 4L19 7"></path>
-                  </svg>
-                  <p className="text-white">Thank you! We'll be in touch soon.</p>
-                </div>
-              )}
+      <div className="relative z-10 container mx-auto px-4">
+        <div className="max-w-4xl mx-auto">
+          {/* Header */}
+          <div
+            className={`text-center mb-12 transition-all duration-700 ${
+              isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-8'
+            }`}
+          >
+            <div className="inline-flex items-center px-4 py-2 rounded-full glass-violet mb-6">
+              <span className="text-sm font-medium text-violet-200">Get in Touch</span>
+            </div>
+
+            <h2 className="text-4xl md:text-5xl lg:text-6xl font-bold mb-6">
+              <span className="text-white">Ready to transform with </span>
+              <span className="gradient-text">intelligent AI?</span>
+            </h2>
+
+            <p className="text-lg text-gray-400 max-w-2xl mx-auto">
+              Get in touch with our team of AI experts to discuss how we can help
+              your business leverage the power of artificial intelligence.
+            </p>
+          </div>
+
+          {/* Form Card */}
+          <div
+            className={`transition-all duration-700 delay-200 ${
+              isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-8'
+            }`}
+          >
+            <div ref={formCardRef} className="relative group">
+              {/* Mouse-tracking spotlight effect */}
+              <div
+                className="pointer-events-none absolute -inset-px rounded-3xl opacity-0 group-hover:opacity-100 transition-opacity duration-500 z-0"
+                style={{
+                  background: formMousePosition.isInside
+                    ? `radial-gradient(800px circle at ${formMousePosition.x}px ${formMousePosition.y}px, rgba(139, 92, 246, 0.12), transparent 40%)`
+                    : 'none',
+                }}
+              />
+
+              {/* Gradient border */}
+              <div className="absolute inset-0 rounded-3xl gradient-border" />
+
+              {/* Form container */}
+              <div className="relative glass-strong rounded-3xl p-8 md:p-12">
+                {/* Inner glow following mouse */}
+                <div
+                  className="pointer-events-none absolute inset-0 rounded-3xl opacity-0 group-hover:opacity-100 transition-opacity duration-300"
+                  style={{
+                    background: formMousePosition.isInside
+                      ? `radial-gradient(500px circle at ${formMousePosition.x}px ${formMousePosition.y}px, rgba(6, 182, 212, 0.06), transparent 40%)`
+                      : 'none',
+                  }}
+                />
+                {!submitted ? (
+                  <form onSubmit={handleSubmit} className="space-y-6">
+                    {/* Email field */}
+                    <div>
+                      <label htmlFor="email" className="block text-sm font-medium text-gray-300 mb-2">
+                        Email address <span className="text-violet-400">*</span>
+                      </label>
+                      <input
+                        type="email"
+                        id="email"
+                        value={email}
+                        onChange={(e) => setEmail(e.target.value)}
+                        placeholder="you@company.com"
+                        required
+                        className="w-full px-4 py-3.5 rounded-xl bg-white/5 border border-white/10 text-white placeholder-gray-500 focus:outline-none focus:border-violet-500/50 focus:ring-2 focus:ring-violet-500/20 transition-all duration-300"
+                      />
+                    </div>
+
+                    {/* Name field */}
+                    <div>
+                      <label htmlFor="name" className="block text-sm font-medium text-gray-300 mb-2">
+                        Your name
+                      </label>
+                      <input
+                        type="text"
+                        id="name"
+                        value={name}
+                        onChange={(e) => setName(e.target.value)}
+                        placeholder="John Doe"
+                        className="w-full px-4 py-3.5 rounded-xl bg-white/5 border border-white/10 text-white placeholder-gray-500 focus:outline-none focus:border-violet-500/50 focus:ring-2 focus:ring-violet-500/20 transition-all duration-300"
+                      />
+                    </div>
+
+                    {/* Message field */}
+                    <div>
+                      <label htmlFor="message" className="block text-sm font-medium text-gray-300 mb-2">
+                        How can we help?
+                      </label>
+                      <textarea
+                        id="message"
+                        value={message}
+                        onChange={(e) => setMessage(e.target.value)}
+                        placeholder="Tell us about your challenges..."
+                        rows={4}
+                        className="w-full px-4 py-3.5 rounded-xl bg-white/5 border border-white/10 text-white placeholder-gray-500 focus:outline-none focus:border-violet-500/50 focus:ring-2 focus:ring-violet-500/20 transition-all duration-300 resize-none"
+                      />
+                    </div>
+
+                    {/* Error message */}
+                    {error && (
+                      <p className="text-red-400 text-sm">{error}</p>
+                    )}
+
+                    {/* Submit button with magnetic effect */}
+                    <button
+                      ref={buttonRef}
+                      type="submit"
+                      disabled={loading}
+                      onMouseMove={handleButtonMouseMove}
+                      onMouseLeave={handleButtonMouseLeave}
+                      className="group/btn relative w-full py-4 rounded-xl text-white font-semibold overflow-hidden transition-all duration-300 hover:shadow-glow disabled:opacity-70 disabled:cursor-not-allowed"
+                      style={{
+                        transform: `translate(${buttonOffset.x}px, ${buttonOffset.y}px)`,
+                        transition: buttonOffset.x === 0 ? 'transform 0.3s ease-out' : 'transform 0.1s ease-out',
+                      }}
+                    >
+                      <span className="absolute inset-0 bg-gradient-to-r from-violet-600 to-indigo-600" />
+                      <span className="absolute inset-0 bg-gradient-to-r from-violet-500 to-cyan-500 opacity-0 group-hover/btn:opacity-100 transition-opacity duration-300" />
+                      <span className="absolute inset-0 btn-shimmer" />
+                      {/* Ripple effect on hover */}
+                      <span className="absolute inset-0 overflow-hidden rounded-xl">
+                        <span className="absolute inset-0 scale-0 group-hover/btn:scale-100 bg-white/10 rounded-full transition-transform duration-500 origin-center" />
+                      </span>
+                      <span className="relative z-10 flex items-center justify-center gap-2">
+                        {loading ? (
+                          <>
+                            <svg className="animate-spin h-5 w-5" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+                              <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4" />
+                              <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z" />
+                            </svg>
+                            Sending...
+                          </>
+                        ) : (
+                          <>
+                            Request a Demo
+                            <svg className="w-4 h-4 transition-transform duration-300 group-hover/btn:translate-x-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 8l4 4m0 0l-4 4m4-4H3" />
+                            </svg>
+                          </>
+                        )}
+                      </span>
+                    </button>
+                  </form>
+                ) : (
+                  <div className="py-12 text-center">
+                    <div className="w-16 h-16 mx-auto mb-6 rounded-full bg-violet-500/20 flex items-center justify-center">
+                      <svg className="w-8 h-8 text-violet-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
+                      </svg>
+                    </div>
+                    <h3 className="text-2xl font-bold text-white mb-2">Thank you!</h3>
+                    <p className="text-gray-400">We&apos;ll be in touch soon.</p>
+                  </div>
+                )}
+              </div>
             </div>
           </div>
-          
-          <div className={`inline-flex flex-col sm:flex-row sm:flex-wrap justify-center gap-x-12 gap-y-8 items-start sm:items-center transition-all duration-700 delay-400 ease-out ${visible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-8'}`}>
-            <div className="flex items-center">
-              <div className="w-12 h-12 rounded-full bg-gray-800/70 backdrop-blur-sm flex items-center justify-center mr-3 border border-teal-400/30 shadow-lg shadow-teal-500/10"> 
-                <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6 text-teal-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+
+          {/* Contact Info */}
+          <div
+            className={`mt-12 flex flex-col sm:flex-row justify-center gap-8 transition-all duration-700 delay-400 ${
+              isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-8'
+            }`}
+          >
+            {/* Phone */}
+            <a
+              href="tel:02035761250"
+              className="group flex items-center gap-4 glass rounded-2xl px-6 py-4 hover:bg-white/[0.04] transition-all duration-300"
+            >
+              <div className="w-12 h-12 rounded-xl bg-violet-500/10 flex items-center justify-center group-hover:bg-violet-500/20 transition-colors duration-300">
+                <svg className="w-5 h-5 text-violet-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 5a2 2 0 012-2h3.28a1 1 0 01.948.684l1.498 4.493a1 1 0 01-.502 1.21l-2.257 1.13a11.042 11.042 0 005.516 5.516l1.13-2.257a1 1 0 011.21-.502l4.493 1.498a1 1 0 01.684.949V19a2 2 0 01-2 2h-1C9.716 21 3 14.284 3 6V5z" />
                 </svg>
               </div>
-              <div className="text-left">
-                <div className="text-sm text-gray-400">Call us</div>
-                <div className="text-white">020 3576 1250</div>
+              <div>
+                <div className="text-xs text-gray-500 mb-1">Call us</div>
+                <div className="text-white font-medium">020 3576 1250</div>
               </div>
-            </div>
-            
-            <div className="flex items-center">
-              <div className="w-12 h-12 rounded-full bg-gray-800/70 backdrop-blur-sm flex items-center justify-center mr-3 border border-teal-400/30 shadow-lg shadow-teal-500/10"> 
-                <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6 text-teal-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            </a>
+
+            {/* Email */}
+            <a
+              href="mailto:admin@asyncstudios.co.uk"
+              className="group flex items-center gap-4 glass rounded-2xl px-6 py-4 hover:bg-white/[0.04] transition-all duration-300"
+            >
+              <div className="w-12 h-12 rounded-xl bg-cyan-500/10 flex items-center justify-center group-hover:bg-cyan-500/20 transition-colors duration-300">
+                <svg className="w-5 h-5 text-cyan-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" />
                 </svg>
               </div>
-              <div className="text-left">
-                <div className="text-sm text-gray-400">Email us</div>
-                <div className="text-white">admin@asyncstudios.co.uk</div>
+              <div>
+                <div className="text-xs text-gray-500 mb-1">Email us</div>
+                <div className="text-white font-medium">admin@asyncstudios.co.uk</div>
               </div>
-            </div>
+            </a>
           </div>
         </div>
       </div>
-    </div>
+    </section>
   );
 };
 
-export default CallToAction; 
+export default CallToAction;
